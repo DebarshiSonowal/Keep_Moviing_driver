@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "858225352337",
+    "project_id": "keepmoviingdriver",
+    "storage_bucket": "keepmoviingdriver.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858225352337:android:22b92e3fd16e5b860da930",
+        "android_client_info": {
+          "package_name": "com.mycab.driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "858225352337-qjcj0acjshkvf7lhf3et7d178a5ilk6j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mycab.driver",
+            "certificate_hash": "fd3f9e01bc1d92b28017573b2553b3cad89570be"
+          }
+        },
+        {
+          "client_id": "858225352337-2j953hq3vuna90kmpqjpunbli1ga4pc4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8ifq-XuxU1OIKxEwVohxAcE7cywSajMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "858225352337-2j953hq3vuna90kmpqjpunbli1ga4pc4.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "858225352337-5pidd3d6pck46viso60ri79qr7nf5ca4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.keepmoviingdriver.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
