@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:animator/animator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'Language/LanguageData.dart';
@@ -16,6 +17,7 @@ class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   AnimationController controller;
   Animation<double> animation;
+  FirebaseAuth auth = FirebaseAuth.instance;
 
   initState() {
     super.initState();
@@ -41,8 +43,13 @@ class _SplashScreenState extends State<SplashScreen>
           await DefaultAssetBundle.of(myContext)
               .loadString("jsonFile/languagetext.json")));
     }
+    ConstanceData.getId();
     await Future.delayed(const Duration(milliseconds: 1200));
-    Navigator.pushReplacementNamed(context, Routes.INTRODUCTION);
+    if(auth.currentUser!=null){
+      Navigator.pushNamedAndRemoveUntil(context, Routes.HOME, (Route<dynamic> route) => false);
+    }else{
+      Navigator.pushReplacementNamed(context, Routes.INTRODUCTION);
+    }
   }
 
   @override

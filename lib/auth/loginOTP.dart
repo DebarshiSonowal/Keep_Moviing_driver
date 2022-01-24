@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
 import 'package:my_cab_driver/constance/constance.dart';
+import 'package:my_cab_driver/networking/Access.dart';
 
 import '../main.dart';
 
 class login_otp extends StatefulWidget {
-  String phone,code;
+  String phone, code;
 
-
-  login_otp(this.phone,this.code);
+  login_otp(this.phone, this.code);
 
   @override
   _login_otpState createState() => _login_otpState();
@@ -67,9 +67,9 @@ class _login_otpState extends State<login_otp> {
                 Text(
                   AppLocalizations.of('Phone Verification'),
                   style: Theme.of(context).textTheme.headline4.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.headline6.color,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.headline6.color,
+                      ),
                 ),
                 SizedBox(
                   height: 6,
@@ -77,9 +77,9 @@ class _login_otpState extends State<login_otp> {
                 Text(
                   AppLocalizations.of('Enter your OTP code here'),
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.headline6.color,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.headline6.color,
+                      ),
                 ),
                 SizedBox(
                   height: 30,
@@ -101,7 +101,7 @@ class _login_otpState extends State<login_otp> {
                                 decoration: BoxDecoration(
                                   color: Colors.green,
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                                      BorderRadius.all(Radius.circular(10)),
                                   border: Border.all(
                                     color: Theme.of(context).dividerColor,
                                   ),
@@ -120,7 +120,7 @@ class _login_otpState extends State<login_otp> {
                                           onTap: () {},
                                           style: TextStyle(
                                             color:
-                                            Theme.of(context).primaryColor,
+                                                Theme.of(context).primaryColor,
                                             fontSize: 16,
                                           ),
                                           decoration: new InputDecoration(
@@ -154,11 +154,22 @@ class _login_otpState extends State<login_otp> {
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     onTap: () {
-                      PhoneAuthCredential phoneAuthCredential =
-                      PhoneAuthProvider.credential(
-                          verificationId: widget.code,
-                          smsCode: otpController.text);
-                      signInWithPhoneAuthCredential(phoneAuthCredential);
+                      if (otpController.text.isNotEmpty&&otpController.text.length==6) {
+                        PhoneAuthCredential phoneAuthCredential =
+                                                  PhoneAuthProvider.credential(
+                                                      verificationId: widget.code,
+                                                      smsCode: otpController.text);
+                        signInWithPhoneAuthCredential(phoneAuthCredential);
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "Enter the otp correctly",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      }
                     },
                     child: Container(
                       height: 45,
@@ -170,9 +181,9 @@ class _login_otpState extends State<login_otp> {
                         child: Text(
                           AppLocalizations.of('VERIFY NOW'),
                           style: Theme.of(context).textTheme.button.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: ConstanceData.secoundryFontColor,
-                          ),
+                                fontWeight: FontWeight.bold,
+                                color: ConstanceData.secoundryFontColor,
+                              ),
                         ),
                       ),
                     ),
@@ -198,9 +209,9 @@ class _login_otpState extends State<login_otp> {
             Text(
               otxt,
               style: Theme.of(context).textTheme.headline5.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).textTheme.headline6.color,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.headline6.color,
+                  ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -227,11 +238,18 @@ class _login_otpState extends State<login_otp> {
       PhoneAuthCredential phoneAuthCredential) async {
     try {
       final authCredential =
-      await auth.signInWithCredential(phoneAuthCredential);
+          await auth.signInWithCredential(phoneAuthCredential);
 
       if (authCredential?.user != null) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, Routes.HOME, (Route<dynamic> route) => false);
+        print('login  ${widget.phone}');
+        Access().login(widget.phone).then((value) => {
+          print('login ${value.name}'),
+              ConstanceData.prof = value,
+              ConstanceData.saveId(value.user_id.toString()),
+              print(value.user_id),
+              Navigator.pushNamedAndRemoveUntil(
+                  context, Routes.HOME, (Route<dynamic> route) => false)
+            });
       }
     } on FirebaseAuthException catch (e) {
       Fluttertoast.showToast(
@@ -245,5 +263,3 @@ class _login_otpState extends State<login_otp> {
     }
   }
 }
-
-

@@ -1,12 +1,16 @@
 import 'package:animator/animator.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_cab_driver/Model/Profile.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/drawer/drawer.dart';
 import 'package:my_cab_driver/home/riderList.dart';
+import 'package:my_cab_driver/networking/Access.dart';
 import '../appTheme.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
 
@@ -35,11 +39,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   GoogleMapController mapController;
   Position position;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
 
   @override
   void initState() {
     super.initState();
-
+    Access().getVehicles().then((value) => {
+      ConstanceData.setVehicleType(value)
+    });
+    if(auth.currentUser!=null){
+      if(ConstanceData.id !=null && ConstanceData.prof==null){
+        print("Got it");
+          Access().getProfile().then((value) => {
+            ConstanceData.prof = value,
+            print("${value.name}")
+          });
+      }
+    }
   }
 
   @override
@@ -313,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      AppLocalizations.of('Esther Berry'),
+                                      AppLocalizations.of('${ConstanceData.prof.name}'),
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline6
@@ -1045,6 +1062,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> setPosition() async {
     position = await _determinePosition();
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    placemarks[0].name.toString();
+
     if (position != null) {
       mapController.animateCamera(CameraUpdate.newLatLng(
           LatLng(position.latitude, position.longitude)));

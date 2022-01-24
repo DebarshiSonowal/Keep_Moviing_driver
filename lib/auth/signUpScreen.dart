@@ -1,22 +1,19 @@
 import 'package:animator/animator.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:country_pickers/country.dart';
-// import 'package:country_pickers/country_picker_dialog.dart';
-// import 'package:country_pickers/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:my_cab_driver/Model/SignUpData.dart';
-import 'package:my_cab_driver/constance/constance.dart';
-import 'package:my_cab_driver/auth/phoneAuthScreen.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
+import 'package:my_cab_driver/Model/SignUpData.dart';
+import 'package:my_cab_driver/auth/phoneAuthScreen.dart';
+import 'package:my_cab_driver/constance/constance.dart';
+import 'package:my_cab_driver/networking/Access.dart';
 
 import '../main.dart';
-import '../temp.dart';
 import 'loginScreen.dart';
 
-enum truckType {open,closed}
+enum truckType { open, closed }
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -34,6 +31,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var emailController = TextEditingController();
   var phoneController = TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
+  Position position;
+  AlertDialog alert;
+
   @override
   void dispose() {
     nameController.dispose();
@@ -41,12 +41,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
     phoneController.dispose();
     super.dispose();
   }
-  // Country _selectedDialogCountry = CountryPickerUtils.getCountryByIsoCode('IN');
+
+  @override
+  void initState() {
+    getCurrentPosition();
+    super.initState();
+  } // Country _selectedDialogCountry = CountryPickerUtils.getCountryByIsoCode('IN');
 
   @override
   Widget build(BuildContext context) {
     appBarheight =
-        AppBar().preferredSize.height + MediaQuery.of(context).padding.top-50;
+        AppBar().preferredSize.height + MediaQuery.of(context).padding.top - 50;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       body: InkWell(
@@ -107,41 +112,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     children: <Widget>[
                                       Row(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10),
+                                            padding:
+                                                const EdgeInsets.only(top: 10),
                                             child: Text(
                                               AppLocalizations.of('Sign Up'),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5
                                                   .copyWith(
-                                                color: ConstanceData
-                                                    .secoundryFontColor,
-                                              ),
+                                                    color: ConstanceData
+                                                        .secoundryFontColor,
+                                                  ),
                                             ),
                                           ),
                                           Padding(
                                             padding:
-                                            const EdgeInsets.only(top: 10),
+                                                const EdgeInsets.only(top: 10),
                                             child: Text(
                                               AppLocalizations.of(' With'),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headline5
                                                   .copyWith(
-                                                color: ConstanceData
-                                                    .secoundryFontColor,
-                                              ),
+                                                    color: ConstanceData
+                                                        .secoundryFontColor,
+                                                  ),
                                             ),
                                           ),
                                         ],
                                       ),
                                       Row(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
                                             AppLocalizations.of(
@@ -150,15 +155,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 .textTheme
                                                 .headline5
                                                 .copyWith(
-                                              color: ConstanceData
-                                                  .secoundryFontColor,
-                                            ),
+                                                  color: ConstanceData
+                                                      .secoundryFontColor,
+                                                ),
                                           ),
                                         ],
                                       ),
                                       Row(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Text(
                                             AppLocalizations.of('number'),
@@ -166,9 +171,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                                 .textTheme
                                                 .headline5
                                                 .copyWith(
-                                              color: ConstanceData
-                                                  .secoundryFontColor,
-                                            ),
+                                                  color: ConstanceData
+                                                      .secoundryFontColor,
+                                                ),
                                           ),
                                         ],
                                       ),
@@ -182,18 +187,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             height: 14,
                           ),
                           Padding(
-                            padding:
-                            const EdgeInsets.only(right: 16, left: 16),
+                            padding: const EdgeInsets.only(right: 16, left: 16),
                             child: Column(
                               children: <Widget>[
                                 Container(
                                   height: 40,
                                   decoration: BoxDecoration(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(10)),
                                     border: Border.all(
-                                        color:
-                                        Theme.of(context).dividerColor),
+                                        color: Theme.of(context).dividerColor),
                                     color: Theme.of(context).backgroundColor,
                                   ),
                                   child: TextFormField(
@@ -202,11 +205,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         .textTheme
                                         .bodyText2
                                         .copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline5
-                                          .color,
-                                    ),
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .headline5
+                                              .color,
+                                        ),
                                     controller: nameController,
                                     keyboardType: TextInputType.text,
                                     decoration: InputDecoration(
@@ -219,9 +222,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             .headline5
                                             .color,
                                       ),
-                                      hintStyle: Theme.of(context)
-                                          .textTheme
-                                          .bodyText2,
+                                      hintStyle:
+                                          Theme.of(context).textTheme.bodyText2,
                                       border: InputBorder.none,
                                     ),
                                   ),
@@ -233,16 +235,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 40,
                                   decoration: BoxDecoration(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(10)),
                                     border: Border.all(
-                                        color:
-                                        Theme.of(context).dividerColor),
+                                        color: Theme.of(context).dividerColor),
                                     color: Theme.of(context).backgroundColor,
                                   ),
                                   child: TextFormField(
                                     autofocus: false,
                                     style:
-                                    Theme.of(context).textTheme.bodyText2,
+                                        Theme.of(context).textTheme.bodyText2,
                                     keyboardType: TextInputType.text,
                                     controller: emailController,
                                     decoration: InputDecoration(
@@ -255,9 +256,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             .headline6
                                             .color,
                                       ),
-                                      hintStyle: Theme.of(context)
-                                          .textTheme
-                                          .bodyText2,
+                                      hintStyle:
+                                          Theme.of(context).textTheme.bodyText2,
                                       border: InputBorder.none,
                                     ),
                                   ),
@@ -269,10 +269,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 40,
                                   decoration: BoxDecoration(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(10)),
                                     border: Border.all(
-                                        color:
-                                        Theme.of(context).dividerColor),
+                                        color: Theme.of(context).dividerColor),
                                     color: Theme.of(context).backgroundColor,
                                   ),
                                   child: Row(
@@ -294,16 +293,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               .textTheme
                                               .bodyText2
                                               .copyWith(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                .color,
-                                          ),
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .headline6
+                                                    .color,
+                                              ),
                                           keyboardType: TextInputType.number,
                                           controller: phoneController,
                                           decoration: InputDecoration(
                                             contentPadding:
-                                            EdgeInsets.only(bottom: 8),
+                                                EdgeInsets.only(bottom: 8),
                                             hintText: AppLocalizations.of(
                                                 'Mobile Number'),
                                             hintStyle: Theme.of(context)
@@ -323,15 +322,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 40,
                                   decoration: BoxDecoration(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(10)),
                                     border: Border.all(
-                                        color:
-                                        Theme.of(context).dividerColor),
+                                        color: Theme.of(context).dividerColor),
                                     color: Theme.of(context).backgroundColor,
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Expanded(
                                         child: Icon(
@@ -344,8 +342,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         child: DropdownButton(
                                           isExpanded: true,
                                           value: selectedVehicle,
-                                          icon:
-                                          Icon(Icons.keyboard_arrow_down),
+                                          icon: Icon(Icons.keyboard_arrow_down),
                                           items: ConstanceData.vehicleType
                                               .map((items) {
                                             return DropdownMenuItem(
@@ -377,10 +374,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   height: 40,
                                   decoration: BoxDecoration(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(10)),
                                     border: Border.all(
-                                        color:
-                                        Theme.of(context).dividerColor),
+                                        color: Theme.of(context).dividerColor),
                                     color: Theme.of(context)
                                         .backgroundColor
                                         .withOpacity(0.7),
@@ -419,8 +415,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       Expanded(
                                         flex: 5,
                                         child: Text(ConstanceData
-                                            .vehicleWeight[
-                                        selectedWeightIndex][0]
+                                            .vehicleWeight[selectedWeightIndex]
+                                                [0]
                                             .toString()),
                                       ),
                                     ],
@@ -434,7 +430,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   width: MediaQuery.of(context).size.width,
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
                                         child: Row(
@@ -465,7 +461,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       Container(
                                         child: Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Radio(
                                               activeColor: Theme.of(context)
@@ -500,7 +496,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   highlightColor: Colors.transparent,
                                   splashColor: Colors.transparent,
                                   onTap: () {
-                                    sendOtp();
+                                    showLoaderDialog(context);
+                                    if (emailController.text != null &&
+                                        phoneController.text.isNotEmpty &&
+                                        nameController.text.isNotEmpty) {
+                                      if (isEmail(emailController.text)) {
+                                        if (_isNumeric(phoneController.text) &&
+                                            phoneController.text.length == 10) {
+                                          sendOtp();
+                                        } else {
+                                          Navigator.pop(context);
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "Enter a valid mobile number",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.CENTER,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: Colors.red,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0);
+                                        }
+                                      } else {
+                                        Navigator.pop(context);
+                                        Fluttertoast.showToast(
+                                            msg: "Enter a valid email",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    } else {
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(
+                                          msg: "Enter all the fields",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.CENTER,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    }
                                   },
                                   child: Container(
                                     height: 45,
@@ -515,10 +552,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                             .textTheme
                                             .button
                                             .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                        ),
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .scaffoldBackgroundColor,
+                                            ),
                                       ),
                                     ),
                                   ),
@@ -538,9 +575,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Text(
                           AppLocalizations.of('Already have an account?'),
                           style: Theme.of(context).textTheme.button.copyWith(
-                            color:
-                            Theme.of(context).textTheme.headline6.color,
-                          ),
+                                color:
+                                    Theme.of(context).textTheme.headline6.color,
+                              ),
                         ),
                         InkWell(
                           highlightColor: Colors.transparent,
@@ -556,12 +593,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           child: Text(
                             AppLocalizations.of(' Sign In'),
                             style: Theme.of(context).textTheme.button.copyWith(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  .color,
-                              fontWeight: FontWeight.bold,
-                            ),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      .color,
+                                  fontWeight: FontWeight.bold,
+                                ),
                           ),
                         ),
                       ],
@@ -637,6 +674,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   //         ),
   //       ],
   //     );
+  bool isEmail(String em) {
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+    RegExp regExp = new RegExp(p);
+
+    return regExp.hasMatch(em);
+  }
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return double.tryParse(result) != null;
+  }
 
   String getCountryString(String str) {
     var newString = '';
@@ -652,6 +704,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     return newString;
   }
+
   String getCateg() {
     if (current == truckType.open) {
       return "OPEN";
@@ -660,12 +713,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
+  showLoaderDialog(BuildContext context) {
+    alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   void sendOtp() async {
     await auth.verifyPhoneNumber(
         phoneNumber: '+91' + phoneController.text,
         verificationCompleted: (credential) async {
           await auth.signInWithCredential(credential).then((value) {
-            Navigator.pushNamedAndRemoveUntil(context, Routes.HOME, (Route<dynamic> route) => false);
+            Navigator.pop(context);
+            Access()
+                .register(signupdata(
+                    nameController.text,
+                    emailController.text,
+                    phoneController.text,
+                    ConstanceData.vehicleType[selectedVehicleIndex].toString(),
+                    getCateg(),
+                    ConstanceData.vehicleWeight[selectedWeightIndex][0]
+                        .toString(),
+                    ''))
+                .then((value) => {
+                      ConstanceData.prof = value,
+                      ConstanceData.saveId(value.user_id.toString()),
+                      print(value.user_id),
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, Routes.HOME, (Route<dynamic> route) => false)
+                    });
           });
         },
         timeout: const Duration(seconds: 60),
@@ -684,6 +773,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           print(verificationId);
           print(resendToken);
           // Create a PhoneAuthCredential with the code
+          Navigator.pop(context);
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -702,4 +792,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
         codeAutoRetrievalTimeout: (xc) {});
   }
 
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void getCurrentPosition() async {
+    position = await _determinePosition();
+  }
 }

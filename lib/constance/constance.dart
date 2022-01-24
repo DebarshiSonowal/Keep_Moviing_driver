@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_cab_driver/Language/LanguageData.dart';
+import 'package:my_cab_driver/Model/Profile.dart';
+import 'package:my_cab_driver/Model/Vehicle.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConstanceData {
   static final splashBackground = "assets/images/building_image.webp";
@@ -27,13 +30,37 @@ class ConstanceData {
   static final Color DrawerFontColor = Color(0xff0b0b0b);
 
   static final url = "https://reinventmyskills.com/keep/public/api/driver/";
+  static final app_key = "jXIIci1Uxirg7MU33cu9qu1PL4kgUIi74Q7yGiFE";
+
+  static String id;
+  static profile prof;
+
+  static saveId(String data) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('id', data);
+    id = data;
+    print("Saved ${id}id");
+  }
+
+  static getId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    id = prefs.getString('id');
+    print("init ${prefs.getString('id')}");
+  }
+
+  static List<vehicleModel> vehicletype;
+
+  static setVehicleType(List<vehicleModel> list){
+    vehicletype = list;
+    print("Vehicle ");
+  }
 
   static final vehicleType = [
     '4.5 Ton',
     'E-Rickshaw',
     'Large Pickup',
     'Loader Rickshaw',
-    'Mini Truk',
+    'Mini Truck',
     'Small Pickup'
   ];
 

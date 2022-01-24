@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
+import 'package:my_cab_driver/networking/Access.dart';
 
 import '../main.dart';
 import 'loginOTP.dart';
@@ -21,17 +22,25 @@ class _LoginScreenState extends State<LoginScreen> {
   var controller = TextEditingController();
   FirebaseAuth auth = FirebaseAuth.instance;
 
+  AlertDialog alert;
 
   @override
   void initState() {
+    ConstanceData.getId();
     super.initState();
 
-    Future.delayed(Duration(seconds: 1), (){
-          if(auth.currentUser!=null){
-            Navigator.pushNamedAndRemoveUntil(
-                context, Routes.HOME, (Route<dynamic> route) => false);
-          }
+    Future.delayed(Duration(seconds: 1), () {
+      if (auth.currentUser != null&&ConstanceData.id!=null) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, Routes.HOME, (Route<dynamic> route) => false);
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,7 +76,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Container(
-              padding:EdgeInsets.only(right: 14, left: 14,),
+              padding: EdgeInsets.only(
+                right: 14,
+                left: 14,
+              ),
               child: SingleChildScrollView(
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height,
@@ -145,7 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                 height: 20,
                               ),
-                              Container(padding: EdgeInsets.only(left: 10),
+                              Container(
+                                padding: EdgeInsets.only(left: 10),
                                 height: 40,
                                 decoration: BoxDecoration(
                                   borderRadius:
@@ -191,9 +204,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 highlightColor: Colors.transparent,
                                 splashColor: Colors.transparent,
                                 onTap: () {
-                                  if (controller.text.isNotEmpty&&controller.text.length==10) {
+                                  showLoaderDialog(context);
+                                  if (controller.text.isNotEmpty &&
+                                      controller.text.length == 10) {
                                     sendOtp();
                                   } else {
+                                    Navigator.pop(context);
                                     Fluttertoast.showToast(
                                         msg: "Please enter a valid number",
                                         toastLength: Toast.LENGTH_SHORT,
@@ -228,15 +244,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                 height: 20,
                               ),
-
                             ],
                           ),
                         ),
                       ),
-                      Expanded(
-                          flex:3,
-                          child:SizedBox()
-                      )
+                      Expanded(flex: 3, child: SizedBox())
                     ],
                   ),
                 ),
@@ -327,8 +339,18 @@ class _LoginScreenState extends State<LoginScreen> {
         phoneNumber: '+91' + controller.text,
         verificationCompleted: (credential) async {
           await auth.signInWithCredential(credential).then((value) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, Routes.HOME, (Route<dynamic> route) => false);
+            print("This is the issue");
+            Navigator.pop(context);
+            Access().login(controller.text).then((value) => {
+              print('login ${value.user_id}'),
+              ConstanceData.prof = value,
+              ConstanceData.saveId(value.user_id.toString()),
+              print(value.user_id),
+              Navigator.pushNamedAndRemoveUntil(
+                  context, Routes.HOME, (Route<dynamic> route) => false)
+            });
+            // Navigator.pushNamedAndRemoveUntil(
+            //     context, Routes.HOME, (Route<dynamic> route) => false);
           });
         },
         timeout: const Duration(seconds: 60),
@@ -347,13 +369,33 @@ class _LoginScreenState extends State<LoginScreen> {
           print(verificationId);
           print(resendToken);
           // Create a PhoneAuthCredential with the code
+          Navigator.pop(context);
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => login_otp(controller.text,verificationId),
+              builder: (context) => login_otp(controller.text, verificationId),
             ),
           );
         },
         codeAutoRetrievalTimeout: (xc) {});
+  }
+
+  showLoaderDialog(BuildContext context) {
+    alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

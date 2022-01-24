@@ -1,20 +1,25 @@
+import 'package:another_xlider/another_xlider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:my_cab_driver/Language/appLocalizations.dart';
 import 'package:my_cab_driver/constance/constance.dart';
-import 'package:my_cab_driver/vehicalManagement/addVehicalScreen.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:my_cab_driver/networking/Access.dart';
+
 class VehicalManagement extends StatefulWidget {
+  double _value = ConstanceData.prof.driver_rate >= ConstanceData.prof.min_rate
+      ? double.parse(ConstanceData.prof.driver_rate.toString())
+      : double.parse(ConstanceData.prof.min_rate.toString());
+
   @override
   _VehicalManagementState createState() => _VehicalManagementState();
 }
 
 class _VehicalManagementState extends State<VehicalManagement> {
+
+
   @override
   Widget build(BuildContext context) {
-    double _value = 40.0;
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: appBar(),
@@ -49,7 +54,8 @@ class _VehicalManagementState extends State<VehicalManagement> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          AppLocalizations.of('Madza'),
+                          AppLocalizations.of(
+                              '${getName(ConstanceData.prof.vehicle_id.toString())}'),
                           style: Theme.of(context).textTheme.headline6.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color:
@@ -60,7 +66,7 @@ class _VehicalManagementState extends State<VehicalManagement> {
                           height: 2,
                         ),
                         Text(
-                          '42A 243.78',
+                          '${ConstanceData.prof.load_capacity}',
                           style: Theme.of(context).textTheme.subtitle2.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).disabledColor,
@@ -81,30 +87,66 @@ class _VehicalManagementState extends State<VehicalManagement> {
             SizedBox(
               height: 16,
             ),
-            SfSlider(
-              min: 0.0,
-              max: 100.0,
-              value: _value,
-              interval: 10,
-              showTicks: true,
-              showLabels: true,
-              enableTooltip: true,
-              minorTicksPerInterval: 1,
-              onChanged: (dynamic value) {
+            FlutterSlider(
+              min: double.parse(ConstanceData.prof.min_rate.toString()),
+              max: double.parse(ConstanceData.prof.max_rate.toString()),
+              step: FlutterSliderStep(
+                  step: 5,
+                  // default
+                  isPercentRange: true,
+                  // ranges are percents, 0% to 20% and so on... . default is true
+                  rangeList: [
+                    FlutterSliderRangeStep(
+                        from: double.parse(
+                            ConstanceData.prof.min_rate.toString()),
+                        to: double.parse(
+                            ConstanceData.prof.max_rate.toString()),
+                        step: 10),
+                  ]),
+              values: [widget._value],
+              onDragCompleted: (one, two, three) {
                 setState(() {
-                  _value = value;
-                  print(_value);
+                  widget._value = two;
                 });
               },
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            InkWell(
+              onTap: () {
+                Access()
+                    .setPrice(widget._value.toInt().toString())
+                    .then((value) => {
+                          Access().getProfile().then((value) => {
+                                ConstanceData.prof = value,
+                                print("prof data${value.driver_rate}")
+                              })
+                        });
+              },
+              child: Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of('SAVE'),
+                    style: Theme.of(context).textTheme.button.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                  ),
+                ),
+              ),
             ),
             Expanded(
               child: SizedBox(),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-
-              ],
+              children: <Widget>[],
             ),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom + 16,
@@ -147,4 +189,20 @@ class _VehicalManagementState extends State<VehicalManagement> {
       ),
     );
   }
+
+  String getName(vehicle_id) {
+    for (var i in ConstanceData.vehicletype) {
+      if (vehicle_id == i.vehicle_id.toString()) {
+        return i.vehicle;
+      }
+    }
+  }
+
+  @override
+  void initState() {
+
+    super.initState();
+  }
+
+
 }

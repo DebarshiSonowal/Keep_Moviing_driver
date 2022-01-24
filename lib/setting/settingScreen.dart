@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
 import 'package:my_cab_driver/constance/constance.dart';
+import 'package:my_cab_driver/documentManagement/DocumentUpload.dart';
 import 'package:my_cab_driver/drawer/drawer.dart';
 import 'package:my_cab_driver/main.dart';
 import 'package:my_cab_driver/vehicalManagement/vehicalmanagementScreen.dart';
@@ -150,7 +151,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   width: 16,
                 ),
                 Text(
-                    AppLocalizations.of('Terms & Privacy Policy'),
+                  AppLocalizations.of('Terms & Privacy Policy'),
                   style: Theme.of(context).textTheme.subtitle1.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.headline6.color,
@@ -197,7 +198,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   width: 16,
                 ),
                 Text(
-                    AppLocalizations.of('Contact Us'),
+                  AppLocalizations.of('Contact Us'),
                   style: Theme.of(context).textTheme.subtitle1.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.headline6.color,
@@ -281,6 +282,66 @@ class _SettingScreenState extends State<SettingScreen> {
               color: Theme.of(context).dividerColor,
             ),
           ),
+          // InkWell(
+          //   highlightColor: Colors.transparent,
+          //   splashColor: Colors.transparent,
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => DocmanagementScreen(),
+          //         // builder: (context) => DocumentUpload(),
+          //       ),
+          //     );
+          //   },
+          //   child: Padding(
+          //     padding:
+          //         const EdgeInsets.only(right: 10, left: 14, top: 8, bottom: 8),
+          //     child: Row(
+          //       children: <Widget>[
+          //         Container(
+          //           height: 26,
+          //           width: 26,
+          //           decoration: BoxDecoration(
+          //             borderRadius: BorderRadius.circular(6),
+          //             color: HexColor("#4BDA65"),
+          //           ),
+          //           child: Padding(
+          //             padding: const EdgeInsets.all(4),
+          //             child: Icon(
+          //               FontAwesomeIcons.idCard,
+          //               color: Colors.white,
+          //               size: 16,
+          //             ),
+          //           ),
+          //         ),
+          //         SizedBox(
+          //           width: 16,
+          //         ),
+          //         Text(
+          //           AppLocalizations.of('Document Management'),
+          //           style: Theme.of(context).textTheme.subtitle1.copyWith(
+          //                 fontWeight: FontWeight.bold,
+          //                 color: Theme.of(context).textTheme.headline6.color,
+          //               ),
+          //         ),
+          //         Expanded(child: SizedBox()),
+          //         Icon(
+          //           Icons.arrow_forward_ios,
+          //           size: 18,
+          //           color: Theme.of(context).disabledColor,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          Padding(
+            padding: const EdgeInsets.only(left: 60),
+            child: Container(
+              height: 1,
+              color: Theme.of(context).dividerColor,
+            ),
+          ),
           InkWell(
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
@@ -288,7 +349,7 @@ class _SettingScreenState extends State<SettingScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DocmanagementScreen(),
+                  builder: (context) => DocumentUpload(),
                 ),
               );
             },
@@ -317,7 +378,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     width: 16,
                   ),
                   Text(
-                    AppLocalizations.of('Document Management'),
+                    AppLocalizations.of('Document Upload'),
                     style: Theme.of(context).textTheme.subtitle1.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).textTheme.headline6.color,
@@ -365,7 +426,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   width: 16,
                 ),
                 Text(
-                    AppLocalizations.of('Reviews'),
+                  AppLocalizations.of('Reviews'),
                   style: Theme.of(context).textTheme.subtitle1.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.headline6.color,
@@ -483,7 +544,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    AppLocalizations.of('Esther Berry'),
+                    AppLocalizations.of('${ConstanceData.prof.name}'),
                     style: Theme.of(context).textTheme.headline6.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).textTheme.headline6.color,

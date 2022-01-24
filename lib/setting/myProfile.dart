@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
+import 'package:my_cab_driver/Model/Profile.dart';
 import 'package:my_cab_driver/constance/constance.dart';
+import 'package:my_cab_driver/setting/editProfile.dart';
 import '../main.dart';
 import 'package:my_cab_driver/constance/constance.dart' as constance;
 
@@ -17,6 +21,16 @@ class _MyProfileState extends State<MyProfile> {
   bool selectFourthColor = false;
   bool selectFifthColor = false;
   bool selectSixthColor = false;
+
+  Position position;
+
+  String place;
+
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +50,23 @@ class _MyProfileState extends State<MyProfile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       CircleAvatar(
-                        radius: MediaQuery.of(context).size.width <= 320 ? 36 : 46,
+                        radius:
+                            MediaQuery.of(context).size.width <= 320 ? 36 : 46,
                         child: ClipRRect(
-                          borderRadius: MediaQuery.of(context).size.width <= 320 ? BorderRadius.circular(40) : BorderRadius.circular(60),
+                          borderRadius: MediaQuery.of(context).size.width <= 320
+                              ? BorderRadius.circular(40)
+                              : BorderRadius.circular(60),
                           child: Image.asset(
                             ConstanceData.user3,
                           ),
                         ),
                       ),
                       Text(
-                        'Esther Berry',
+                        '${ConstanceData.prof.name}',
                         style: Theme.of(context).textTheme.headline6.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: Theme.of(context).textTheme.headline6.color,
+                              color:
+                                  Theme.of(context).textTheme.headline6.color,
                             ),
                       ),
                       Text(
@@ -65,7 +83,8 @@ class _MyProfileState extends State<MyProfile> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 14, left: 14, top: 10, bottom: 10),
+            padding:
+                const EdgeInsets.only(right: 14, left: 14, top: 10, bottom: 10),
             child: Row(
               children: <Widget>[
                 Text(
@@ -87,7 +106,8 @@ class _MyProfileState extends State<MyProfile> {
             child: Container(
               color: Theme.of(context).scaffoldBackgroundColor,
               child: Padding(
-                padding: const EdgeInsets.only(right: 10, left: 14, top: 8, bottom: 8),
+                padding: const EdgeInsets.only(
+                    right: 10, left: 14, top: 8, bottom: 8),
                 child: Row(
                   children: <Widget>[
                     Text(
@@ -109,7 +129,8 @@ class _MyProfileState extends State<MyProfile> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 14, left: 14, top: 10, bottom: 10),
+            padding:
+                const EdgeInsets.only(right: 14, left: 14, top: 10, bottom: 10),
             child: Row(
               children: <Widget>[
                 Text(
@@ -131,7 +152,8 @@ class _MyProfileState extends State<MyProfile> {
             child: Container(
               color: Theme.of(context).scaffoldBackgroundColor,
               child: Padding(
-                padding: const EdgeInsets.only(right: 10, left: 14, top: 8, bottom: 8),
+                padding: const EdgeInsets.only(
+                    right: 10, left: 14, top: 8, bottom: 8),
                 child: Row(
                   children: <Widget>[
                     Text(
@@ -153,7 +175,8 @@ class _MyProfileState extends State<MyProfile> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 14, left: 14, top: 10, bottom: 10),
+            padding:
+                const EdgeInsets.only(right: 14, left: 14, top: 10, bottom: 10),
             child: Row(
               children: <Widget>[
                 Text(
@@ -175,20 +198,30 @@ class _MyProfileState extends State<MyProfile> {
                   child: Column(
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(right: 10, left: 14, top: 8, bottom: 8),
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 14, top: 8, bottom: 8),
                         child: Row(
                           children: <Widget>[
                             Text(
                               AppLocalizations.of('Username'),
-                              style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).textTheme.headline6.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
                                   ),
                             ),
                             Expanded(child: SizedBox()),
                             Text(
-                              'Martha Banks',
-                              style: Theme.of(context).textTheme.subtitle2.copyWith(
+                              '${ConstanceData.prof.name}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).disabledColor,
                                   ),
@@ -209,20 +242,30 @@ class _MyProfileState extends State<MyProfile> {
                         color: Theme.of(context).dividerColor,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 10, left: 14, top: 8, bottom: 8),
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 14, top: 8, bottom: 8),
                         child: Row(
                           children: <Widget>[
                             Text(
                               AppLocalizations.of('Phone number'),
-                              style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).textTheme.headline6.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
                                   ),
                             ),
                             Expanded(child: SizedBox()),
                             Text(
-                              '567-367-0088',
-                              style: Theme.of(context).textTheme.subtitle2.copyWith(
+                              '${ConstanceData.prof.phone}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).disabledColor,
                                   ),
@@ -243,20 +286,30 @@ class _MyProfileState extends State<MyProfile> {
                         color: Theme.of(context).dividerColor,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 10, left: 14, top: 8, bottom: 8),
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 14, top: 8, bottom: 8),
                         child: Row(
                           children: <Widget>[
                             Text(
                               AppLocalizations.of('Email'),
-                              style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).textTheme.headline6.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
                                   ),
                             ),
                             Expanded(child: SizedBox()),
                             Text(
-                              'Freeslab88@gmail.com',
-                              style: Theme.of(context).textTheme.subtitle2.copyWith(
+                              '${ConstanceData.prof.email}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).disabledColor,
                                   ),
@@ -277,20 +330,31 @@ class _MyProfileState extends State<MyProfile> {
                         color: Theme.of(context).dividerColor,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 10, left: 14, top: 8, bottom: 8),
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 14, top: 8, bottom: 8),
                         child: Row(
                           children: <Widget>[
                             Text(
-                              AppLocalizations.of('Gender'),
-                              style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              AppLocalizations.of('City'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).textTheme.headline6.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
                                   ),
                             ),
                             Expanded(child: SizedBox()),
                             Text(
-                              AppLocalizations.of('Female'),
-                              style: Theme.of(context).textTheme.subtitle2.copyWith(
+                              AppLocalizations.of(
+                                  '${ConstanceData.prof.city == null ? place : ConstanceData.prof.city}'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).disabledColor,
                                   ),
@@ -311,20 +375,210 @@ class _MyProfileState extends State<MyProfile> {
                         color: Theme.of(context).dividerColor,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 10, left: 14, top: 8, bottom: 8),
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 14, top: 8, bottom: 8),
                         child: Row(
                           children: <Widget>[
                             Text(
-                              AppLocalizations.of('Birthday'),
-                              style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              AppLocalizations.of('GST'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).textTheme.headline6.color,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
                                   ),
                             ),
                             Expanded(child: SizedBox()),
                             Text(
-                              'April 16,1988',
-                              style: Theme.of(context).textTheme.subtitle2.copyWith(
+                              AppLocalizations.of(
+                                  '${ConstanceData.prof.GST == null ? 'Not Available' : ConstanceData.prof.GST}'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).disabledColor,
+                                  ),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Theme.of(context).disabledColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 14, top: 8, bottom: 8),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              AppLocalizations.of('Vehicle'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
+                                  ),
+                            ),
+                            Expanded(child: SizedBox()),
+                            Text(
+                              AppLocalizations.of(
+                                  '${getName(ConstanceData.prof.vehicle_id.toString())}'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).disabledColor,
+                                  ),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Theme.of(context).disabledColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 14, top: 8, bottom: 8),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              AppLocalizations.of('Type'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
+                                  ),
+                            ),
+                            Expanded(child: SizedBox()),
+                            Text(
+                              '${ConstanceData.prof.vehicle_type}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).disabledColor,
+                                  ),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Theme.of(context).disabledColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 14, top: 8, bottom: 8),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              AppLocalizations.of('Capacity'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
+                                  ),
+                            ),
+                            Expanded(child: SizedBox()),
+                            Text(
+                              AppLocalizations.of(
+                                  '${ConstanceData.prof.load_capacity}'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).disabledColor,
+                                  ),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Theme.of(context).disabledColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 14, top: 8, bottom: 8),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              AppLocalizations.of('Document'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
+                                  ),
+                            ),
+                            Expanded(child: SizedBox()),
+                            Text(
+                              AppLocalizations.of(
+                                  '${ConstanceData.prof.driving_license == null ? "NOT UPLOADED" : getStatus(ConstanceData.prof.status)}'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).disabledColor,
                                   ),
@@ -534,7 +788,8 @@ class _MyProfileState extends State<MyProfile> {
                       },
                       child: CircleAvatar(
                         radius: 34,
-                        backgroundColor: Theme.of(context).textTheme.headline6.color,
+                        backgroundColor:
+                            Theme.of(context).textTheme.headline6.color,
                         child: CircleAvatar(
                           backgroundColor: Colors.white,
                           radius: 32,
@@ -553,7 +808,8 @@ class _MyProfileState extends State<MyProfile> {
                       },
                       child: CircleAvatar(
                         radius: 34,
-                        backgroundColor: Theme.of(context).textTheme.headline6.color,
+                        backgroundColor:
+                            Theme.of(context).textTheme.headline6.color,
                         child: CircleAvatar(
                           backgroundColor: Colors.black,
                           radius: 32,
@@ -804,6 +1060,8 @@ class _MyProfileState extends State<MyProfile> {
             splashColor: Colors.transparent,
             onTap: () {
               Navigator.of(context).pop();
+
+
             },
             child: SizedBox(
               child: Icon(
@@ -822,5 +1080,73 @@ class _MyProfileState extends State<MyProfile> {
         ],
       ),
     );
+  }
+
+  String getName(vehicle_id) {
+    for (var i in ConstanceData.vehicletype) {
+      if (vehicle_id == i.vehicle_id.toString()) {
+        return i.vehicle;
+      }
+    }
+  }
+
+  void getLocation() async {
+    position = await _determinePosition();
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    if (mounted) {
+      setState(() {
+        place = placemarks[0].name.toString();
+        print(place);
+      });
+    } else {
+      place = placemarks[0].name.toString();
+      print(place);
+    }
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  getStatus(String id) {
+    if (id == '2') {
+      return "Verified";
+    } else {
+      return 'Not verified';
+    }
   }
 }

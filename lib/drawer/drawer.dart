@@ -55,7 +55,7 @@ class _AppDrawerState extends State<AppDrawer> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              AppLocalizations.of('Martha Banks'),
+                              AppLocalizations.of('${ConstanceData.prof==null?'ADS':ConstanceData.prof.name}'),
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6

@@ -13,6 +13,13 @@ class MyWallet extends StatefulWidget {
 class _MyWalletState extends State<MyWallet> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

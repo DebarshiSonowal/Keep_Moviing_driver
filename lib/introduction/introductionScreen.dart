@@ -206,6 +206,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> with TickerProv
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               onTap: () {
+                
                 Navigator.pushReplacementNamed(context, Routes.ENABLELOCATION);
               },
               child: Container(

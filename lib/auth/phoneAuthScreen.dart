@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_cab_driver/Model/SignUpData.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
+import 'package:my_cab_driver/networking/Access.dart';
 
 import '../main.dart';
 
@@ -154,11 +155,23 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     onTap: () {
-                      PhoneAuthCredential phoneAuthCredential =
-                          PhoneAuthProvider.credential(
-                              verificationId: widget.data.code,
-                              smsCode: otpController.text);
-                      signInWithPhoneAuthCredential(phoneAuthCredential);
+                      if (otpController.text.isNotEmpty&&otpController.text.length==6) {
+                        PhoneAuthCredential phoneAuthCredential =
+                        PhoneAuthProvider.credential(
+                            verificationId: widget.data.code,
+                            smsCode: otpController.text);
+                        signInWithPhoneAuthCredential(phoneAuthCredential);
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "Enter the otp correctly",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      }
+
                     },
                     child: Container(
                       height: 45,
@@ -230,8 +243,14 @@ class _PhoneVerificationState extends State<PhoneVerification> {
           await auth.signInWithCredential(phoneAuthCredential);
 
       if (authCredential?.user != null) {
-        Navigator.pushNamedAndRemoveUntil(
-            context, Routes.HOME, (Route<dynamic> route) => false);
+        Access().register(widget.data).then((value) => {
+
+          ConstanceData.prof = value,
+          ConstanceData.saveId(value.user_id.toString()),
+          print(value.user_id),
+              Navigator.pushNamedAndRemoveUntil(
+                  context, Routes.HOME, (Route<dynamic> route) => false)
+            });
       }
     } on FirebaseAuthException catch (e) {
       Fluttertoast.showToast(
