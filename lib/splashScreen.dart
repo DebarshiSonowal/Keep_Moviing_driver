@@ -7,6 +7,7 @@ import 'package:my_cab_driver/constance/constance.dart';
 import 'Language/LanguageData.dart';
 import 'constance/constance.dart' as constance;
 import 'main.dart';
+import 'networking/Access.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -44,6 +45,9 @@ class _SplashScreenState extends State<SplashScreen>
               .loadString("jsonFile/languagetext.json")));
     }
     ConstanceData.getId();
+    Access().getVehicles().then((value) => {
+      ConstanceData.setVehicleType(value)
+    });
     await Future.delayed(const Duration(milliseconds: 1200));
     if(auth.currentUser!=null){
       Navigator.pushNamedAndRemoveUntil(context, Routes.HOME, (Route<dynamic> route) => false);

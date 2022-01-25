@@ -41,6 +41,10 @@ class ConstanceData {
     id = data;
     print("Saved ${id}id");
   }
+  static clear() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.clear();
+  }
 
   static getId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

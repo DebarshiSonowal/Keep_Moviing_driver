@@ -1070,12 +1070,22 @@ class _MyProfileState extends State<MyProfile> {
               ),
             ),
           ),
-          Text(
-            AppLocalizations.of('Edit'),
-            style: Theme.of(context).textTheme.headline6.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+          GestureDetector(
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => edit_profile(),
                 ),
+              );
+            },
+            child: Text(
+              AppLocalizations.of('Edit'),
+              style: Theme.of(context).textTheme.headline6.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor,
+                  ),
+            ),
           ),
         ],
       ),

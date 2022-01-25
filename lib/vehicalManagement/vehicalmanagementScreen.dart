@@ -7,9 +7,7 @@ import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/networking/Access.dart';
 
 class VehicalManagement extends StatefulWidget {
-  double _value = ConstanceData.prof.driver_rate >= ConstanceData.prof.min_rate
-      ? double.parse(ConstanceData.prof.driver_rate.toString())
-      : double.parse(ConstanceData.prof.min_rate.toString());
+  double _value =double.parse(ConstanceData.prof.min_rate.toString());
 
   @override
   _VehicalManagementState createState() => _VehicalManagementState();
@@ -202,6 +200,22 @@ class _VehicalManagementState extends State<VehicalManagement> {
   void initState() {
 
     super.initState();
+    if(mounted){
+      setState(() {
+        if (ConstanceData.prof.driver_rate!=null&&ConstanceData.prof.driver_rate>=ConstanceData.prof.min_rate&&ConstanceData.prof.driver_rate<=ConstanceData.prof.max_rate) {
+          widget._value = ConstanceData.prof.driver_rate >= ConstanceData.prof.min_rate
+                      ? double.parse(ConstanceData.prof.driver_rate.toString())
+                      : double.parse(ConstanceData.prof.min_rate.toString());
+        }
+      });
+    }else{
+      if (ConstanceData.prof.driver_rate!=null&&ConstanceData.prof.driver_rate>=ConstanceData.prof.min_rate&&ConstanceData.prof.driver_rate<=ConstanceData.prof.max_rate) {
+        widget._value = ConstanceData.prof.driver_rate >= ConstanceData.prof.min_rate
+                  ? double.parse(ConstanceData.prof.driver_rate.toString())
+                  : double.parse(ConstanceData.prof.min_rate.toString());
+      }
+    }
+
   }
 
 

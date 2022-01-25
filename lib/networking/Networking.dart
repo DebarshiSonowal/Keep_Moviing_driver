@@ -64,6 +64,7 @@ class NetworkHelper {
         'vehicle_name': data.type,
         'vehicle_type': data.category,
         'capacity': data.weight,
+        'vehicle_id':data.vehicle_id
       });
       if (response.statusCode == 200) {
         Fluttertoast.showToast(
@@ -279,4 +280,34 @@ class NetworkHelper {
       return 'Failed';
     }
   }
+
+  Future saveVehicle(vehicleModel1 vehicle) async{
+    dio = Dio(option);
+
+    try {
+      Response response = await dio.post(url, queryParameters: {
+        'id': ConstanceData.id.toString(),
+        'vehicle_id': vehicle.vehicle_id,
+        'loadcapacity':vehicle.loadcapacity,
+        'vehicle_type':vehicle.vehicle_type,
+      });
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: "${response.data['message']}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return response.data['message'];
+      } else {
+        return 'Failed';
+      }
+    } on DioError catch (e) {
+      print(e.message);
+      return 'Failed';
+    }
+  }
+
 }

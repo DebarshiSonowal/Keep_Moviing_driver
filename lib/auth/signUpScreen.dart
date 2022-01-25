@@ -39,6 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     nameController.dispose();
     emailController.dispose();
     phoneController.dispose();
+    auth = null;
     super.dispose();
   }
 
@@ -737,7 +738,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         phoneNumber: '+91' + phoneController.text,
         verificationCompleted: (credential) async {
           await auth.signInWithCredential(credential).then((value) {
-            Navigator.pop(context);
+
             Access()
                 .register(signupdata(
                     nameController.text,
@@ -747,13 +748,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     getCateg(),
                     ConstanceData.vehicleWeight[selectedWeightIndex][0]
                         .toString(),
-                    ''))
+                    '',
+                    vehicleId()))
                 .then((value) => {
-                      ConstanceData.prof = value,
-                      ConstanceData.saveId(value.user_id.toString()),
-                      print(value.user_id),
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, Routes.HOME, (Route<dynamic> route) => false)
+                      ConstanceData.prof = null,
+                      ConstanceData.clear(),
+                      // ConstanceData.prof = value,
+                      // ConstanceData.saveId(value.user_id.toString()),
+                      // print("Here ${value.user_id}"),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      )
                     });
           });
         },
@@ -785,7 +793,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   getCateg(),
                   ConstanceData.vehicleWeight[selectedWeightIndex][0]
                       .toString(),
-                  verificationId)),
+                  verificationId,
+                  vehicleId())),
             ),
           );
         },
@@ -831,5 +840,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void getCurrentPosition() async {
     position = await _determinePosition();
+  }
+
+  int vehicleId() {
+    for (var a in ConstanceData.vehicletype) {
+      if (a.vehicle ==
+          ConstanceData.vehicleType[selectedVehicleIndex].toString()) {
+        return a.vehicle_id;
+      }
+    }
+  }
+  String getName(vehicle_id) {
+    for (var i in ConstanceData.vehicletype) {
+      if (vehicle_id == i.vehicle_id.toString()) {
+        return i.vehicle;
+      }
+    }
   }
 }

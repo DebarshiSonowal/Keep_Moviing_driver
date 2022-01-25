@@ -55,6 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ConstanceData.prof = value,
             print("${value.name}")
           });
+      }else if( ConstanceData.prof.min_rate==null||ConstanceData.prof.min_rate==null){
+        Access().getProfile().then((value) => {
+          ConstanceData.prof = value,
+          print("${value.name}")
+        });
       }
     }
   }

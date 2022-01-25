@@ -7,6 +7,7 @@ import 'package:my_cab_driver/Language/appLocalizations.dart';
 import 'package:my_cab_driver/networking/Access.dart';
 
 import '../main.dart';
+import 'loginScreen.dart';
 
 class PhoneVerification extends StatefulWidget {
   final signupdata data;
@@ -245,11 +246,16 @@ class _PhoneVerificationState extends State<PhoneVerification> {
       if (authCredential?.user != null) {
         Access().register(widget.data).then((value) => {
 
-          ConstanceData.prof = value,
-          ConstanceData.saveId(value.user_id.toString()),
-          print(value.user_id),
-              Navigator.pushNamedAndRemoveUntil(
-                  context, Routes.HOME, (Route<dynamic> route) => false)
+          ConstanceData.prof = null,
+          ConstanceData.clear(),
+          // ConstanceData.prof = value,
+          // ConstanceData.saveId(value.user_id.toString()),
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(),
+            ),
+          )
             });
       }
     } on FirebaseAuthException catch (e) {

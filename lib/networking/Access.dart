@@ -1,4 +1,3 @@
-
 import 'package:my_cab_driver/Model/Document.dart';
 import 'package:my_cab_driver/Model/Profile.dart';
 import 'package:my_cab_driver/Model/SignUpData.dart';
@@ -15,6 +14,7 @@ class Access {
   static final get_profile_url = ConstanceData.url + "get-profile/";
   static final get_vehicle_url = ConstanceData.url + "get-vehicle";
   static final driver_rate_url = ConstanceData.url + "driver-rate";
+  static final update_profile_url = ConstanceData.url + "update-profile";
   static final login_otp_vrification_url =
       ConstanceData.url + "login-otp-verification";
 
@@ -36,7 +36,8 @@ class Access {
   }
 
   Future<dynamic> getProfile() async {
-    NetworkHelper helper = NetworkHelper(get_profile_url + ConstanceData.id.toString());
+    NetworkHelper helper =
+        NetworkHelper(get_profile_url + ConstanceData.id.toString());
 
     var returndata = await helper.getProfile();
     print("the id ${ConstanceData.id}");
@@ -51,22 +52,28 @@ class Access {
 
     return data;
   }
-  Future<dynamic> getVehicles() async{
 
+  Future<dynamic> getVehicles() async {
     NetworkHelper helper = NetworkHelper(get_vehicle_url);
 
     List<vehicleModel> data = await helper.getVehicles();
     return data;
   }
 
-  Future<dynamic> setPrice(String price) async{
-
+  Future<dynamic> setPrice(String price) async {
     NetworkHelper helper = NetworkHelper(driver_rate_url);
 
     var data = await helper.saveDriverPrice(price);
 
     return data;
+  }
 
+  Future<dynamic> saveVehicle(vehicleModel1 vehicle) async{
+    NetworkHelper helper = NetworkHelper(update_profile_url);
+
+    var data = await helper.saveVehicle(vehicle);
+
+    return data;
   }
 
 }
