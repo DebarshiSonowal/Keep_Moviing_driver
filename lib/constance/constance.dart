@@ -32,6 +32,8 @@ class ConstanceData {
   static final url = "https://reinventmyskills.com/keep/public/api/driver/";
   static final app_key = "jXIIci1Uxirg7MU33cu9qu1PL4kgUIi74Q7yGiFE";
 
+  static String image_url;
+
   static String id;
   static profile prof;
 
@@ -59,23 +61,23 @@ class ConstanceData {
     print("Vehicle ");
   }
 
-  static final vehicleType = [
-    '4.5 Ton',
-    'E-Rickshaw',
-    'Large Pickup',
-    'Loader Rickshaw',
-    'Mini Truck',
-    'Small Pickup'
-  ];
-
-  static final vehicleWeight = [
-    ['7 Ton'],
-    ['50 KG'],
-    ['100 Ton'],
-    ['50 KG'],
-    ['1 Ton'],
-    ['50 KG']
-  ];
+  // static final vehicleType = [
+  //   '4.5 Ton',
+  //   'E-Rickshaw',
+  //   'Large Pickup',
+  //   'Loader Rickshaw',
+  //   'Mini Truck',
+  //   'Small Pickup'
+  // ];
+  //
+  // static final vehicleWeight = [
+  //   ['7 Ton'],
+  //   ['50 KG'],
+  //   ['100 Ton'],
+  //   ['50 KG'],
+  //   ['1 Ton'],
+  //   ['50 KG']
+  // ];
 
   List<String> colors = [
     '#EB1165',

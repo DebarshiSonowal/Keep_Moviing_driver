@@ -3,9 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/documentManagement/DocumentUpload.dart';
+import 'package:my_cab_driver/documentManagement/documentUploadSingle.dart';
 import 'package:my_cab_driver/drawer/drawer.dart';
 import 'package:my_cab_driver/main.dart';
-import 'package:my_cab_driver/vehicalManagement/vehicalmanagementScreen.dart';
+import 'package:my_cab_driver/priceManagement/pricemanagementScreen.dart';
 import 'package:my_cab_driver/documentManagement/docManagementScreen.dart';
 import '../appTheme.dart';
 import 'myProfile.dart';
@@ -259,7 +260,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     width: 16,
                   ),
                   Text(
-                    AppLocalizations.of('vehicle Management'),
+                    AppLocalizations.of('Price Management'),
                     style: Theme.of(context).textTheme.subtitle1.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).textTheme.headline6.color,
@@ -349,7 +350,7 @@ class _SettingScreenState extends State<SettingScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DocumentUpload(),
+                  builder: (context) => documentUploadSingle(),
                 ),
               );
             },
@@ -551,7 +552,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         ),
                   ),
                   Text(
-                    AppLocalizations.of('5 mutual friends'),
+                    AppLocalizations.of('${ConstanceData.prof.email}'),
                     style: Theme.of(context).textTheme.subtitle2.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).disabledColor,

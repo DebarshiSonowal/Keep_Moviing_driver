@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
-import 'package:my_cab_driver/Model/Profile.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/setting/editProfile.dart';
 import '../main.dart';
@@ -21,9 +23,9 @@ class _MyProfileState extends State<MyProfile> {
   bool selectFourthColor = false;
   bool selectFifthColor = false;
   bool selectSixthColor = false;
-
+  final ImagePicker _picker = ImagePicker();
   Position position;
-
+  XFile pic;
   String place;
 
   @override
@@ -49,15 +51,91 @@ class _MyProfileState extends State<MyProfile> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CircleAvatar(
-                        radius:
-                            MediaQuery.of(context).size.width <= 320 ? 36 : 46,
-                        child: ClipRRect(
-                          borderRadius: MediaQuery.of(context).size.width <= 320
-                              ? BorderRadius.circular(40)
-                              : BorderRadius.circular(60),
-                          child: Image.asset(
-                            ConstanceData.user3,
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (_) => AlertDialog(
+                                    title: Text('Profile Photo'),
+                                    content: StatefulBuilder(
+                                        builder: (cont, stateSet) {
+                                      return Container(
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                4,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            CircleAvatar(
+                                              radius: MediaQuery.of(context)
+                                                          .size
+                                                          .width <=
+                                                      320
+                                                  ? 36
+                                                  : 46,
+                                              child: ClipRRect(
+                                                borderRadius: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width <=
+                                                        320
+                                                    ? BorderRadius.circular(40)
+                                                    : BorderRadius.circular(60),
+                                                child: pic != null
+                                                    ? Image.file(
+                                                        File(pic.path),
+                                                        fit: BoxFit.cover,
+                                                      )
+                                                    : Image.asset(
+                                                        ConstanceData.user3,
+                                                      ),
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: () async {
+                                                var path =
+                                                    await _picker.pickImage(
+                                                  source: ImageSource.gallery,
+                                                  imageQuality: 50,
+                                                );
+                                                stateSet(() {
+                                                  pic = path;
+                                                });
+                                              },
+                                              child: Text('Select Image'),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          pic = null;
+                                        },
+                                        child: Text('Go Back'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {},
+                                        child: Text('Save'),
+                                      )
+                                    ],
+                                  ));
+                        },
+                        child: CircleAvatar(
+                          radius: MediaQuery.of(context).size.width <= 320
+                              ? 36
+                              : 46,
+                          child: ClipRRect(
+                            borderRadius:
+                                MediaQuery.of(context).size.width <= 320
+                                    ? BorderRadius.circular(40)
+                                    : BorderRadius.circular(60),
+                            child: Image.asset(
+                              ConstanceData.user3,
+                            ),
                           ),
                         ),
                       ),
@@ -1060,8 +1138,6 @@ class _MyProfileState extends State<MyProfile> {
             splashColor: Colors.transparent,
             onTap: () {
               Navigator.of(context).pop();
-
-
             },
             child: SizedBox(
               child: Icon(
@@ -1071,7 +1147,7 @@ class _MyProfileState extends State<MyProfile> {
             ),
           ),
           GestureDetector(
-            onTap: (){
+            onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -1159,4 +1235,6 @@ class _MyProfileState extends State<MyProfile> {
       return 'Not verified';
     }
   }
+
+  void getPic() async {}
 }

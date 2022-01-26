@@ -7,15 +7,13 @@ import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/networking/Access.dart';
 
 class VehicalManagement extends StatefulWidget {
-  double _value =double.parse(ConstanceData.prof.min_rate.toString());
+  double _value = double.parse(ConstanceData.prof.min_rate.toString());
 
   @override
   _VehicalManagementState createState() => _VehicalManagementState();
 }
 
 class _VehicalManagementState extends State<VehicalManagement> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,10 +36,15 @@ class _VehicalManagementState extends State<VehicalManagement> {
                         CircleAvatar(
                           backgroundColor: Theme.of(context).primaryColor,
                           radius: 30,
-                          child: Icon(
-                            FontAwesomeIcons.filePdf,
-                            color: ConstanceData.secoundryFontColor,
-                          ),
+                          child: getPhoto(ConstanceData.prof.vehicle_id
+                                      .toString()) ==
+                                  null
+                              ? Icon(
+                                  FontAwesomeIcons.filePdf,
+                                  color: ConstanceData.secoundryFontColor,
+                                )
+                              : Image.network(ConstanceData.image_url.toString()+getPhoto(
+                                  ConstanceData.prof.vehicle_id.toString())),
                         ),
                       ],
                     ),
@@ -111,6 +114,48 @@ class _VehicalManagementState extends State<VehicalManagement> {
             SizedBox(
               height: 16,
             ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 20,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Minimum rate:',
+                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).disabledColor,
+                          )),
+                  Text('${ConstanceData.prof.min_rate}',
+                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff0b0b0b),
+                          )),
+                  Text('Selected rate:',
+                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).disabledColor,
+                          )),
+                  Text('${widget._value.toInt()}',
+                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff0b0b0b),
+                          )),
+                  Text('Maximum rate:',
+                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).disabledColor,
+                          )),
+                  Text('${ConstanceData.prof.max_rate}',
+                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff0b0b0b),
+                          )),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 16,
+            ),
             InkWell(
               onTap: () {
                 Access()
@@ -118,7 +163,6 @@ class _VehicalManagementState extends State<VehicalManagement> {
                     .then((value) => {
                           Access().getProfile().then((value) => {
                                 ConstanceData.prof = value,
-                                print("prof data${value.driver_rate}")
                               })
                         });
               },
@@ -176,7 +220,7 @@ class _VehicalManagementState extends State<VehicalManagement> {
             ),
           ),
           Text(
-            AppLocalizations.of('Vehicle Management'),
+            AppLocalizations.of('Price Management'),
             style: Theme.of(context).textTheme.headline6.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).textTheme.headline6.color,
@@ -196,27 +240,37 @@ class _VehicalManagementState extends State<VehicalManagement> {
     }
   }
 
-  @override
-  void initState() {
-
-    super.initState();
-    if(mounted){
-      setState(() {
-        if (ConstanceData.prof.driver_rate!=null&&ConstanceData.prof.driver_rate>=ConstanceData.prof.min_rate&&ConstanceData.prof.driver_rate<=ConstanceData.prof.max_rate) {
-          widget._value = ConstanceData.prof.driver_rate >= ConstanceData.prof.min_rate
-                      ? double.parse(ConstanceData.prof.driver_rate.toString())
-                      : double.parse(ConstanceData.prof.min_rate.toString());
-        }
-      });
-    }else{
-      if (ConstanceData.prof.driver_rate!=null&&ConstanceData.prof.driver_rate>=ConstanceData.prof.min_rate&&ConstanceData.prof.driver_rate<=ConstanceData.prof.max_rate) {
-        widget._value = ConstanceData.prof.driver_rate >= ConstanceData.prof.min_rate
-                  ? double.parse(ConstanceData.prof.driver_rate.toString())
-                  : double.parse(ConstanceData.prof.min_rate.toString());
+  String getPhoto(vehicle_id) {
+    for (var i in ConstanceData.vehicletype) {
+      if (vehicle_id == i.vehicle_id.toString()) {
+        return i.vehicle_icon;
       }
     }
-
   }
 
-
+  @override
+  void initState() {
+    super.initState();
+    if (mounted) {
+      setState(() {
+        if (ConstanceData.prof.driver_rate != null &&
+            ConstanceData.prof.driver_rate >= ConstanceData.prof.min_rate &&
+            ConstanceData.prof.driver_rate <= ConstanceData.prof.max_rate) {
+          widget._value =
+              ConstanceData.prof.driver_rate >= ConstanceData.prof.min_rate
+                  ? double.parse(ConstanceData.prof.driver_rate.toString())
+                  : double.parse(ConstanceData.prof.min_rate.toString());
+        }
+      });
+    } else {
+      if (ConstanceData.prof.driver_rate != null &&
+          ConstanceData.prof.driver_rate >= ConstanceData.prof.min_rate &&
+          ConstanceData.prof.driver_rate <= ConstanceData.prof.max_rate) {
+        widget._value =
+            ConstanceData.prof.driver_rate >= ConstanceData.prof.min_rate
+                ? double.parse(ConstanceData.prof.driver_rate.toString())
+                : double.parse(ConstanceData.prof.min_rate.toString());
+      }
+    }
+  }
 }

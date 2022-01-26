@@ -22,8 +22,8 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   var appBarheight = 0.0;
-  var selectedVehicle = ConstanceData.vehicleType[0];
-  var selectedWeight = ConstanceData.vehicleWeight[0][0];
+  var selectedVehicle = ConstanceData.vehicletype[0].vehicle.toString();
+  var selectedWeight = ConstanceData.vehicletype[0].loadcapacity;
   var selectedVehicleIndex = 0;
   var selectedWeightIndex = 0;
   truckType current = truckType.open;
@@ -344,23 +344,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           isExpanded: true,
                                           value: selectedVehicle,
                                           icon: Icon(Icons.keyboard_arrow_down),
-                                          items: ConstanceData.vehicleType
-                                              .map((items) {
+                                          items: ConstanceData.vehicletype.map((items) {
                                             return DropdownMenuItem(
-                                              value: items,
-                                              child: Text(items),
+                                              value: items.vehicle,
+                                              child: Text(items.vehicle,),
                                             );
                                           }).toList(),
                                           onChanged: (String value) {
                                             setState(() {
                                               selectedVehicle = value;
                                               selectedVehicleIndex =
-                                                  ConstanceData.vehicleType
-                                                      .indexOf(value);
+                                                  getIndex(value);
                                               selectedWeightIndex =
                                                   selectedVehicleIndex;
                                               print(
-                                                  'The value is ${value} and index ${selectedWeightIndex} and weight ${ConstanceData.vehicleWeight[selectedWeightIndex]}');
+                                                  'The value is ${value} and index ${selectedVehicleIndex} and weight ${ConstanceData.vehicletype[selectedVehicleIndex].loadcapacity}');
                                             });
                                           },
                                         ),
@@ -382,29 +380,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         .backgroundColor
                                         .withOpacity(0.7),
                                   ),
-                                  // child: DropdownButton(
-                                  //   isExpanded: true,
-                                  //   value: selectedWeight,
-                                  //   icon: Icon(Icons.keyboard_arrow_down),
-                                  //   items: ConstanceData
-                                  //       .vehicleWeight[selectedWeightIndex]
-                                  //       .map((items) {
-                                  //     return DropdownMenuItem(
-                                  //       value: items,
-                                  //       child: Text(items),
-                                  //     );
-                                  //   }).toList(),
-                                  //   onChanged: (String value) {
-                                  //     setState(() {
-                                  //       selectedWeight = value;
-                                  //       print(
-                                  //           'selected weight changed ${value} AND ${ConstanceData.vehicleWeight[selectedWeightIndex].indexOf(value)}');
-                                  //       selectedWeightIndex = ConstanceData
-                                  //           .vehicleWeight[selectedWeightIndex]
-                                  //           .indexOf(value);
-                                  //     });
-                                  //   },
-                                  // ),
                                   child: Row(
                                     children: [
                                       Expanded(
@@ -415,10 +390,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       ),
                                       Expanded(
                                         flex: 5,
-                                        child: Text(ConstanceData
-                                            .vehicleWeight[selectedWeightIndex]
-                                                [0]
-                                            .toString()),
+                                          child: Text(
+                                              '${ConstanceData.vehicletype[selectedVehicleIndex].loadcapacity}')
                                       ),
                                     ],
                                   ),
@@ -497,48 +470,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   highlightColor: Colors.transparent,
                                   splashColor: Colors.transparent,
                                   onTap: () {
-                                    showLoaderDialog(context);
-                                    if (emailController.text != null &&
-                                        phoneController.text.isNotEmpty &&
-                                        nameController.text.isNotEmpty) {
-                                      if (isEmail(emailController.text)) {
-                                        if (_isNumeric(phoneController.text) &&
-                                            phoneController.text.length == 10) {
-                                          sendOtp();
-                                        } else {
-                                          Navigator.pop(context);
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  "Enter a valid mobile number",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.CENTER,
-                                              timeInSecForIosWeb: 1,
-                                              backgroundColor: Colors.red,
-                                              textColor: Colors.white,
-                                              fontSize: 16.0);
-                                        }
-                                      } else {
-                                        Navigator.pop(context);
-                                        Fluttertoast.showToast(
-                                            msg: "Enter a valid email",
-                                            toastLength: Toast.LENGTH_SHORT,
-                                            gravity: ToastGravity.CENTER,
-                                            timeInSecForIosWeb: 1,
-                                            backgroundColor: Colors.red,
-                                            textColor: Colors.white,
-                                            fontSize: 16.0);
-                                      }
-                                    } else {
-                                      Navigator.pop(context);
-                                      Fluttertoast.showToast(
-                                          msg: "Enter all the fields",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.CENTER,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Colors.red,
-                                          textColor: Colors.white,
-                                          fontSize: 16.0);
-                                    }
+                                    print('${getVehicleType(selectedVehicle)} ${ getLoad(selectedVehicle)} ${selectedVehicle}');
+                                    // showLoaderDialog(context);
+                                    // if (emailController.text != null &&
+                                    //     phoneController.text.isNotEmpty &&
+                                    //     nameController.text.isNotEmpty) {
+                                    //   if (isEmail(emailController.text)) {
+                                    //     if (_isNumeric(phoneController.text) &&
+                                    //         phoneController.text.length == 10) {
+                                    //       sendOtp();
+                                    //     } else {
+                                    //       Navigator.pop(context);
+                                    //       Fluttertoast.showToast(
+                                    //           msg:
+                                    //               "Enter a valid mobile number",
+                                    //           toastLength: Toast.LENGTH_SHORT,
+                                    //           gravity: ToastGravity.CENTER,
+                                    //           timeInSecForIosWeb: 1,
+                                    //           backgroundColor: Colors.red,
+                                    //           textColor: Colors.white,
+                                    //           fontSize: 16.0);
+                                    //     }
+                                    //   } else {
+                                    //     Navigator.pop(context);
+                                    //     Fluttertoast.showToast(
+                                    //         msg: "Enter a valid email",
+                                    //         toastLength: Toast.LENGTH_SHORT,
+                                    //         gravity: ToastGravity.CENTER,
+                                    //         timeInSecForIosWeb: 1,
+                                    //         backgroundColor: Colors.red,
+                                    //         textColor: Colors.white,
+                                    //         fontSize: 16.0);
+                                    //   }
+                                    // } else {
+                                    //   Navigator.pop(context);
+                                    //   Fluttertoast.showToast(
+                                    //       msg: "Enter all the fields",
+                                    //       toastLength: Toast.LENGTH_SHORT,
+                                    //       gravity: ToastGravity.CENTER,
+                                    //       timeInSecForIosWeb: 1,
+                                    //       backgroundColor: Colors.red,
+                                    //       textColor: Colors.white,
+                                    //       fontSize: 16.0);
+                                    // }
                                   },
                                   child: Container(
                                     height: 45,
@@ -734,6 +708,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void sendOtp() async {
+
     await auth.verifyPhoneNumber(
         phoneNumber: '+91' + phoneController.text,
         verificationCompleted: (credential) async {
@@ -744,12 +719,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     nameController.text,
                     emailController.text,
                     phoneController.text,
-                    ConstanceData.vehicleType[selectedVehicleIndex].toString(),
-                    getCateg(),
-                    ConstanceData.vehicleWeight[selectedWeightIndex][0]
-                        .toString(),
+                    selectedVehicle,
+                getVehicleType(selectedVehicle),
+                getLoad(selectedVehicle),
                     '',
-                    vehicleId()))
+                getVehicleId(selectedVehicle)))
                 .then((value) => {
                       ConstanceData.prof = null,
                       ConstanceData.clear(),
@@ -789,12 +763,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   nameController.text,
                   emailController.text,
                   phoneController.text,
-                  ConstanceData.vehicleType[selectedVehicleIndex].toString(),
-                  getCateg(),
-                  ConstanceData.vehicleWeight[selectedWeightIndex][0]
-                      .toString(),
+                  selectedVehicle,
+                  getVehicleType(selectedVehicle),
+                  getLoad(selectedVehicle),
                   verificationId,
-                  vehicleId())),
+                  getVehicleId(selectedVehicle))),
             ),
           );
         },
@@ -842,18 +815,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
     position = await _determinePosition();
   }
 
-  int vehicleId() {
-    for (var a in ConstanceData.vehicletype) {
-      if (a.vehicle ==
-          ConstanceData.vehicleType[selectedVehicleIndex].toString()) {
-        return a.vehicle_id;
+  int getVehicleId(String selectedVehicle) {
+    for (var i in ConstanceData.vehicletype) {
+      if (selectedVehicle == i.vehicle.toString()) {
+        return i.vehicle_id;
       }
     }
   }
   String getName(vehicle_id) {
     for (var i in ConstanceData.vehicletype) {
-      if (vehicle_id == i.vehicle_id.toString()) {
-        return i.vehicle;
+      if (vehicle_id == i.vehicle_id) {
+        print('${i.vehicle_id.toString()}:${i.vehicle.toString()}');
+        return i.vehicle.toString();
+      }
+    }
+  }
+  String getVehicleType(String selectedVehicle) {
+    if (current == truckType.open) {
+      return "OPEN";
+    } else {
+      return "CLOSED";
+    }
+  }
+  String getLoad(String selectedVehicle) {
+    for (var i in ConstanceData.vehicletype) {
+      if (selectedVehicle == i.vehicle.toString()) {
+        return i.loadcapacity;
+      }
+    }
+  }
+  int getIndex(String value) {
+    for (int i = 0; i < ConstanceData.vehicletype.length; i++) {
+      if (value == ConstanceData.vehicletype[i].vehicle) {
+        print("returned ${i}");
+        return i;
       }
     }
   }
