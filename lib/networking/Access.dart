@@ -15,6 +15,7 @@ class Access {
   static final get_vehicle_url = ConstanceData.url + "get-vehicle";
   static final driver_rate_url = ConstanceData.url + "driver-rate";
   static final update_profile_url = ConstanceData.url + "update-profile";
+  static final update_profile_pic_url = ConstanceData.url + "profile-picture";
   static final login_otp_vrification_url =
       ConstanceData.url + "login-otp-verification";
 
@@ -74,6 +75,17 @@ class Access {
     var data = await helper.saveVehicle(vehicle);
 
     return data;
+  }
+
+
+  Future<dynamic> uploadPicture(String path) async {
+
+    NetworkHelper helper = NetworkHelper(update_profile_pic_url);
+
+    var data = await helper.uploadPicture(path);
+
+    return data;
+
   }
 
 }

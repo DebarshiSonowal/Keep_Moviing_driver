@@ -43,8 +43,10 @@ class _VehicalManagementState extends State<VehicalManagement> {
                                   FontAwesomeIcons.filePdf,
                                   color: ConstanceData.secoundryFontColor,
                                 )
-                              : Image.network(ConstanceData.image_url.toString()+getPhoto(
-                                  ConstanceData.prof.vehicle_id.toString())),
+                              : Image.network(
+                                  ConstanceData.image_url.toString() +
+                                      getPhoto(ConstanceData.prof.vehicle_id
+                                          .toString())),
                         ),
                       ],
                     ),
@@ -88,32 +90,6 @@ class _VehicalManagementState extends State<VehicalManagement> {
             SizedBox(
               height: 16,
             ),
-            FlutterSlider(
-              min: double.parse(ConstanceData.prof.min_rate.toString()),
-              max: double.parse(ConstanceData.prof.max_rate.toString()),
-              step: FlutterSliderStep(
-                  step: 5,
-                  // default
-                  isPercentRange: true,
-                  // ranges are percents, 0% to 20% and so on... . default is true
-                  rangeList: [
-                    FlutterSliderRangeStep(
-                        from: double.parse(
-                            ConstanceData.prof.min_rate.toString()),
-                        to: double.parse(
-                            ConstanceData.prof.max_rate.toString()),
-                        step: 10),
-                  ]),
-              values: [widget._value],
-              onDragCompleted: (one, two, three) {
-                setState(() {
-                  widget._value = two;
-                });
-              },
-            ),
-            SizedBox(
-              height: 16,
-            ),
             Container(
               width: MediaQuery.of(context).size.width,
               height: 20,
@@ -152,6 +128,32 @@ class _VehicalManagementState extends State<VehicalManagement> {
                           )),
                 ],
               ),
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            FlutterSlider(
+              min: double.parse(ConstanceData.prof.min_rate.toString()),
+              max: double.parse(ConstanceData.prof.max_rate.toString()),
+              step: FlutterSliderStep(
+                  step: 5,
+                  // default
+                  isPercentRange: true,
+                  // ranges are percents, 0% to 20% and so on... . default is true
+                  rangeList: [
+                    FlutterSliderRangeStep(
+                        from: double.parse(
+                            ConstanceData.prof.min_rate.toString()),
+                        to: double.parse(
+                            ConstanceData.prof.max_rate.toString()),
+                        step: 10),
+                  ]),
+              values: [widget._value],
+              onDragCompleted: (one, two, three) {
+                setState(() {
+                  widget._value = two;
+                });
+              },
             ),
             SizedBox(
               height: 16,

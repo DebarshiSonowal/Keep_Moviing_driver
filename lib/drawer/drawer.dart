@@ -42,10 +42,16 @@ class _AppDrawerState extends State<AppDrawer> {
                           radius: 30,
                           child: new ClipRRect(
                             borderRadius: new BorderRadius.circular(50),
-                            child: Image.asset(
-                              ConstanceData.userImage,
-                              fit: BoxFit.fill,
-                            ),
+                            child: ConstanceData.prof.profile_img == null
+                                ? Image.asset(
+                                    ConstanceData.user3,
+                                    fit: BoxFit.fill,
+                                  )
+                                : Image.network(
+                                    ConstanceData.image_url +
+                                        ConstanceData.prof.profile_img,
+                                    fit: BoxFit.fill,
+                                  ),
                           ),
                         ),
                         SizedBox(
@@ -55,7 +61,8 @@ class _AppDrawerState extends State<AppDrawer> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              AppLocalizations.of('${ConstanceData.prof==null?'ADS':ConstanceData.prof.name}'),
+                              AppLocalizations.of(
+                                  '${ConstanceData.prof == null ? 'ADS' : ConstanceData.prof.name}'),
                               style: Theme.of(context)
                                   .textTheme
                                   .headline6
@@ -493,9 +500,9 @@ class _AppDrawerState extends State<AppDrawer> {
                 splashColor: Colors.transparent,
                 onTap: () {
                   if (auth.currentUser != null) {
-                    auth.signOut().then((value){
+                    auth.signOut().then((value) {
                       Navigator.pushReplacementNamed(context, Routes.AUTH);
-                        });
+                    });
                   }
                 },
                 child: Padding(

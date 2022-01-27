@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_cab_driver/constance/constance.dart';
+import 'package:my_cab_driver/networking/Access.dart';
 import 'package:my_cab_driver/setting/editProfile.dart';
 import '../main.dart';
 import 'package:my_cab_driver/constance/constance.dart' as constance;
@@ -87,9 +88,7 @@ class _MyProfileState extends State<MyProfile> {
                                                         File(pic.path),
                                                         fit: BoxFit.cover,
                                                       )
-                                                    : Image.asset(
-                                                        ConstanceData.user3,
-                                                      ),
+                                                    : getDefault(),
                                               ),
                                             ),
                                             TextButton(
@@ -118,7 +117,22 @@ class _MyProfileState extends State<MyProfile> {
                                         child: Text('Go Back'),
                                       ),
                                       TextButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Access()
+                                              .uploadPicture(pic.path)
+                                              .then((value) => {
+                                                    Access()
+                                                        .getProfile()
+                                                        .then((value) => {
+                                                              ConstanceData
+                                                                  .prof = value,
+                                                              print(
+                                                                  "${value.name}"),
+                                                              Navigator.pop(
+                                                                  context),
+                                                            }),
+                                                  });
+                                        },
                                         child: Text('Save'),
                                       )
                                     ],
@@ -133,9 +147,12 @@ class _MyProfileState extends State<MyProfile> {
                                 MediaQuery.of(context).size.width <= 320
                                     ? BorderRadius.circular(40)
                                     : BorderRadius.circular(60),
-                            child: Image.asset(
-                              ConstanceData.user3,
-                            ),
+                            child: ConstanceData.prof.profile_img == null
+                                ? Image.asset(
+                                    ConstanceData.user3,
+                                  )
+                                : Image.network(ConstanceData.image_url +
+                                    ConstanceData.prof.profile_img),
                           ),
                         ),
                       ),
@@ -1237,4 +1254,13 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   void getPic() async {}
+
+  getDefault() {
+    return ConstanceData.prof.profile_img == null
+        ? Image.asset(
+            ConstanceData.user3,
+          )
+        : Image.network(
+            ConstanceData.image_url + ConstanceData.prof.profile_img);
+  }
 }

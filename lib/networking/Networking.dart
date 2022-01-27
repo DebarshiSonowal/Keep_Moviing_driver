@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +100,7 @@ class NetworkHelper {
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0);
+        print(response.data['data']['profile_img']);
         return response.data['data'];
       } else {
         return 'Failed';
@@ -106,6 +108,36 @@ class NetworkHelper {
     } on DioError catch (e) {
       print(e.message);
       return 'Failed';
+    }
+  }
+
+  Future uploadPicture(String path) async {
+    final mimedatatype =
+    lookupMimeType(path, headerBytes: [0xFF, 0xD8]).split('/');
+
+    http.MultipartFile file = await http.MultipartFile.fromPath(
+        'profile_img', path,
+        filename: 'profile_img0',
+        contentType: new MediaType(mimedatatype[0], mimedatatype[1]));
+    final imageUpload = http.MultipartRequest('POST', Uri.parse(url));
+
+    imageUpload.files.add(file);
+    imageUpload.fields['id'] = await ConstanceData.id.toString();
+    imageUpload.headers['APP-KEY'] = ConstanceData.app_key;
+    imageUpload.headers['Content-Type'] = "multipart/form-data";
+    try {
+      final streamResp = await imageUpload.send();
+      print(streamResp.stream);
+      final response = await http.Response.fromStream(streamResp);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        print("${responseData}");
+        return responseData['message'];
+      } else {
+        print("${response.statusCode} ${response}");
+      }
+    } catch (e) {
+      print(e);
     }
   }
 

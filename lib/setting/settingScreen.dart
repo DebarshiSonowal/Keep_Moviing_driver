@@ -533,9 +533,12 @@ class _SettingScreenState extends State<SettingScreen> {
                 radius: 30,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(60),
-                  child: Image.asset(
+                  child: ConstanceData.prof.profile_img == null
+                      ? Image.asset(
                     ConstanceData.user3,
-                  ),
+                  )
+                      : Image.network(ConstanceData.image_url +
+                      ConstanceData.prof.profile_img),
                 ),
               ),
               SizedBox(

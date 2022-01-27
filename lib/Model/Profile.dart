@@ -1,5 +1,6 @@
 class profile {
   int _id, _vehicle_id, _min_rate, _max_rate,_driver_rate,_user_id;
+  var _profile_img;
 
   String _name,
       _email,
@@ -44,7 +45,8 @@ class profile {
       this._max_rate,
       this._driver_rate,
       this._pickup_address,
-      this._dropoff_address);
+      this._dropoff_address,
+      this._profile_img,);
 
   factory profile.fromJson(dynamic json) {
     return profile(
@@ -72,6 +74,7 @@ class profile {
       json['driver_rate'],
       json['pickup_address'],
       json['dropoff_address'],
+      json['profile_img'],
     );
   }
 
@@ -131,4 +134,5 @@ class profile {
     _city = value;
   }
 
+  get profile_img => _profile_img;
 }
