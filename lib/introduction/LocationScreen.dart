@@ -77,8 +77,7 @@ class _EnableLocationState extends State<EnableLocation>
                 splashColor: Colors.transparent,
                 onTap: () async {
                   if (await Permission.location.request().isGranted) {
-                    print("Allowed");
-                    Navigator.pushReplacementNamed(context, Routes.AUTH);
+                    Navigator.pushReplacementNamed(context, Routes.LOGIN);
                   }
                   Map<Permission, PermissionStatus> statuses = await [
                     Permission.location,
@@ -111,25 +110,25 @@ class _EnableLocationState extends State<EnableLocation>
               child: SizedBox(),
               flex: 1,
             ),
-            InkWell(
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-              onTap: () {
-                Navigator.pushReplacementNamed(context, Routes.AUTH);
-              },
-              child: SizedBox(
-                height: 40,
-                child: Center(
-                  child: Text(
-                    AppLocalizations.of('Skip for now'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          color: Theme.of(context).disabledColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-              ),
-            ),
+            // InkWell(
+            //   highlightColor: Colors.transparent,
+            //   splashColor: Colors.transparent,
+            //   onTap: () {
+            //     Navigator.pushReplacementNamed(context, Routes.LOGIN);
+            //   },
+            //   child: SizedBox(
+            //     height: 40,
+            //     child: Center(
+            //       child: Text(
+            //         AppLocalizations.of('Skip for now'),
+            //         style: Theme.of(context).textTheme.button.copyWith(
+            //               color: Theme.of(context).disabledColor,
+            //               fontWeight: FontWeight.bold,
+            //             ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: 20,
             ),

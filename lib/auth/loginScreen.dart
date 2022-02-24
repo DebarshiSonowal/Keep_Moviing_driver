@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
 
     Future.delayed(Duration(seconds: 1), () {
-      if (auth.currentUser != null&&ConstanceData.id!=null) {
+      if (auth.currentUser != null && ConstanceData.id != null) {
         Navigator.pushNamedAndRemoveUntil(
             context, Routes.HOME, (Route<dynamic> route) => false);
       }
@@ -103,7 +103,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             children: <Widget>[
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.only(top: 10),
@@ -123,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(top: 10),
                                     child: Text(
-                                      AppLocalizations.of(' With Your'),
+                                      AppLocalizations.of(' with your'),
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline5
@@ -135,25 +136,41 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                     ),
                                   ),
-                                ],
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    AppLocalizations.of('phone number'),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline5
-                                        .copyWith(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              .color,
-                                        ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Text(
+                                      AppLocalizations.of(' phone number'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline5
+                                          .copyWith(
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .headline6
+                                            .color,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
+                              // Row(
+                              //   crossAxisAlignment: CrossAxisAlignment.center,
+                              //   mainAxisAlignment: MainAxisAlignment.center,
+                              //   children: <Widget>[
+                              //     Text(
+                              //       AppLocalizations.of('phone number'),
+                              //       style: Theme.of(context)
+                              //           .textTheme
+                              //           .headline5
+                              //           .copyWith(
+                              //             color: Theme.of(context)
+                              //                 .textTheme
+                              //                 .headline6
+                              //                 .color,
+                              //           ),
+                              //     ),
+                              //   ],
+                              // ),
                               SizedBox(
                                 height: 20,
                               ),
@@ -167,34 +184,32 @@ class _LoginScreenState extends State<LoginScreen> {
                                       color: Theme.of(context).dividerColor),
                                   color: Theme.of(context).backgroundColor,
                                 ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Center(
-                                        child: TextFormField(
-                                          autofocus: false,
-                                          style: Theme.of(context)
+                                child: Center(
+                                  child: TextFormField(
+                                    autofocus: false,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText2
+                                        .copyWith(
+                                          fontSize: 14,
+                                          color: Theme.of(context)
                                               .textTheme
-                                              .bodyText2
-                                              .copyWith(
-                                                color: Theme.of(context)
-                                                    .textTheme
-                                                    .headline6
-                                                    .color,
-                                              ),
-                                          controller: controller,
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                            hintText: 'Mobile Number',
-                                            hintStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyText2,
-                                            border: InputBorder.none,
-                                          ),
+                                              .headline6
+                                              .color,
                                         ),
-                                      ),
+                                    controller: controller,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      hintText: 'Mobile Number',
+                                      hintStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2
+                                          .copyWith(
+                                            fontSize: 14,
+                                          ),
+                                      border: InputBorder.none,
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
                               SizedBox(
@@ -238,6 +253,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 .scaffoldBackgroundColor,
                                           ),
                                     ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(context, Routes.AUTH);
+                                },
+                                child: Text(
+                                  AppLocalizations.of('Don\'t have an account ? Register'),
+                                  style: Theme.of(context).textTheme.button.copyWith(
+                                    fontSize: 12,
+                                    color:
+                                    Theme.of(context).primaryColor,
                                   ),
                                 ),
                               ),
@@ -342,13 +373,13 @@ class _LoginScreenState extends State<LoginScreen> {
             print("This is the issue");
             Navigator.pop(context);
             Access().login(controller.text).then((value) => {
-              print('login ${value.user_id}'),
-              ConstanceData.prof = value,
-              ConstanceData.saveId(value.user_id.toString()),
-              print(value.user_id),
-              Navigator.pushNamedAndRemoveUntil(
-                  context, Routes.HOME, (Route<dynamic> route) => false)
-            });
+                  print('login ${value.user_id}'),
+                  ConstanceData.prof = value,
+                  ConstanceData.saveId(value.user_id.toString()),
+                  print(value.user_id),
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, Routes.HOME, (Route<dynamic> route) => false)
+                });
             // Navigator.pushNamedAndRemoveUntil(
             //     context, Routes.HOME, (Route<dynamic> route) => false);
           });

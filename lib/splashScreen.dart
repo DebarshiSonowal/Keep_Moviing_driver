@@ -44,14 +44,14 @@ class _SplashScreenState extends State<SplashScreen>
           await DefaultAssetBundle.of(myContext)
               .loadString("jsonFile/languagetext.json")));
     }
-    ConstanceData.getId();
-    Access().getVehicles().then((value) => {
-      ConstanceData.setVehicleType(value)
-    });
+
+    getData(await ConstanceData.getId());
+
     await Future.delayed(const Duration(milliseconds: 1200));
-    if(auth.currentUser!=null){
-      Navigator.pushNamedAndRemoveUntil(context, Routes.HOME, (Route<dynamic> route) => false);
-    }else{
+    if (auth.currentUser != null) {
+      Navigator.pushNamedAndRemoveUntil(
+          context, Routes.HOME, (Route<dynamic> route) => false);
+    } else {
       Navigator.pushReplacementNamed(context, Routes.INTRODUCTION);
     }
   }
@@ -59,9 +59,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme
-          .of(context)
-          .primaryColor,
+      backgroundColor: Theme.of(context).primaryColor,
       body: Center(
         child: Column(
           children: <Widget>[
@@ -74,18 +72,14 @@ class _SplashScreenState extends State<SplashScreen>
               child: Container(
                 height: 100,
                 width: 100,
-
                 child: Image.asset(
                   ConstanceData.appicon,
                   fit: BoxFit.cover,
                   height: 100,
                   width: 100,
-
                 ),
                 decoration: BoxDecoration(
-                  color: Theme
-                      .of(context)
-                      .accentColor,
+                  color: Theme.of(context).accentColor,
                   borderRadius: BorderRadius.circular(22),
                 ),
               ),
@@ -113,16 +107,10 @@ class _SplashScreenState extends State<SplashScreen>
               opacity: animation,
               child: Text(
                 'Keep Moviing Driver',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headline4
-                    .copyWith(
-                  color: Theme
-                      .of(context)
-                      .backgroundColor,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headline4.copyWith(
+                      color: Theme.of(context).backgroundColor,
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ),
             Expanded(
@@ -131,32 +119,36 @@ class _SplashScreenState extends State<SplashScreen>
             ),
             CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
-                  Theme
-                      .of(context)
-                      .backgroundColor),
+                  Theme.of(context).backgroundColor),
               strokeWidth: 2,
             ),
             Animator(
-                tween: Tween<Offset>(
-                  begin: Offset(0, 0.4),
-                  end: Offset(0, 0),
+              tween: Tween<Offset>(
+                begin: Offset(0, 0.4),
+                end: Offset(0, 0),
+              ),
+              duration: Duration(seconds: 1),
+              cycles: 1,
+              builder: (cont, anim, sd) => SlideTransition(
+                position: anim.animation,
+                child: Image.asset(
+                  ConstanceData.splashBackground,
+                  fit: BoxFit.cover,
+                  color: Colors.white.withOpacity(0.2),
                 ),
-                duration: Duration(seconds: 1),
-                cycles: 1,
-                builder: (cont, anim, sd) =>
-                    SlideTransition(
-                      position: anim.animation,
-                      child: Image.asset(
-                        ConstanceData.splashBackground,
-                        fit: BoxFit.cover,
-                        color: Colors.white.withOpacity(0.2),
-                      ),
-                    ),
-
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void getData(id) {
+    Access()
+        .getVehicles()
+        .then((value) => {ConstanceData.setVehicleType(value)});
+
+    Access().getOrders(id).then((value) => {ConstanceData.addOrders(value)});
   }
 }

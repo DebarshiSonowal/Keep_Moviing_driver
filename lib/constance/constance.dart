@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_cab_driver/Language/LanguageData.dart';
+import 'package:my_cab_driver/Model/MockOrder.dart';
+import 'package:my_cab_driver/Model/Order.dart';
 import 'package:my_cab_driver/Model/Profile.dart';
 import 'package:my_cab_driver/Model/Vehicle.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,10 +34,14 @@ class ConstanceData {
   static final url = "https://reinventmyskills.com/keep/public/api/driver/";
   static final app_key = "jXIIci1Uxirg7MU33cu9qu1PL4kgUIi74Q7yGiFE";
 
-  static String image_url;
+  static String image_url="https://reinventmyskills.com/keep/public/";
 
   static String id;
   static profile prof;
+
+  static setProfile( profile data) {
+    prof = data;
+  }
 
   static saveId(String data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -51,10 +57,36 @@ class ConstanceData {
   static getId() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     id = prefs.getString('id');
-    print("init ${prefs.getString('id')}");
+    print("init ${id}");
+    return id;
   }
 
   static List<vehicleModel> vehicletype;
+
+  static List<Order> orders;
+  static addOrders(List<Order> list) async {
+
+    orders = list;
+
+    print('asdaqr ${list.length}');
+
+  }
+
+  static List<mockOrder> mockOrders =
+  [
+    mockOrder('Esther Berry','79 Swift Village','115 William St, Chicago, US',25.00,2.2,[
+      'Cash',
+      'Card'
+    ]),
+    mockOrder('Subhankar ','Kolkata','Delhi',225.00,22.2,[
+      'Cash',
+      'Card'
+    ]),
+    mockOrder('Debarshi','Guwahati','Shillong',55.00,15.2,[
+      'Cash',
+      'Card'
+    ]),
+  ];
 
   static setVehicleType(List<vehicleModel> list){
     vehicletype = list;

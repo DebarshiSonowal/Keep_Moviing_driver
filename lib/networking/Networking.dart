@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mime/mime.dart';
 import 'package:my_cab_driver/Model/Document.dart';
+import 'package:my_cab_driver/Model/Order.dart';
 import 'package:my_cab_driver/Model/SignUpData.dart';
 import 'package:my_cab_driver/Model/Vehicle.dart';
 import 'package:my_cab_driver/constance/constance.dart';
@@ -26,6 +28,8 @@ class NetworkHelper {
     'APP-KEY': ConstanceData.app_key
   });
 
+//++++++++++++++++++++++++++++++++++++++++++
+  //AUTH
   Future login(String number) async {
     dio = Dio(option);
     print(url);
@@ -43,6 +47,7 @@ class NetworkHelper {
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0);
+        print("${response.data['message']}");
         return response.data['data'];
       } else {
         return 'Failed';
@@ -62,12 +67,14 @@ class NetworkHelper {
         'name': data.name,
         'country_code': '+91',
         'designation': 'Truck Driver',
-        'vehicle_name': data.type,
+        // 'vehicle_name': data.type,
         'vehicle_type': data.category,
-        'capacity': data.weight,
-        'vehicle_id': data.vehicle_id
+        // 'capacity': data.weight,
+        'vehicle_id': data.vehicle_id,
+        'model_id': data.model_id,
       });
       if (response.statusCode == 200) {
+        print("${response.data['message']}");
         Fluttertoast.showToast(
             msg: "${response.data['message']}",
             toastLength: Toast.LENGTH_SHORT,
@@ -86,6 +93,8 @@ class NetworkHelper {
     }
   }
 
+  //+++++++++++++++++++++++++++++++++++
+  //Get
   Future getProfile() async {
     dio = Dio(option);
 
@@ -100,7 +109,8 @@ class NetworkHelper {
             backgroundColor: Colors.red,
             textColor: Colors.white,
             fontSize: 16.0);
-        print(response.data['data']['profile_img']);
+        // ConstanceData.image_url = response.data['image_url'];
+        print('idasd ${response.data['data']['user_id']}');
         return response.data['data'];
       } else {
         return 'Failed';
@@ -111,9 +121,62 @@ class NetworkHelper {
     }
   }
 
+  Future getOrderDetails(id) async {
+    dio = Dio(option);
+    print('nada ${id}');
+    try {
+      Response response = await dio.post(url, data: {
+        'id': id,
+      });
+      if (response.statusCode == 200) {
+        var data = response.data['data'] as List;
+        List<Order> list = data.map((e) => Order.fromJson(e)).toList();
+        return list;
+      } else {
+        List<Order> list = new List<Order>();
+        return list;
+      }
+    } on DioError catch (e) {
+      print(e.message);
+      List<Order> list = new List<Order>();
+      return list;
+    }
+  }
+  Future getVehicles() async {
+    dio = Dio(option);
+
+    try {
+      Response response = await dio.get(url);
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: "${response.data['message']}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        // ConstanceData.image_url = response.data['image_url'];
+        print(ConstanceData.image_url);
+        var data = response.data['vehicle'] as List;
+        List<vehicleModel> list =
+        data.map((e) => vehicleModel.fromJson(e)).toList();
+
+        return list;
+      } else {
+        return 'Failed';
+      }
+    } on DioError catch (e) {
+      print(e.message);
+      return 'Failed';
+    }
+  }
+
+  //++++++++++++++++++++++++++++++++++++++++++++++++++
+  //Updating
   Future uploadPicture(String path) async {
     final mimedatatype =
-    lookupMimeType(path, headerBytes: [0xFF, 0xD8]).split('/');
+        lookupMimeType(path, headerBytes: [0xFF, 0xD8]).split('/');
 
     http.MultipartFile file = await http.MultipartFile.fromPath(
         'profile_img', path,
@@ -224,36 +287,7 @@ class NetworkHelper {
     }
   }
 
-  Future getVehicles() async {
-    dio = Dio(option);
 
-    try {
-      Response response = await dio.get(url);
-      if (response.statusCode == 200) {
-        Fluttertoast.showToast(
-            msg: "${response.data['message']}",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        ConstanceData.image_url = response.data['image_url'];
-        print(ConstanceData.image_url);
-        var data = response.data['data'] as List;
-
-        List<vehicleModel> list =
-            data.map((e) => vehicleModel.fromJson(e)).toList();
-
-        return list;
-      } else {
-        return 'Failed';
-      }
-    } on DioError catch (e) {
-      print(e.message);
-      return 'Failed';
-    }
-  }
 
   Future saveDriverPrice(String price) async {
     dio = Dio(option);
@@ -291,6 +325,7 @@ class NetworkHelper {
         'vehicle_id': vehicle.vehicle_id,
         'loadcapacity': vehicle.loadcapacity,
         'vehicle_type': vehicle.vehicle_type,
+        'model_id': vehicle.model_id,
       });
       if (response.statusCode == 200) {
         Fluttertoast.showToast(
@@ -310,7 +345,37 @@ class NetworkHelper {
       return 'Failed';
     }
   }
+
+  Future updateLiveLocation(LatLng location) async {
+    dio = Dio(option);
+
+    try {
+      Response response = await dio.post(url, queryParameters: {
+        'id': ConstanceData.id.toString(),
+        'latitude': location.latitude,
+        'longitude': location.longitude,
+      });
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: "${ConstanceData.id.toString()} ${response.data['message']}",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return response.data['message'];
+      } else {
+        return 'Failed';
+      }
+    } on DioError catch (e) {
+      print(e.message);
+      return 'Failed';
+    }
+  }
 }
+//+++++++++++++++++++++++++++++++++++++++++++++++++
+
 //  Future UploadDocument(document doc) async {
 //     final mimedatatype =
 //         lookupMimeType(doc.rc[0], headerBytes: [0xFF, 0xD8]).split('/');

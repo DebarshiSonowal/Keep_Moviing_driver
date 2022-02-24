@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
@@ -118,20 +119,32 @@ class _MyProfileState extends State<MyProfile> {
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          Access()
-                                              .uploadPicture(pic.path)
-                                              .then((value) => {
-                                                    Access()
-                                                        .getProfile()
-                                                        .then((value) => {
-                                                              ConstanceData
-                                                                  .prof = value,
-                                                              print(
-                                                                  "${value.name}"),
-                                                              Navigator.pop(
-                                                                  context),
-                                                            }),
-                                                  });
+                                          if (pic != null) {
+                                            Access()
+                                                .uploadPicture(pic.path)
+                                                .then((value) => {
+                                                      Access()
+                                                          .getProfile()
+                                                          .then((value) => {
+                                                                ConstanceData
+                                                                        .prof =
+                                                                    value,
+                                                                print(
+                                                                    "${value.name}"),
+                                                                Navigator.pop(
+                                                                    context),
+                                                              }),
+                                                    });
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg: "Select one image",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.CENTER,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.red,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0);
+                                          }
                                         },
                                         child: Text('Save'),
                                       )
@@ -565,6 +578,51 @@ class _MyProfileState extends State<MyProfile> {
                         child: Row(
                           children: <Widget>[
                             Text(
+                              AppLocalizations.of('Model'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
+                                  ),
+                            ),
+                            Expanded(child: SizedBox()),
+                            Text(
+                              AppLocalizations.of(
+                                  '${getModelName(getindex(ConstanceData.prof.vehicle_id),ConstanceData.prof.model_id)}'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).disabledColor,
+                                  ),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Theme.of(context).disabledColor,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 14, top: 8, bottom: 8),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
                               AppLocalizations.of('Type'),
                               style: Theme.of(context)
                                   .textTheme
@@ -624,7 +682,7 @@ class _MyProfileState extends State<MyProfile> {
                             Expanded(child: SizedBox()),
                             Text(
                               AppLocalizations.of(
-                                  '${ConstanceData.prof.load_capacity}'),
+                                  '${getCapacity(getindex(ConstanceData.prof.vehicle_id),ConstanceData.prof.model_id)}'),
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2
@@ -1192,6 +1250,22 @@ class _MyProfileState extends State<MyProfile> {
       }
     }
   }
+  String getModelName(index,model_id) {
+    for (var i in ConstanceData.vehicletype[index].models) {
+      if (model_id == i.model_id) {
+
+        return i.model_name;
+      }
+    }
+  }
+  String getCapacity(index,model_id) {
+    for (var i in ConstanceData.vehicletype[index].models) {
+      if (model_id == i.model_id) {
+
+        return i.loadcapacity;
+      }
+    }
+  }
 
   void getLocation() async {
     position = await _determinePosition();
@@ -1262,5 +1336,14 @@ class _MyProfileState extends State<MyProfile> {
           )
         : Image.network(
             ConstanceData.image_url + ConstanceData.prof.profile_img);
+  }
+
+  getindex(vehicle_id) {
+    for (int i=0;i<ConstanceData.vehicletype.length;i++) {
+      if (vehicle_id == ConstanceData.vehicletype[i].vehicle_id) {
+        print('er ${i}');
+        return i;
+      }
+    }
   }
 }

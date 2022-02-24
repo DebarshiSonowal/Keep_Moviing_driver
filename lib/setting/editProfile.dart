@@ -16,8 +16,11 @@ class edit_profile extends StatefulWidget {
 
 class _edit_profileState extends State<edit_profile> {
   var selectedVehicle = ConstanceData.vehicletype[0].vehicle.toString();
+  var selectedVehicleModel =
+      ConstanceData.vehicletype[0].models[0].model_name.toString();
   var selectedVehicleIndex = 0;
-  var selectedWeightIndex = 0;
+  var selectedModelIndex = 0;
+  var selectedVehicleModelIndex = 0;
   truckType current = truckType.open;
 
   AlertDialog alert;
@@ -28,10 +31,20 @@ class _edit_profileState extends State<edit_profile> {
       setState(() {
         print("before ${selectedVehicle}");
         selectedVehicle = getName(ConstanceData.prof.vehicle_id);
+        selectedVehicleModel = getModelName(ConstanceData.prof.vehicle_id,
+            ConstanceData.prof.model_id);
+        selectedModelIndex=getModelIndex1(ConstanceData.prof.vehicle_id,
+            ConstanceData.prof.model_id);
+        selectedVehicleIndex = getVehicleIndex(ConstanceData.prof.vehicle_id);
       });
-      print("after ${selectedVehicle}");
+      print("after ${selectedVehicle} ${selectedVehicleModel} ${selectedModelIndex}");
     } else {
       selectedVehicle = getName(ConstanceData.prof.vehicle_id);
+      selectedVehicleModel = getModelName(ConstanceData.prof.vehicle_id,
+          ConstanceData.prof.model_id);
+      selectedModelIndex=getModelIndex1(ConstanceData.prof.vehicle_id,
+          ConstanceData.prof.model_id);
+      selectedVehicleIndex = getVehicleIndex(ConstanceData.prof.vehicle_id);
     }
     super.initState();
   }
@@ -103,9 +116,67 @@ class _edit_profileState extends State<edit_profile> {
                             setState(() {
                               selectedVehicle = value;
                               selectedVehicleIndex = getIndex(value);
-                              selectedWeightIndex = selectedVehicleIndex;
+                              selectedModelIndex = selectedVehicleIndex;
+                              selectedVehicleModel = ConstanceData
+                                  .vehicletype[selectedVehicleIndex]
+                                  .models[0]
+                                  .model_name
+                                  .toString();
                               print(
                                   'The value is ${value} and index ${selectedVehicleIndex} and weight ${ConstanceData.vehicletype[selectedVehicleIndex].loadcapacity}');
+                            });
+                          }),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                height: 40,
+                padding: EdgeInsets.only(
+                  left: 5,
+                  right: 5,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(color: Theme.of(context).dividerColor),
+                  color: Colors.white,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: Icon(
+                        FontAwesomeIcons.car,
+                        color: Color(0xff0b0b0b),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 5,
+                      child: DropdownButton(
+                          isExpanded: true,
+                          value: selectedVehicleModel,
+                          icon: Icon(Icons.keyboard_arrow_down),
+                          items: ConstanceData
+                              .vehicletype[selectedVehicleIndex].models
+                              .map((items) {
+                            return DropdownMenuItem(
+                              value: items.model_name,
+                              child: Text(
+                                items.model_name,
+                                style: Theme.of(context).textTheme.bodyText2,
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String value) {
+                            setState(() {
+                              selectedVehicleModel = value;
+                              selectedVehicleModelIndex =
+                                  getModelIndex(selectedVehicleIndex, value);
+                              print(
+                                  'The value is ${value} and index ${selectedVehicleModelIndex} and weight ${ConstanceData.vehicletype[selectedVehicleIndex].models[selectedVehicleModelIndex].loadcapacity}');
                             });
                           }),
                     ),
@@ -138,7 +209,7 @@ class _edit_profileState extends State<edit_profile> {
                     Expanded(
                         flex: 5,
                         child: Text(
-                            '${ConstanceData.vehicletype[selectedVehicleIndex].loadcapacity}')),
+                            '${ConstanceData.vehicletype[selectedVehicleIndex].models[selectedVehicleModelIndex].loadcapacity}')),
                   ],
                 ),
               ),
@@ -212,10 +283,13 @@ class _edit_profileState extends State<edit_profile> {
                   // print("${getVehicleId(selectedVehicle)} ${selectedVehicle} ${getLoad(selectedVehicle)} ${getVehicleType(selectedVehicle)}");
                   Access()
                       .saveVehicle(vehicleModel1(
-                          getVehicleId(selectedVehicle),
-                          selectedVehicle,
-                          getLoad(selectedVehicle),
-                          getVehicleType(selectedVehicle)))
+                        getVehicleId(selectedVehicle),
+                        selectedVehicle,
+                        getLoad(selectedVehicle),
+                        getVehicleType(selectedVehicle),
+                        ConstanceData.vehicletype[selectedVehicleIndex]
+                            .models[selectedVehicleModelIndex].model_id,
+                      ))
                       .then((value) => {
                             Access().getProfile().then((value) => {
                                   ConstanceData.prof = value,
@@ -309,6 +383,24 @@ class _edit_profileState extends State<edit_profile> {
     }
   }
 
+  int getVehicleIndex(int value) {
+    for (int i = 0; i < ConstanceData.vehicletype.length; i++) {
+      if (value == ConstanceData.vehicletype[i].vehicle_id) {
+        print("returned ${i}");
+        return i;
+      }
+    }
+  }
+
+  int getModelIndex(int index, String value) {
+    for (int i = 0; i < ConstanceData.vehicletype[index].models.length; i++) {
+      if (value == ConstanceData.vehicletype[index].models[i].model_name) {
+        print("returned ${i}");
+        return i;
+      }
+    }
+  }
+
   int getVehicleId(String selectedVehicle) {
     for (var i in ConstanceData.vehicletype) {
       if (selectedVehicle == i.vehicle.toString()) {
@@ -350,5 +442,33 @@ class _edit_profileState extends State<edit_profile> {
         return alert;
       },
     );
+  }
+
+  String getModelName(vehicle_id, model_id) {
+    for(int i=0 ;i<ConstanceData.vehicletype.length ;i++) {
+      if(vehicle_id == ConstanceData.vehicletype[i].vehicle_id){
+
+        for(int j=0;j<ConstanceData.vehicletype[i].models.length; j++) {
+          if(model_id == ConstanceData.vehicletype[i].models[j].model_id){
+
+            return ConstanceData.vehicletype[i].models[j].model_name;
+          }
+        }
+      }
+    }
+  }
+
+  int getModelIndex1(vehicle_id, model_id) {
+    for(int i=0 ;i<ConstanceData.vehicletype.length ;i++) {
+      if(vehicle_id == ConstanceData.vehicletype[i].vehicle_id){
+
+        for(int j=0;j<ConstanceData.vehicletype[i].models.length; j++) {
+          if(model_id == ConstanceData.vehicletype[i].models[j].model_id){
+
+            return j;
+          }
+        }
+      }
+    }
   }
 }

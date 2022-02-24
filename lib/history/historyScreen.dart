@@ -719,7 +719,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               ),
                         ),
                         Text(
-                          '\$325',
+                          '₹325',
                           style: Theme.of(context).textTheme.headline6.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).primaryColor,

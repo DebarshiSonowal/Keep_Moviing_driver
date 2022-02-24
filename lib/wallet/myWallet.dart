@@ -112,7 +112,7 @@ class _MyWalletState extends State<MyWallet> {
                           child: SizedBox(),
                         ),
                         Text(
-                          '\$325.00',
+                          '₹325.00',
                           style: Theme.of(context).textTheme.headline3.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: ConstanceData.secoundryFontColor,
@@ -310,7 +310,7 @@ class _MyWalletState extends State<MyWallet> {
                                   ),
                                   Expanded(child: SizedBox()),
                                   Text(
-                                    '\$34.00',
+                                    '₹34.00',
                                     style: Theme.of(context).textTheme.bodyText2.copyWith(
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(context).textTheme.headline6.color,

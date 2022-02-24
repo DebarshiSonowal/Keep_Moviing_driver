@@ -46,6 +46,11 @@ dependencies:
   mime: ^1.0.1
   another_xlider: ^1.0.0
   geocoding: ^2.0.2
+  geocoder: ^0.2.1
+  flutter_background_service: ^0.2.5
+  device_info_plus: ^3.2.2
+  flutter_polyline_points: ^1.0.0
+  google_maps_widget: ^1.0.1
 
 dev_dependencies:
   flutter_test:

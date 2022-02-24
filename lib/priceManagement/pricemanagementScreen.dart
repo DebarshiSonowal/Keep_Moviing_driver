@@ -136,7 +136,7 @@ class _VehicalManagementState extends State<VehicalManagement> {
               min: double.parse(ConstanceData.prof.min_rate.toString()),
               max: double.parse(ConstanceData.prof.max_rate.toString()),
               step: FlutterSliderStep(
-                  step: 5,
+                  step: 0.50,
                   // default
                   isPercentRange: true,
                   // ranges are percents, 0% to 20% and so on... . default is true

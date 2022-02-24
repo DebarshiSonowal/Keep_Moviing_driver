@@ -1,5 +1,15 @@
 class profile {
-  int _id, _vehicle_id, _min_rate, _max_rate,_driver_rate,_user_id;
+  int _id,
+      _vehicle_id,
+      _model_id,
+      _min_rate,
+      _max_rate,
+      _driver_rate,
+      _user_id,
+      _rating,
+      _total_job,
+      _total_distance,
+      _hours_online;
   var _profile_img;
 
   String _name,
@@ -22,31 +32,37 @@ class profile {
       _dropoff_address;
 
   profile(
-      this._id,
-      this._name,
-      this._email,
-      this._phone,
-      this._city,
-      this._company,
-      this._vehicle_id,
-      this._vehicle_type,
-      this._load_capacity,
-      this._user_id,
-      this._truck_owner_name,
-      this._registration_certificate,
-      this._insurance,
-      this._PUC_certificate,
-      this._fitness,
-      this._permit,
-      this._driving_license,
-      this._status,
-      this._GST,
-      this._min_rate,
-      this._max_rate,
-      this._driver_rate,
-      this._pickup_address,
-      this._dropoff_address,
-      this._profile_img,);
+    this._id,
+    this._name,
+    this._email,
+    this._phone,
+    this._city,
+    this._company,
+    this._vehicle_id,
+    this._vehicle_type,
+    this._load_capacity,
+    this._user_id,
+    this._truck_owner_name,
+    this._registration_certificate,
+    this._insurance,
+    this._PUC_certificate,
+    this._fitness,
+    this._permit,
+    this._driving_license,
+    this._status,
+    this._GST,
+    this._min_rate,
+    this._max_rate,
+    this._driver_rate,
+    this._pickup_address,
+    this._dropoff_address,
+    this._profile_img,
+    this._hours_online,
+    this._rating,
+    this._total_distance,
+    this._total_job,
+    this._model_id,
+  );
 
   factory profile.fromJson(dynamic json) {
     return profile(
@@ -75,12 +91,19 @@ class profile {
       json['pickup_address'],
       json['dropoff_address'],
       json['profile_img'],
+      json['hours_online'],
+      json['rating'],
+      json['total_distance'],
+      json['total_job'],
+      json['model_id'],
     );
   }
 
   set set_driver_rate(value) {
     _driver_rate = value;
   }
+
+  get model_id => _model_id;
 
   get dropoff_address => _dropoff_address;
 
@@ -134,5 +157,13 @@ class profile {
     _city = value;
   }
 
+  get rating => _rating;
+
   get profile_img => _profile_img;
+
+  get total_job => _total_job;
+
+  get total_distance => _total_distance;
+
+  get hours_online => _hours_online;
 }

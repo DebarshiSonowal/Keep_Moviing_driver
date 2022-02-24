@@ -23,9 +23,13 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   var appBarheight = 0.0;
   var selectedVehicle = ConstanceData.vehicletype[0].vehicle.toString();
+  var selectedVehicleModel =
+      ConstanceData.vehicletype[0].models[0].model_name.toString();
   var selectedWeight = ConstanceData.vehicletype[0].loadcapacity;
   var selectedVehicleIndex = 0;
   var selectedWeightIndex = 0;
+  var selectedVehicleModelIndex = 0;
+  var selectedModelIndex = 0;
   truckType current = truckType.open;
   var nameController = TextEditingController();
   var emailController = TextEditingController();
@@ -344,10 +348,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                           isExpanded: true,
                                           value: selectedVehicle,
                                           icon: Icon(Icons.keyboard_arrow_down),
-                                          items: ConstanceData.vehicletype.map((items) {
+                                          items: ConstanceData.vehicletype
+                                              .map((items) {
                                             return DropdownMenuItem(
                                               value: items.vehicle,
-                                              child: Text(items.vehicle,),
+                                              child: Text(
+                                                items.vehicle,
+                                              ),
                                             );
                                           }).toList(),
                                           onChanged: (String value) {
@@ -355,13 +362,81 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                               selectedVehicle = value;
                                               selectedVehicleIndex =
                                                   getIndex(value);
-                                              selectedWeightIndex =
+                                              selectedModelIndex =
                                                   selectedVehicleIndex;
-                                              print(
-                                                  'The value is ${value} and index ${selectedVehicleIndex} and weight ${ConstanceData.vehicletype[selectedVehicleIndex].loadcapacity}');
+                                              selectedVehicleModel =
+                                                  ConstanceData
+                                                      .vehicletype[
+                                                          selectedVehicleIndex]
+                                                      .models[0]
+                                                      .model_name
+                                                      .toString();
                                             });
                                           },
                                         ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 14,
+                                ),
+                                Container(
+                                  height: 40,
+                                  padding: EdgeInsets.only(
+                                    left: 5,
+                                    right: 5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                    border: Border.all(
+                                        color: Theme.of(context).dividerColor),
+                                    color: Theme.of(context).backgroundColor,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Expanded(
+                                        child: Icon(
+                                          FontAwesomeIcons.car,
+                                          color: Color(0xff0b0b0b),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 5,
+                                        child: DropdownButton(
+                                            isExpanded: true,
+                                            value: selectedVehicleModel,
+                                            icon:
+                                                Icon(Icons.keyboard_arrow_down),
+                                            items: ConstanceData
+                                                .vehicletype[
+                                                    selectedVehicleIndex]
+                                                .models
+                                                .map((items) {
+                                              return DropdownMenuItem(
+                                                value: items.model_name,
+                                                child: Text(
+                                                  items.model_name,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyText2,
+                                                ),
+                                              );
+                                            }).toList(),
+                                            onChanged: (String value) {
+                                              setState(() {
+                                                selectedVehicleModel = value;
+                                                selectedVehicleModelIndex =
+                                                    getModelIndex(
+                                                        selectedVehicleIndex,
+                                                        value);
+                                                print(
+                                                    'The value is ${value} and index ${selectedVehicleModelIndex} and weight ${ConstanceData.vehicletype[selectedVehicleIndex].models[selectedVehicleModelIndex].loadcapacity}');
+                                              });
+                                            }),
                                       ),
                                     ],
                                   ),
@@ -390,8 +465,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       ),
                                       Expanded(
                                         flex: 5,
-                                          child: Text(
-                                              '${ConstanceData.vehicletype[selectedVehicleIndex].loadcapacity}')
+                                        child: Text(
+                                            '${ConstanceData.vehicletype[selectedVehicleIndex].models[selectedVehicleModelIndex].loadcapacity}'),
                                       ),
                                     ],
                                   ),
@@ -470,49 +545,48 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   highlightColor: Colors.transparent,
                                   splashColor: Colors.transparent,
                                   onTap: () {
-                                    print('${getVehicleType(selectedVehicle)} ${ getLoad(selectedVehicle)} ${selectedVehicle}');
-                                    // showLoaderDialog(context);
-                                    // if (emailController.text != null &&
-                                    //     phoneController.text.isNotEmpty &&
-                                    //     nameController.text.isNotEmpty) {
-                                    //   if (isEmail(emailController.text)) {
-                                    //     if (_isNumeric(phoneController.text) &&
-                                    //         phoneController.text.length == 10) {
-                                    //       sendOtp();
-                                    //     } else {
-                                    //       Navigator.pop(context);
-                                    //       Fluttertoast.showToast(
-                                    //           msg:
-                                    //               "Enter a valid mobile number",
-                                    //           toastLength: Toast.LENGTH_SHORT,
-                                    //           gravity: ToastGravity.CENTER,
-                                    //           timeInSecForIosWeb: 1,
-                                    //           backgroundColor: Colors.red,
-                                    //           textColor: Colors.white,
-                                    //           fontSize: 16.0);
-                                    //     }
-                                    //   } else {
-                                    //     Navigator.pop(context);
-                                    //     Fluttertoast.showToast(
-                                    //         msg: "Enter a valid email",
-                                    //         toastLength: Toast.LENGTH_SHORT,
-                                    //         gravity: ToastGravity.CENTER,
-                                    //         timeInSecForIosWeb: 1,
-                                    //         backgroundColor: Colors.red,
-                                    //         textColor: Colors.white,
-                                    //         fontSize: 16.0);
-                                    //   }
-                                    // } else {
-                                    //   Navigator.pop(context);
-                                    //   Fluttertoast.showToast(
-                                    //       msg: "Enter all the fields",
-                                    //       toastLength: Toast.LENGTH_SHORT,
-                                    //       gravity: ToastGravity.CENTER,
-                                    //       timeInSecForIosWeb: 1,
-                                    //       backgroundColor: Colors.red,
-                                    //       textColor: Colors.white,
-                                    //       fontSize: 16.0);
-                                    // }
+                                    showLoaderDialog(context);
+                                    if (emailController.text != null &&
+                                        phoneController.text.isNotEmpty &&
+                                        nameController.text.isNotEmpty) {
+                                      if (isEmail(emailController.text)) {
+                                        if (_isNumeric(phoneController.text) &&
+                                            phoneController.text.length == 10) {
+                                          sendOtp();
+                                        } else {
+                                          Navigator.pop(context);
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  "Enter a valid mobile number",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.CENTER,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: Colors.red,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0);
+                                        }
+                                      } else {
+                                        Navigator.pop(context);
+                                        Fluttertoast.showToast(
+                                            msg: "Enter a valid email",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    } else {
+                                      Navigator.pop(context);
+                                      Fluttertoast.showToast(
+                                          msg: "Enter all the fields",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.CENTER,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Colors.red,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    }
                                   },
                                   child: Container(
                                     height: 45,
@@ -558,12 +632,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           highlightColor: Colors.transparent,
                           splashColor: Colors.transparent,
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LoginScreen(),
-                              ),
-                            );
+                            Navigator.pushNamed(context, Routes.LOGIN);
                           },
                           child: Text(
                             AppLocalizations.of(' Sign In'),
@@ -708,22 +777,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void sendOtp() async {
-
     await auth.verifyPhoneNumber(
         phoneNumber: '+91' + phoneController.text,
         verificationCompleted: (credential) async {
           await auth.signInWithCredential(credential).then((value) {
-
             Access()
-                .register(signupdata(
+                .register(
+                  signupdata(
                     nameController.text,
                     emailController.text,
                     phoneController.text,
                     selectedVehicle,
-                getVehicleType(selectedVehicle),
-                getLoad(selectedVehicle),
+                    getVehicleType(selectedVehicle),
+                    getLoad(selectedVehicle),
                     '',
-                getVehicleId(selectedVehicle)))
+                    getVehicleId(selectedVehicle),
+                    ConstanceData.vehicletype[selectedVehicleIndex]
+                        .models[selectedVehicleModelIndex].model_id,
+                  ),
+                )
                 .then((value) => {
                       ConstanceData.prof = null,
                       ConstanceData.clear(),
@@ -759,7 +831,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => PhoneVerification(signupdata(
+              builder: (context) => PhoneVerification(
+                signupdata(
                   nameController.text,
                   emailController.text,
                   phoneController.text,
@@ -767,7 +840,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   getVehicleType(selectedVehicle),
                   getLoad(selectedVehicle),
                   verificationId,
-                  getVehicleId(selectedVehicle))),
+                  getVehicleId(selectedVehicle),
+                  ConstanceData.vehicletype[selectedVehicleIndex].models[selectedVehicleModelIndex].model_id,
+                ),
+              ),
             ),
           );
         },
@@ -822,6 +898,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     }
   }
+
   String getName(vehicle_id) {
     for (var i in ConstanceData.vehicletype) {
       if (vehicle_id == i.vehicle_id) {
@@ -830,6 +907,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     }
   }
+
   String getVehicleType(String selectedVehicle) {
     if (current == truckType.open) {
       return "OPEN";
@@ -837,6 +915,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return "CLOSED";
     }
   }
+
   String getLoad(String selectedVehicle) {
     for (var i in ConstanceData.vehicletype) {
       if (selectedVehicle == i.vehicle.toString()) {
@@ -844,9 +923,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     }
   }
+
   int getIndex(String value) {
     for (int i = 0; i < ConstanceData.vehicletype.length; i++) {
       if (value == ConstanceData.vehicletype[i].vehicle) {
+        print("returned ${i}");
+        return i;
+      }
+    }
+  }
+
+  int getModelIndex(int index, String value) {
+    for (int i = 0; i < ConstanceData.vehicletype[index].models.length; i++) {
+      if (value == ConstanceData.vehicletype[index].models[i].model_name) {
         print("returned ${i}");
         return i;
       }

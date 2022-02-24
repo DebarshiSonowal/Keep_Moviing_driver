@@ -71,7 +71,7 @@ class _RiderListState extends State<RiderList> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      AppLocalizations.of('You have 10 new requess !!!'),
+                      AppLocalizations.of('You have ${ConstanceData.orders.length} new requests !!!'),
                       style: Theme.of(context).textTheme.subtitle1.copyWith(
                             fontWeight: FontWeight.bold,
                             color: ConstanceData.secoundryFontColor,
@@ -84,23 +84,14 @@ class _RiderListState extends State<RiderList> {
             SizedBox(
               height: 10,
             ),
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(right: 6, left: 6),
-                  child: InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserDetailScreen(
-                            userId: 1,
-                          ),
-                        ),
-                      );
-                    },
+            Container(
+              height: MediaQuery.of(context).size.height-200,
+              child: ListView.builder(
+                itemCount: ConstanceData.orders.length,
+                itemBuilder: (con,index){
+                  var data = ConstanceData.orders[index];
+                  return Padding(
+                    padding: EdgeInsets.only(right: 6, left: 6,bottom: 15),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadiusDirectional.circular(16),
@@ -131,59 +122,33 @@ class _RiderListState extends State<RiderList> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
-                                        AppLocalizations.of('Esther Berry'),
+                                        AppLocalizations.of('${data.user_name}'),
                                         style: Theme.of(context).textTheme.headline6.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
-                                            ),
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).textTheme.headline6.color,
+                                        ),
                                       ),
                                       SizedBox(
                                         height: 4,
                                       ),
-                                      Row(
-                                        children: <Widget>[
-                                          Container(
-                                            height: 24,
-                                            width: 74,
-                                            child: Center(
-                                              child: Text(
-                                                AppLocalizations.of('ApplePay'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
-                                                    ),
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(15),
-                                              ),
-                                              color: Theme.of(context).primaryColor,
+                                      Container(
+                                        height: 24,
+                                        width: 74,
+                                        child: Center(
+                                          child: Text(
+                                            AppLocalizations.of('${data.payment_type}'),
+                                            style: Theme.of(context).textTheme.button.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context).textTheme.headline6.color,
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 4,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(15),
                                           ),
-                                          Container(
-                                            height: 24,
-                                            width: 74,
-                                            child: Center(
-                                              child: Text(
-                                                AppLocalizations.of('Discount'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
-                                                    ),
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(15),
-                                              ),
-                                              color: Theme.of(context).primaryColor,
-                                            ),
-                                          )
-                                        ],
+                                          color: Theme.of(context).accentColor,
+                                        ),
                                       )
                                     ],
                                   ),
@@ -194,18 +159,18 @@ class _RiderListState extends State<RiderList> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       Text(
-                                        '\$25.00',
+                                        '₹${data.total_price}',
                                         style: Theme.of(context).textTheme.headline6.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
-                                            ),
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).textTheme.headline6.color,
+                                        ),
                                       ),
                                       Text(
-                                        '2.2 km',
+                                        '${data.total_distance} km',
                                         style: Theme.of(context).textTheme.caption.copyWith(
-                                              color: Theme.of(context).disabledColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                          color: Theme.of(context).disabledColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -228,19 +193,23 @@ class _RiderListState extends State<RiderList> {
                                     Text(
                                       AppLocalizations.of('PICKUP'),
                                       style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        color: Theme.of(context).disabledColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 4,
                                     ),
-                                    Text(
-                                      AppLocalizations.of('79 Swift Village'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
-                                          ),
+                                    SizedBox(
+                                      width:MediaQuery.of(context).size.width-40,
+                                      child: Text(
+                                        AppLocalizations.of('${data.pickup_location_name}'),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).textTheme.headline6.color,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -265,19 +234,23 @@ class _RiderListState extends State<RiderList> {
                                     Text(
                                       AppLocalizations.of('DROP OFF'),
                                       style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                        color: Theme.of(context).disabledColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     SizedBox(
                                       height: 4,
                                     ),
-                                    Text(
-                                      AppLocalizations.of('115 William St, Chicago, US'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
-                                          ),
+                                    SizedBox(
+                                      width:MediaQuery.of(context).size.width-40,
+                                      child: Text(
+                                        AppLocalizations.of('${data.drop_location_name}'),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).textTheme.headline6.color,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -289,254 +262,35 @@ class _RiderListState extends State<RiderList> {
                             width: MediaQuery.of(context).size.width,
                             color: Theme.of(context).dividerColor,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, top: 16),
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  AppLocalizations.of('ACCEPT'),
-                                  style: Theme.of(context).textTheme.button.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: ConstanceData.secoundryFontColor,
-                                      ),
+                          InkWell(
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UserDetailScreen(
+                                    userId: index,
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 6, left: 6),
-                  child: InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserDetailScreen(
-                            userId: 2,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadiusDirectional.circular(16),
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                      ),
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadiusDirectional.only(topEnd: Radius.circular(16), topStart: Radius.circular(16)),
-                            ),
+                              );
+                            },
                             child: Padding(
-                              padding: const EdgeInsets.all(14),
-                              child: Row(
-                                children: <Widget>[
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      ConstanceData.user1,
-                                      height: 50,
-                                      width: 50,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        AppLocalizations.of('Callie Greer'),
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
-                                            ),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Container(
-                                            height: 24,
-                                            width: 74,
-                                            child: Center(
-                                              child: Text(
-                                                AppLocalizations.of('ApplePay'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
-                                                    ),
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(15),
-                                              ),
-                                              color: Theme.of(context).primaryColor,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          Container(
-                                            height: 24,
-                                            width: 74,
-                                            child: Center(
-                                              child: Text(
-                                                AppLocalizations.of('Discount'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
-                                                    ),
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(15),
-                                              ),
-                                              color: Theme.of(context).primaryColor,
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Expanded(
-                                    child: SizedBox(),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      Text(
-                                        '\$20.00',
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
-                                            ),
-                                      ),
-                                      Text(
-                                        '1.5 km',
-                                        style: Theme.of(context).textTheme.caption.copyWith(
-                                              color: Theme.of(context).disabledColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 1,
-                            width: MediaQuery.of(context).size.width,
-                            color: Theme.of(context).dividerColor,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
-                            child: Row(
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      AppLocalizations.of('PICKUP'),
-                                      style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      AppLocalizations.of('62 Kobe Trafficway'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
-                                          ),
-                                    ),
-                                  ],
+                              padding: const EdgeInsets.only(right: 14, left: 14, top: 16),
+                              child: Container(
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Theme.of(context).primaryColor,
                                 ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14),
-                            child: Container(
-                              height: 1,
-                              width: MediaQuery.of(context).size.width,
-                              color: Theme.of(context).dividerColor,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
-                            child: Row(
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      AppLocalizations.of('DROP OFF'),
-                                      style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                child: Center(
+                                  child: Text(
+                                    AppLocalizations.of('ACCEPT'),
+                                    style: Theme.of(context).textTheme.button.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: ConstanceData.secoundryFontColor,
                                     ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      AppLocalizations.of('280, AB Sunny willa'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            height: 1,
-                            width: MediaQuery.of(context).size.width,
-                            color: Theme.of(context).dividerColor,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, top: 16),
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  AppLocalizations.of('ACCEPT'),
-                                  style: Theme.of(context).textTheme.button.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: ConstanceData.secoundryFontColor,
-                                      ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -547,243 +301,713 @@ class _RiderListState extends State<RiderList> {
                         ],
                       ),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(right: 6, left: 6),
-                  child: InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserDetailScreen(
-                            userId: 3,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadiusDirectional.circular(16),
-                        color: Theme.of(context).scaffoldBackgroundColor,
-                      ),
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadiusDirectional.only(topEnd: Radius.circular(16), topStart: Radius.circular(16)),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(14),
-                              child: Row(
-                                children: <Widget>[
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      ConstanceData.user2,
-                                      height: 50,
-                                      width: 50,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        AppLocalizations.of('Esther Berry'),
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
-                                            ),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Row(
-                                        children: <Widget>[
-                                          Container(
-                                            height: 24,
-                                            width: 74,
-                                            child: Center(
-                                              child: Text(
-                                                AppLocalizations.of('ApplePay'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
-                                                    ),
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(15),
-                                              ),
-                                              color: Theme.of(context).primaryColor,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          Container(
-                                            height: 24,
-                                            width: 74,
-                                            child: Center(
-                                              child: Text(
-                                                AppLocalizations.of('Discount'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
-                                                    ),
-                                              ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(15),
-                                              ),
-                                              color: Theme.of(context).primaryColor,
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Expanded(
-                                    child: SizedBox(),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      Text(
-                                        '\$10.00',
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
-                                            ),
-                                      ),
-                                      Text(
-                                        '0.5 km',
-                                        style: Theme.of(context).textTheme.caption.copyWith(
-                                              color: Theme.of(context).disabledColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            height: 1,
-                            width: MediaQuery.of(context).size.width,
-                            color: Theme.of(context).dividerColor,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
-                            child: Row(
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      AppLocalizations.of('PICKUP'),
-                                      style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      AppLocalizations.of('25 Lcie Park Suite'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14),
-                            child: Container(
-                              height: 1,
-                              width: MediaQuery.of(context).size.width,
-                              color: Theme.of(context).dividerColor,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
-                            child: Row(
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      AppLocalizations.of('DROP OFF'),
-                                      style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text(
-                                      AppLocalizations.of('187/ William St, London, UK'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            height: 1,
-                            width: MediaQuery.of(context).size.width,
-                            color: Theme.of(context).dividerColor,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, top: 16),
-                            child: Container(
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Accept',
-                                  style: Theme.of(context).textTheme.button.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: ConstanceData.secoundryFontColor,
-                                      ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                  );
+                },
+              ),
             ),
+            SizedBox(
+              height: 25,
+            ),
+            // Column(
+            //   children: <Widget>[
+            //     Padding(
+            //       padding: EdgeInsets.only(right: 6, left: 6),
+            //       child: InkWell(
+            //         highlightColor: Colors.transparent,
+            //         splashColor: Colors.transparent,
+            //         onTap: () {
+            //           Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => UserDetailScreen(
+            //                 userId: 1,
+            //               ),
+            //             ),
+            //           );
+            //         },
+            //         child: Container(
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadiusDirectional.circular(16),
+            //             color: Theme.of(context).scaffoldBackgroundColor,
+            //           ),
+            //           child: Column(
+            //             children: <Widget>[
+            //               Container(
+            //                 decoration: BoxDecoration(
+            //                   borderRadius: BorderRadiusDirectional.only(topEnd: Radius.circular(16), topStart: Radius.circular(16)),
+            //                 ),
+            //                 child: Padding(
+            //                   padding: const EdgeInsets.all(14),
+            //                   child: Row(
+            //                     children: <Widget>[
+            //                       ClipRRect(
+            //                         borderRadius: BorderRadius.circular(10),
+            //                         child: Image.asset(
+            //                           ConstanceData.user8,
+            //                           height: 50,
+            //                           width: 50,
+            //                         ),
+            //                       ),
+            //                       SizedBox(
+            //                         width: 8,
+            //                       ),
+            //                       Column(
+            //                         crossAxisAlignment: CrossAxisAlignment.start,
+            //                         children: <Widget>[
+            //                           Text(
+            //                             AppLocalizations.of('Esther Berry'),
+            //                             style: Theme.of(context).textTheme.headline6.copyWith(
+            //                                   fontWeight: FontWeight.bold,
+            //                                   color: Theme.of(context).textTheme.headline6.color,
+            //                                 ),
+            //                           ),
+            //                           SizedBox(
+            //                             height: 4,
+            //                           ),
+            //                           Row(
+            //                             children: <Widget>[
+            //                               Container(
+            //                                 height: 24,
+            //                                 width: 74,
+            //                                 child: Center(
+            //                                   child: Text(
+            //                                     AppLocalizations.of('UPI'),
+            //                                     style: Theme.of(context).textTheme.button.copyWith(
+            //                                           fontWeight: FontWeight.bold,
+            //                                           color: ConstanceData.secoundryFontColor,
+            //                                         ),
+            //                                   ),
+            //                                 ),
+            //                                 decoration: BoxDecoration(
+            //                                   borderRadius: BorderRadius.all(
+            //                                     Radius.circular(15),
+            //                                   ),
+            //                                   color: Theme.of(context).primaryColor,
+            //                                 ),
+            //                               ),
+            //                               SizedBox(
+            //                                 width: 4,
+            //                               ),
+            //                               Container(
+            //                                 height: 24,
+            //                                 width: 74,
+            //                                 child: Center(
+            //                                   child: Text(
+            //                                     AppLocalizations.of('Cash'),
+            //                                     style: Theme.of(context).textTheme.button.copyWith(
+            //                                           fontWeight: FontWeight.bold,
+            //                                           color: ConstanceData.secoundryFontColor,
+            //                                         ),
+            //                                   ),
+            //                                 ),
+            //                                 decoration: BoxDecoration(
+            //                                   borderRadius: BorderRadius.all(
+            //                                     Radius.circular(15),
+            //                                   ),
+            //                                   color: Theme.of(context).primaryColor,
+            //                                 ),
+            //                               )
+            //                             ],
+            //                           )
+            //                         ],
+            //                       ),
+            //                       Expanded(
+            //                         child: SizedBox(),
+            //                       ),
+            //                       Column(
+            //                         crossAxisAlignment: CrossAxisAlignment.end,
+            //                         children: <Widget>[
+            //                           Text(
+            //                             '₹25.00',
+            //                             style: Theme.of(context).textTheme.headline6.copyWith(
+            //                                   fontWeight: FontWeight.bold,
+            //                                   color: Theme.of(context).textTheme.headline6.color,
+            //                                 ),
+            //                           ),
+            //                           Text(
+            //                             '2.2 km',
+            //                             style: Theme.of(context).textTheme.caption.copyWith(
+            //                                   color: Theme.of(context).disabledColor,
+            //                                   fontWeight: FontWeight.bold,
+            //                                 ),
+            //                           ),
+            //                         ],
+            //                       ),
+            //                     ],
+            //                   ),
+            //                 ),
+            //               ),
+            //               Container(
+            //                 height: 1,
+            //                 width: MediaQuery.of(context).size.width,
+            //                 color: Theme.of(context).dividerColor,
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+            //                 child: Row(
+            //                   children: <Widget>[
+            //                     Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.start,
+            //                       children: <Widget>[
+            //                         Text(
+            //                           AppLocalizations.of('PICKUP'),
+            //                           style: Theme.of(context).textTheme.caption.copyWith(
+            //                                 color: Theme.of(context).disabledColor,
+            //                                 fontWeight: FontWeight.bold,
+            //                               ),
+            //                         ),
+            //                         SizedBox(
+            //                           height: 4,
+            //                         ),
+            //                         Text(
+            //                           AppLocalizations.of('79 Swift Village'),
+            //                           style: Theme.of(context).textTheme.subtitle2.copyWith(
+            //                                 fontWeight: FontWeight.bold,
+            //                                 color: Theme.of(context).textTheme.headline6.color,
+            //                               ),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14),
+            //                 child: Container(
+            //                   height: 1,
+            //                   width: MediaQuery.of(context).size.width,
+            //                   color: Theme.of(context).dividerColor,
+            //                 ),
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+            //                 child: Row(
+            //                   children: <Widget>[
+            //                     Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.start,
+            //                       children: <Widget>[
+            //                         Text(
+            //                           AppLocalizations.of('DROP OFF'),
+            //                           style: Theme.of(context).textTheme.caption.copyWith(
+            //                                 color: Theme.of(context).disabledColor,
+            //                                 fontWeight: FontWeight.bold,
+            //                               ),
+            //                         ),
+            //                         SizedBox(
+            //                           height: 4,
+            //                         ),
+            //                         Text(
+            //                           AppLocalizations.of('115 William St, Chicago, US'),
+            //                           style: Theme.of(context).textTheme.subtitle2.copyWith(
+            //                                 fontWeight: FontWeight.bold,
+            //                                 color: Theme.of(context).textTheme.headline6.color,
+            //                               ),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //               Container(
+            //                 height: 1,
+            //                 width: MediaQuery.of(context).size.width,
+            //                 color: Theme.of(context).dividerColor,
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14, top: 16),
+            //                 child: Container(
+            //                   height: 40,
+            //                   decoration: BoxDecoration(
+            //                     borderRadius: BorderRadius.circular(10),
+            //                     color: Theme.of(context).primaryColor,
+            //                   ),
+            //                   child: Center(
+            //                     child: Text(
+            //                       AppLocalizations.of('ACCEPT'),
+            //                       style: Theme.of(context).textTheme.button.copyWith(
+            //                             fontWeight: FontWeight.bold,
+            //                             color: ConstanceData.secoundryFontColor,
+            //                           ),
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //               SizedBox(
+            //                 height: 16,
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     SizedBox(
+            //       height: 16,
+            //     ),
+            //     Padding(
+            //       padding: EdgeInsets.only(right: 6, left: 6),
+            //       child: InkWell(
+            //         highlightColor: Colors.transparent,
+            //         splashColor: Colors.transparent,
+            //         onTap: () {
+            //           Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => UserDetailScreen(
+            //                 userId: 2,
+            //               ),
+            //             ),
+            //           );
+            //         },
+            //         child: Container(
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadiusDirectional.circular(16),
+            //             color: Theme.of(context).scaffoldBackgroundColor,
+            //           ),
+            //           child: Column(
+            //             children: <Widget>[
+            //               Container(
+            //                 decoration: BoxDecoration(
+            //                   borderRadius: BorderRadiusDirectional.only(topEnd: Radius.circular(16), topStart: Radius.circular(16)),
+            //                 ),
+            //                 child: Padding(
+            //                   padding: const EdgeInsets.all(14),
+            //                   child: Row(
+            //                     children: <Widget>[
+            //                       ClipRRect(
+            //                         borderRadius: BorderRadius.circular(10),
+            //                         child: Image.asset(
+            //                           ConstanceData.user1,
+            //                           height: 50,
+            //                           width: 50,
+            //                         ),
+            //                       ),
+            //                       SizedBox(
+            //                         width: 8,
+            //                       ),
+            //                       Column(
+            //                         crossAxisAlignment: CrossAxisAlignment.start,
+            //                         children: <Widget>[
+            //                           Text(
+            //                             AppLocalizations.of('Callie Greer'),
+            //                             style: Theme.of(context).textTheme.headline6.copyWith(
+            //                                   fontWeight: FontWeight.bold,
+            //                                   color: Theme.of(context).textTheme.headline6.color,
+            //                                 ),
+            //                           ),
+            //                           SizedBox(
+            //                             height: 4,
+            //                           ),
+            //                           Row(
+            //                             children: <Widget>[
+            //                               Container(
+            //                                 height: 24,
+            //                                 width: 74,
+            //                                 child: Center(
+            //                                   child: Text(
+            //                                     AppLocalizations.of('ApplePay'),
+            //                                     style: Theme.of(context).textTheme.button.copyWith(
+            //                                           fontWeight: FontWeight.bold,
+            //                                           color: ConstanceData.secoundryFontColor,
+            //                                         ),
+            //                                   ),
+            //                                 ),
+            //                                 decoration: BoxDecoration(
+            //                                   borderRadius: BorderRadius.all(
+            //                                     Radius.circular(15),
+            //                                   ),
+            //                                   color: Theme.of(context).primaryColor,
+            //                                 ),
+            //                               ),
+            //                               SizedBox(
+            //                                 width: 4,
+            //                               ),
+            //                               Container(
+            //                                 height: 24,
+            //                                 width: 74,
+            //                                 child: Center(
+            //                                   child: Text(
+            //                                     AppLocalizations.of('Discount'),
+            //                                     style: Theme.of(context).textTheme.button.copyWith(
+            //                                           fontWeight: FontWeight.bold,
+            //                                           color: ConstanceData.secoundryFontColor,
+            //                                         ),
+            //                                   ),
+            //                                 ),
+            //                                 decoration: BoxDecoration(
+            //                                   borderRadius: BorderRadius.all(
+            //                                     Radius.circular(15),
+            //                                   ),
+            //                                   color: Theme.of(context).primaryColor,
+            //                                 ),
+            //                               )
+            //                             ],
+            //                           )
+            //                         ],
+            //                       ),
+            //                       Expanded(
+            //                         child: SizedBox(),
+            //                       ),
+            //                       Column(
+            //                         crossAxisAlignment: CrossAxisAlignment.end,
+            //                         children: <Widget>[
+            //                           Text(
+            //                             '\$20.00',
+            //                             style: Theme.of(context).textTheme.headline6.copyWith(
+            //                                   fontWeight: FontWeight.bold,
+            //                                   color: Theme.of(context).textTheme.headline6.color,
+            //                                 ),
+            //                           ),
+            //                           Text(
+            //                             '1.5 km',
+            //                             style: Theme.of(context).textTheme.caption.copyWith(
+            //                                   color: Theme.of(context).disabledColor,
+            //                                   fontWeight: FontWeight.bold,
+            //                                 ),
+            //                           ),
+            //                         ],
+            //                       ),
+            //                     ],
+            //                   ),
+            //                 ),
+            //               ),
+            //               Container(
+            //                 height: 1,
+            //                 width: MediaQuery.of(context).size.width,
+            //                 color: Theme.of(context).dividerColor,
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+            //                 child: Row(
+            //                   children: <Widget>[
+            //                     Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.start,
+            //                       children: <Widget>[
+            //                         Text(
+            //                           AppLocalizations.of('PICKUP'),
+            //                           style: Theme.of(context).textTheme.caption.copyWith(
+            //                                 color: Theme.of(context).disabledColor,
+            //                                 fontWeight: FontWeight.bold,
+            //                               ),
+            //                         ),
+            //                         SizedBox(
+            //                           height: 4,
+            //                         ),
+            //                         Text(
+            //                           AppLocalizations.of('62 Kobe Trafficway'),
+            //                           style: Theme.of(context).textTheme.subtitle2.copyWith(
+            //                                 fontWeight: FontWeight.bold,
+            //                                 color: Theme.of(context).textTheme.headline6.color,
+            //                               ),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14),
+            //                 child: Container(
+            //                   height: 1,
+            //                   width: MediaQuery.of(context).size.width,
+            //                   color: Theme.of(context).dividerColor,
+            //                 ),
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+            //                 child: Row(
+            //                   children: <Widget>[
+            //                     Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.start,
+            //                       children: <Widget>[
+            //                         Text(
+            //                           AppLocalizations.of('DROP OFF'),
+            //                           style: Theme.of(context).textTheme.caption.copyWith(
+            //                                 color: Theme.of(context).disabledColor,
+            //                                 fontWeight: FontWeight.bold,
+            //                               ),
+            //                         ),
+            //                         SizedBox(
+            //                           height: 4,
+            //                         ),
+            //                         Text(
+            //                           AppLocalizations.of('280, AB Sunny willa'),
+            //                           style: Theme.of(context).textTheme.subtitle2.copyWith(
+            //                                 fontWeight: FontWeight.bold,
+            //                                 color: Theme.of(context).textTheme.headline6.color,
+            //                               ),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //               Container(
+            //                 height: 1,
+            //                 width: MediaQuery.of(context).size.width,
+            //                 color: Theme.of(context).dividerColor,
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14, top: 16),
+            //                 child: Container(
+            //                   height: 40,
+            //                   decoration: BoxDecoration(
+            //                     borderRadius: BorderRadius.circular(10),
+            //                     color: Theme.of(context).primaryColor,
+            //                   ),
+            //                   child: Center(
+            //                     child: Text(
+            //                       AppLocalizations.of('ACCEPT'),
+            //                       style: Theme.of(context).textTheme.button.copyWith(
+            //                             fontWeight: FontWeight.bold,
+            //                             color: ConstanceData.secoundryFontColor,
+            //                           ),
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //               SizedBox(
+            //                 height: 16,
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     SizedBox(
+            //       height: 16,
+            //     ),
+            //     Padding(
+            //       padding: EdgeInsets.only(right: 6, left: 6),
+            //       child: InkWell(
+            //         highlightColor: Colors.transparent,
+            //         splashColor: Colors.transparent,
+            //         onTap: () {
+            //           Navigator.push(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => UserDetailScreen(
+            //                 userId: 3,
+            //               ),
+            //             ),
+            //           );
+            //         },
+            //         child: Container(
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadiusDirectional.circular(16),
+            //             color: Theme.of(context).scaffoldBackgroundColor,
+            //           ),
+            //           child: Column(
+            //             children: <Widget>[
+            //               Container(
+            //                 decoration: BoxDecoration(
+            //                   borderRadius: BorderRadiusDirectional.only(topEnd: Radius.circular(16), topStart: Radius.circular(16)),
+            //                 ),
+            //                 child: Padding(
+            //                   padding: const EdgeInsets.all(14),
+            //                   child: Row(
+            //                     children: <Widget>[
+            //                       ClipRRect(
+            //                         borderRadius: BorderRadius.circular(10),
+            //                         child: Image.asset(
+            //                           ConstanceData.user2,
+            //                           height: 50,
+            //                           width: 50,
+            //                         ),
+            //                       ),
+            //                       SizedBox(
+            //                         width: 8,
+            //                       ),
+            //                       Column(
+            //                         crossAxisAlignment: CrossAxisAlignment.start,
+            //                         children: <Widget>[
+            //                           Text(
+            //                             AppLocalizations.of('Esther Berry'),
+            //                             style: Theme.of(context).textTheme.headline6.copyWith(
+            //                                   fontWeight: FontWeight.bold,
+            //                                   color: Theme.of(context).textTheme.headline6.color,
+            //                                 ),
+            //                           ),
+            //                           SizedBox(
+            //                             height: 4,
+            //                           ),
+            //                           Row(
+            //                             children: <Widget>[
+            //                               Container(
+            //                                 height: 24,
+            //                                 width: 74,
+            //                                 child: Center(
+            //                                   child: Text(
+            //                                     AppLocalizations.of('ApplePay'),
+            //                                     style: Theme.of(context).textTheme.button.copyWith(
+            //                                           fontWeight: FontWeight.bold,
+            //                                           color: ConstanceData.secoundryFontColor,
+            //                                         ),
+            //                                   ),
+            //                                 ),
+            //                                 decoration: BoxDecoration(
+            //                                   borderRadius: BorderRadius.all(
+            //                                     Radius.circular(15),
+            //                                   ),
+            //                                   color: Theme.of(context).primaryColor,
+            //                                 ),
+            //                               ),
+            //                               SizedBox(
+            //                                 width: 4,
+            //                               ),
+            //                               Container(
+            //                                 height: 24,
+            //                                 width: 74,
+            //                                 child: Center(
+            //                                   child: Text(
+            //                                     AppLocalizations.of('Discount'),
+            //                                     style: Theme.of(context).textTheme.button.copyWith(
+            //                                           fontWeight: FontWeight.bold,
+            //                                           color: ConstanceData.secoundryFontColor,
+            //                                         ),
+            //                                   ),
+            //                                 ),
+            //                                 decoration: BoxDecoration(
+            //                                   borderRadius: BorderRadius.all(
+            //                                     Radius.circular(15),
+            //                                   ),
+            //                                   color: Theme.of(context).primaryColor,
+            //                                 ),
+            //                               )
+            //                             ],
+            //                           )
+            //                         ],
+            //                       ),
+            //                       Expanded(
+            //                         child: SizedBox(),
+            //                       ),
+            //                       Column(
+            //                         crossAxisAlignment: CrossAxisAlignment.end,
+            //                         children: <Widget>[
+            //                           Text(
+            //                             '\$10.00',
+            //                             style: Theme.of(context).textTheme.headline6.copyWith(
+            //                                   fontWeight: FontWeight.bold,
+            //                                   color: Theme.of(context).textTheme.headline6.color,
+            //                                 ),
+            //                           ),
+            //                           Text(
+            //                             '0.5 km',
+            //                             style: Theme.of(context).textTheme.caption.copyWith(
+            //                                   color: Theme.of(context).disabledColor,
+            //                                   fontWeight: FontWeight.bold,
+            //                                 ),
+            //                           ),
+            //                         ],
+            //                       ),
+            //                     ],
+            //                   ),
+            //                 ),
+            //               ),
+            //               Container(
+            //                 height: 1,
+            //                 width: MediaQuery.of(context).size.width,
+            //                 color: Theme.of(context).dividerColor,
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+            //                 child: Row(
+            //                   children: <Widget>[
+            //                     Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.start,
+            //                       children: <Widget>[
+            //                         Text(
+            //                           AppLocalizations.of('PICKUP'),
+            //                           style: Theme.of(context).textTheme.caption.copyWith(
+            //                                 color: Theme.of(context).disabledColor,
+            //                                 fontWeight: FontWeight.bold,
+            //                               ),
+            //                         ),
+            //                         SizedBox(
+            //                           height: 4,
+            //                         ),
+            //                         Text(
+            //                           AppLocalizations.of('25 Lcie Park Suite'),
+            //                           style: Theme.of(context).textTheme.subtitle2.copyWith(
+            //                                 fontWeight: FontWeight.bold,
+            //                                 color: Theme.of(context).textTheme.headline6.color,
+            //                               ),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14),
+            //                 child: Container(
+            //                   height: 1,
+            //                   width: MediaQuery.of(context).size.width,
+            //                   color: Theme.of(context).dividerColor,
+            //                 ),
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+            //                 child: Row(
+            //                   children: <Widget>[
+            //                     Column(
+            //                       crossAxisAlignment: CrossAxisAlignment.start,
+            //                       children: <Widget>[
+            //                         Text(
+            //                           AppLocalizations.of('DROP OFF'),
+            //                           style: Theme.of(context).textTheme.caption.copyWith(
+            //                                 color: Theme.of(context).disabledColor,
+            //                                 fontWeight: FontWeight.bold,
+            //                               ),
+            //                         ),
+            //                         SizedBox(
+            //                           height: 4,
+            //                         ),
+            //                         Text(
+            //                           AppLocalizations.of('187/ William St, London, UK'),
+            //                           style: Theme.of(context).textTheme.subtitle2.copyWith(
+            //                                 fontWeight: FontWeight.bold,
+            //                                 color: Theme.of(context).textTheme.headline6.color,
+            //                               ),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //               Container(
+            //                 height: 1,
+            //                 width: MediaQuery.of(context).size.width,
+            //                 color: Theme.of(context).dividerColor,
+            //               ),
+            //               Padding(
+            //                 padding: const EdgeInsets.only(right: 14, left: 14, top: 16),
+            //                 child: Container(
+            //                   height: 40,
+            //                   decoration: BoxDecoration(
+            //                     borderRadius: BorderRadius.circular(10),
+            //                     color: Theme.of(context).primaryColor,
+            //                   ),
+            //                   child: Center(
+            //                     child: Text(
+            //                       'Accept',
+            //                       style: Theme.of(context).textTheme.button.copyWith(
+            //                             fontWeight: FontWeight.bold,
+            //                             color: ConstanceData.secoundryFontColor,
+            //                           ),
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //               SizedBox(
+            //                 height: 16,
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom + 16,
             )

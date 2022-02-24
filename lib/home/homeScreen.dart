@@ -2,6 +2,7 @@ import 'package:animator/animator.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -41,24 +42,38 @@ class _HomeScreenState extends State<HomeScreen> {
   Position position;
   FirebaseAuth auth = FirebaseAuth.instance;
 
-
   @override
   void initState() {
     super.initState();
-    Access().getVehicles().then((value) => {
-      ConstanceData.setVehicleType(value)
-    });
-    if(auth.currentUser!=null){
-      if(ConstanceData.id !=null && ConstanceData.prof==null){
+    // FlutterBackgroundService()
+    //     .sendData({"action": "setAsForeground"});
+    FlutterBackgroundService().sendData({"action": "setAsBackground"});
+    Access()
+        .getVehicles()
+        .then((value) => {ConstanceData.setVehicleType(value)});
+    if (auth.currentUser != null) {
+      if (ConstanceData.id != null && ConstanceData.prof == null) {
         print("Got it");
-          Access().getProfile().then((value) => {
-            ConstanceData.prof = value,
-            print("${value.name}")
-          });
-      }else if( ConstanceData.prof.min_rate==null||ConstanceData.prof.min_rate==null){
-        Access().getProfile().then((value) => {
-          ConstanceData.prof = value,
-          print("${value.name}")
+        Access().getProfile().then((value) {
+          if (mounted) {
+            setState(() {
+              ConstanceData.setProfile(value);
+            });
+          } else {
+            ConstanceData.setProfile(value);
+          }
+          print("${value.name}");
+        });
+      } else if (ConstanceData.prof.min_rate == null ||
+          ConstanceData.prof.min_rate == null) {
+        Access().getProfile().then((value) {
+          if (mounted) {
+            setState(() {
+              ConstanceData.setProfile(value);
+            });
+          } else {
+            ConstanceData.setProfile(value);
+          }
         });
       }
     }
@@ -335,7 +350,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      AppLocalizations.of('${ConstanceData.prof.name}'),
+                                      AppLocalizations.of(
+                                          '${ConstanceData.orders != null && ConstanceData.orders.length > 1 ? ConstanceData.orders[0].user_name : ConstanceData.prof.name}'),
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline6
@@ -357,14 +373,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: 74,
                                           child: Center(
                                             child: Text(
-                                              AppLocalizations.of('ApplePay'),
+                                              AppLocalizations.of(
+                                                  '${ConstanceData.orders != null && ConstanceData.orders.length > 1 ? ConstanceData.orders[0].payment_type : 'Cash'}'),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .button
                                                   .copyWith(
                                                     fontWeight: FontWeight.bold,
-                                                    color: ConstanceData
-                                                        .secoundryFontColor,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .headline6
+                                                        .color,
                                                   ),
                                             ),
                                           ),
@@ -373,7 +392,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Radius.circular(15),
                                             ),
                                             color:
-                                                Theme.of(context).primaryColor,
+                                                Theme.of(context).accentColor,
                                           ),
                                         ),
                                         SizedBox(
@@ -384,14 +403,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                           width: 74,
                                           child: Center(
                                             child: Text(
-                                              AppLocalizations.of('Discount'),
+                                              AppLocalizations.of('UPI'),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .button
                                                   .copyWith(
                                                     fontWeight: FontWeight.bold,
-                                                    color: ConstanceData
-                                                        .secoundryFontColor,
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .headline6
+                                                        .color,
                                                   ),
                                             ),
                                           ),
@@ -400,7 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               Radius.circular(15),
                                             ),
                                             color:
-                                                Theme.of(context).primaryColor,
+                                                Theme.of(context).accentColor,
                                           ),
                                         )
                                       ],
@@ -414,7 +435,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
                                     Text(
-                                      '\$25.00',
+                                      '₹${ConstanceData.orders != null && ConstanceData.orders.length > 1 ? ConstanceData.orders[0].total_price : "25.00"}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline6
@@ -427,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                     ),
                                     Text(
-                                      '2.2 km',
+                                      '${ConstanceData.orders != null && ConstanceData.orders.length > 1 ? ConstanceData.orders[0].total_distance : "2.2"} km',
                                       style: Theme.of(context)
                                           .textTheme
                                           .caption
@@ -465,18 +486,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
-                                    Text(
-                                      AppLocalizations.of('79 Swift Village'),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                .color,
-                                          ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          50,
+                                      child: Text(
+                                        AppLocalizations.of(
+                                            '${ConstanceData.orders != null && ConstanceData.orders.length > 1 ? ConstanceData.orders[0].pickup_location_name : "79 Swift Village"}'),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2
+                                            .copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  .color,
+                                            ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -506,19 +533,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
-                                    Text(
-                                      AppLocalizations.of(
-                                          '115 William St, Chicago, US'),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .headline6
-                                                .color,
-                                          ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width -
+                                          50,
+                                      child: Text(
+                                        AppLocalizations.of(
+                                            '${ConstanceData.orders != null && ConstanceData.orders.length > 1 ? ConstanceData.orders[0].drop_location_name : "115 William St, Chicago, US"}'),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle2
+                                            .copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  .color,
+                                            ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -716,7 +748,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Text(
-                      '\$325.00',
+                      '₹325.00',
                       style: Theme.of(context).textTheme.headline6.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).textTheme.headline6.color,
@@ -761,7 +793,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 4,
                         ),
                         Text(
-                          '10.2',
+                          '${ConstanceData.prof == null || ConstanceData.prof.hours_online == null ? 0 : ConstanceData.prof.hours_online}',
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: ConstanceData.secoundryFontColor,
@@ -796,7 +828,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 4,
                         ),
                         Text(
-                          '30 KM',
+                          '${ConstanceData.prof == null || ConstanceData.prof.total_distance == null ? 0 : ConstanceData.prof.total_distance} KM',
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: ConstanceData.secoundryFontColor,
@@ -831,7 +863,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 4,
                         ),
                         Text(
-                          '20',
+                          '${ConstanceData.prof == null || ConstanceData.prof.total_job == null ? 0 : ConstanceData.prof.total_job}',
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: ConstanceData.secoundryFontColor,
@@ -1067,7 +1099,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> setPosition() async {
     position = await _determinePosition();
-    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
     placemarks[0].name.toString();
 
     if (position != null) {

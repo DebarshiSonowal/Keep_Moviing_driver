@@ -48,8 +48,8 @@ class _AppDrawerState extends State<AppDrawer> {
                                     fit: BoxFit.fill,
                                   )
                                 : Image.network(
-                                    ConstanceData.image_url +
-                                        ConstanceData.prof.profile_img,
+                                    ConstanceData.image_url.toString() +
+                                        ConstanceData.prof.profile_img.toString(),
                                     fit: BoxFit.fill,
                                   ),
                           ),
@@ -89,7 +89,7 @@ class _AppDrawerState extends State<AppDrawer> {
                                     size: 16,
                                   ),
                                   Text(
-                                    'Gold Member',
+                                    '${ConstanceData.prof.rating} Star',
                                     style: Theme.of(context)
                                         .textTheme
                                         .button
@@ -127,7 +127,7 @@ class _AppDrawerState extends State<AppDrawer> {
                             height: 4,
                           ),
                           Text(
-                            '10.2',
+                            '${ConstanceData.prof.hours_online}',
                             style:
                                 Theme.of(context).textTheme.subtitle1.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -161,7 +161,7 @@ class _AppDrawerState extends State<AppDrawer> {
                             height: 4,
                           ),
                           Text(
-                            '30 KM',
+                            '${ConstanceData.prof.total_distance} KM',
                             style:
                                 Theme.of(context).textTheme.subtitle1.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -195,7 +195,7 @@ class _AppDrawerState extends State<AppDrawer> {
                             height: 4,
                           ),
                           Text(
-                            '20',
+                            '${ConstanceData.prof.total_job}',
                             style:
                                 Theme.of(context).textTheme.subtitle1.copyWith(
                                       fontWeight: FontWeight.bold,
@@ -501,7 +501,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 onTap: () {
                   if (auth.currentUser != null) {
                     auth.signOut().then((value) {
-                      Navigator.pushReplacementNamed(context, Routes.AUTH);
+                      Navigator.pushReplacementNamed(context, Routes.LOGIN);
                     });
                   }
                 },
