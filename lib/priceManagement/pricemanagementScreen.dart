@@ -111,7 +111,7 @@ class _VehicalManagementState extends State<VehicalManagement> {
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).disabledColor,
                           )),
-                  Text('${widget._value.toInt()}',
+                  Text('${widget._value}',
                       style: Theme.of(context).textTheme.subtitle2.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Color(0xff0b0b0b),
@@ -146,7 +146,7 @@ class _VehicalManagementState extends State<VehicalManagement> {
                             ConstanceData.prof.min_rate.toString()),
                         to: double.parse(
                             ConstanceData.prof.max_rate.toString()),
-                        step: 10),
+                        step: 0.50),
                   ]),
               values: [widget._value],
               onDragCompleted: (one, two, three) {

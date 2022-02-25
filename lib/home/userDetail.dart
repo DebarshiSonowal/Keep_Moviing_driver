@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_cab_driver/Model/MockOrder.dart';
+import 'package:my_cab_driver/Model/Order.dart';
 import 'package:my_cab_driver/appTheme.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/pickup/pickupScreen.dart';
@@ -15,10 +16,10 @@ class UserDetailScreen extends StatefulWidget {
 }
 
 class _UserDetailScreenState extends State<UserDetailScreen> {
-  mockOrder data;
+  Order data;
   @override
   Widget build(BuildContext context) {
-    data = ConstanceData.mockOrders[widget.userId];
+    data = ConstanceData.orders[widget.userId];
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: appbar(),
@@ -108,7 +109,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => PickupScreen(),
+                builder: (context) => PickupScreen(data),
               ),
             );
           },
@@ -254,11 +255,55 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                       ),
                 ),
                 Text(
-                  '₹15.00',
+                  '₹${double.parse(data.base_fare.toString())}',
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.headline6.color,
                       ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  AppLocalizations.of('Per minute Fare'),
+                  style: Theme.of(context).textTheme.subtitle2.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.headline6.color,
+                  ),
+                ),
+                Text(
+                  '₹${double.parse(data.rate_per_minute.toString())}',
+                  style: Theme.of(context).textTheme.subtitle2.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.headline6.color,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  AppLocalizations.of('Waiting charge'),
+                  style: Theme.of(context).textTheme.subtitle2.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.headline6.color,
+                  ),
+                ),
+                Text(
+                  '₹${double.parse(data.waiting_charge.toString())}',
+                  style: Theme.of(context).textTheme.subtitle2.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.headline6.color,
+                  ),
                 ),
               ],
             ),
@@ -276,7 +321,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                       ),
                 ),
                 Text(
-                  '₹10.00',
+                  '₹${double.parse(data.rate_per_km.toString())}',
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.headline6.color,
@@ -287,6 +332,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             SizedBox(
               height: 8,
             ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -298,7 +344,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                       ),
                 ),
                 Text(
-                  '₹25.00',
+                  '₹${double.parse(data.total_price.toString())}',
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.headline6.color,
@@ -369,7 +415,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   height: 4,
                 ),
                 Text(
-                  AppLocalizations.of('${data.drop}'),
+                  AppLocalizations.of('${data.drop_location_name}'),
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.headline6.color,
@@ -404,7 +450,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   height: 4,
                 ),
                 Text(
-                  AppLocalizations.of('${data.pickup}'),
+                  AppLocalizations.of('${data.pickup_location_name}'),
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.headline6.color,
@@ -425,22 +471,22 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         padding: const EdgeInsets.all(14),
         child: Row(
           children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                ConstanceData.userImage,
-                height: 50,
-                width: 50,
-              ),
-            ),
-            SizedBox(
-              width: 8,
-            ),
+            // ClipRRect(
+            //   borderRadius: BorderRadius.circular(10),
+            //   child: Image.asset(
+            //     ConstanceData.userImage,
+            //     height: 50,
+            //     width: 50,
+            //   ),
+            // ),
+            // SizedBox(
+            //   width: 8,
+            // ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  AppLocalizations.of('${data.name}'),
+                  AppLocalizations.of('${data.user_name}'),
                   style: Theme.of(context).textTheme.headline6.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.headline6.color,
@@ -449,50 +495,24 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                 SizedBox(
                   height: 4,
                 ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      height: 24,
-                      width: 74,
-                      child: Center(
-                        child: Text(
-                          AppLocalizations.of('${data.paymentMethods[0]}'),
-                          style: Theme.of(context).textTheme.button.copyWith(
-                                fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.headline6.color,
-                              ),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                        color: Theme.of(context).accentColor,
-                      ),
+                Container(
+                  height: 24,
+                  width: 74,
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.of('${data.payment_type}'),
+                      style: Theme.of(context).textTheme.button.copyWith(
+                            fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.headline6.color,
+                          ),
                     ),
-                    SizedBox(
-                      width: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(15),
                     ),
-                    Container(
-                      height: 24,
-                      width: 74,
-                      child: Center(
-                        child: Text(
-                          AppLocalizations.of('${data.paymentMethods[1]}'),
-                          style: Theme.of(context).textTheme.button.copyWith(
-                                fontWeight: FontWeight.bold,
-                            color: Theme.of(context).textTheme.headline6.color,
-                              ),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(15),
-                        ),
-                        color: Theme.of(context).accentColor,
-                      ),
-                    )
-                  ],
+                    color: Theme.of(context).accentColor,
+                  ),
                 )
               ],
             ),
@@ -503,14 +523,14 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
-                  '₹${data.amount}',
+                  '₹${data.total_price}',
                   style: Theme.of(context).textTheme.headline6.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).textTheme.headline6.color,
                       ),
                 ),
                 Text(
-                  '${data.distance} km',
+                  '${data.total_distance} km',
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Theme.of(context).primaryColor,
@@ -545,7 +565,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             ),
           ),
           Text(
-            '#123456',
+            '${data.order_id}',
             style: Theme.of(context).textTheme.headline6.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).textTheme.headline6.color,

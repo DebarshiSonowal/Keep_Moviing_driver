@@ -123,12 +123,13 @@ class NetworkHelper {
 
   Future getOrderDetails(id) async {
     dio = Dio(option);
-    print('nada ${id}');
+
     try {
       Response response = await dio.post(url, data: {
         'id': id,
       });
       if (response.statusCode == 200) {
+        print(response.data['data']);
         var data = response.data['data'] as List;
         List<Order> list = data.map((e) => Order.fromJson(e)).toList();
         return list;

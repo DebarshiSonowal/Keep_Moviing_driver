@@ -726,7 +726,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      AppLocalizations.of('Jeremiah Curtis'),
+                      AppLocalizations.of('${ConstanceData.prof!=null?ConstanceData.prof.name:'Jeremiah Curtis'}'),
                       style: Theme.of(context).textTheme.headline6.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).textTheme.headline6.color,

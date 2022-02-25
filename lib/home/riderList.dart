@@ -107,17 +107,17 @@ class _RiderListState extends State<RiderList> {
                               padding: const EdgeInsets.all(14),
                               child: Row(
                                 children: <Widget>[
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                      ConstanceData.user8,
-                                      height: 50,
-                                      width: 50,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
+                                  // ClipRRect(
+                                  //   borderRadius: BorderRadius.circular(10),
+                                  //   child: Image.asset(
+                                  //     ConstanceData.user8,
+                                  //     height: 50,
+                                  //     width: 50,
+                                  //   ),
+                                  // ),
+                                  // SizedBox(
+                                  //   width: 8,
+                                  // ),
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: <Widget>[

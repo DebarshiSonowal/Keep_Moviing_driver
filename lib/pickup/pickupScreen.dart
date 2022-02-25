@@ -2,13 +2,19 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_cab_driver/Model/Order.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/ticketView.dart';
 import '../appTheme.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
 
 class PickupScreen extends StatefulWidget {
+  Order data;
+
+  PickupScreen(this.data);
+
   @override
   _PickupScreenState createState() => _PickupScreenState();
 }
@@ -16,6 +22,7 @@ class PickupScreen extends StatefulWidget {
 class _PickupScreenState extends State<PickupScreen> {
   GoogleMapController mapController;
   PolylinePoints polylinePoints;
+  Position current;
 
 // List of coordinates to join
   List<LatLng> polylineCoordinates = [];
@@ -24,9 +31,12 @@ class _PickupScreenState extends State<PickupScreen> {
   Map<PolylineId, Polyline> polylines = {};
   Set<Marker> markers = {};
 
+  var dropaddress="";
+
   @override
   void initState() {
     super.initState();
+    getLocation();
     // Future.delayed(Duration.zero,(){
     //   try {
     //     setState(() {
@@ -44,10 +54,11 @@ class _PickupScreenState extends State<PickupScreen> {
   Widget build(BuildContext context) {
     seticonimage(context);
     seticonimage2(context);
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Theme
+            .of(context)
+            .scaffoldBackgroundColor,
         automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,16 +72,28 @@ class _PickupScreenState extends State<PickupScreen> {
               child: SizedBox(
                 child: Icon(
                   Icons.arrow_back_ios,
-                  color: Theme.of(context).textTheme.headline6.color,
+                  color: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6
+                      .color,
                 ),
               ),
             ),
             Text(
               AppLocalizations.of('Pick up'),
-              style: Theme.of(context).textTheme.headline6.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.headline6.color,
-                  ),
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline6
+                  .copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme
+                    .of(context)
+                    .textTheme
+                    .headline6
+                    .color,
+              ),
             ),
             SizedBox(
               width: 20,
@@ -95,7 +118,17 @@ class _PickupScreenState extends State<PickupScreen> {
               setState(() {
                 seticonimage(context);
                 seticonimage2(context);
-                customn();
+                if (current != null) {
+                  customn(current);
+                } else {
+                  setState(() =>
+                  {
+                    getLocation().then((value) => {
+                    customn(value)
+                    }),
+
+                  });
+                }
               });
             },
             markers: Set<Marker>.of(markers),
@@ -111,7 +144,9 @@ class _PickupScreenState extends State<PickupScreen> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16)),
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: Theme
+                      .of(context)
+                      .scaffoldBackgroundColor,
                   boxShadow: [
                     BoxShadow(
                       color: AppTheme.isLightTheme
@@ -133,7 +168,9 @@ class _PickupScreenState extends State<PickupScreen> {
                         height: 2.7,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
-                          color: Theme.of(context).disabledColor,
+                          color: Theme
+                              .of(context)
+                              .disabledColor,
                         ),
                       ),
                     ),
@@ -145,17 +182,20 @@ class _PickupScreenState extends State<PickupScreen> {
                       child: Row(
                         children: <Widget>[
                           CircleAvatar(
-                            backgroundColor: Theme.of(context).primaryColor,
+                            backgroundColor: Theme
+                                .of(context)
+                                .primaryColor,
                             radius: 22,
                             child: Text(
                               "A",
-                              style: Theme.of(context)
+                              style: Theme
+                                  .of(context)
                                   .textTheme
                                   .headline6
                                   .copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: ConstanceData.secoundryFontColor,
-                                  ),
+                                fontWeight: FontWeight.bold,
+                                color: ConstanceData.secoundryFontColor,
+                              ),
                             ),
                           ),
                           SizedBox(
@@ -167,26 +207,35 @@ class _PickupScreenState extends State<PickupScreen> {
                             children: <Widget>[
                               Text(
                                 AppLocalizations.of('Pick up at'),
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .subtitle2
                                     .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).disabledColor,
-                                    ),
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme
+                                      .of(context)
+                                      .disabledColor,
+                                ),
                               ),
-                              Text(
-                                AppLocalizations.of('London Bridge Walk'),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                              SizedBox(
+                                width:MediaQuery.of(context).size.width -80,
+                                child: Text(
+                                  AppLocalizations.of('${dropaddress}'),
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .headline6
+                                      .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize:12,
+                                    color: Theme
+                                        .of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
+                                  ),
+                                ),
                               )
                             ],
                           ),
@@ -198,7 +247,7 @@ class _PickupScreenState extends State<PickupScreen> {
                     ),
                     Padding(
                       padding:
-                          const EdgeInsets.only(right: 14, left: 14, top: 10),
+                      const EdgeInsets.only(right: 14, left: 14, top: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
@@ -206,29 +255,34 @@ class _PickupScreenState extends State<PickupScreen> {
                             children: <Widget>[
                               Text(
                                 'EST',
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .caption
                                     .copyWith(
-                                      color: Theme.of(context).disabledColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  color: Theme
+                                      .of(context)
+                                      .disabledColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               SizedBox(
                                 height: 4,
                               ),
                               Text(
                                 AppLocalizations.of('5 min'),
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .subtitle1
                                     .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .headline6
+                                      .color,
+                                ),
                               ),
                             ],
                           ),
@@ -236,29 +290,34 @@ class _PickupScreenState extends State<PickupScreen> {
                             children: <Widget>[
                               Text(
                                 AppLocalizations.of('Distance'),
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .caption
                                     .copyWith(
-                                      color: Theme.of(context).disabledColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  color: Theme
+                                      .of(context)
+                                      .disabledColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               SizedBox(
                                 height: 4,
                               ),
                               Text(
                                 '2.2 km',
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .subtitle1
                                     .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .headline6
+                                      .color,
+                                ),
                               ),
                             ],
                           ),
@@ -266,29 +325,34 @@ class _PickupScreenState extends State<PickupScreen> {
                             children: <Widget>[
                               Text(
                                 AppLocalizations.of('Fare'),
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .caption
                                     .copyWith(
-                                      color: Theme.of(context).disabledColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                  color: Theme
+                                      .of(context)
+                                      .disabledColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                               SizedBox(
                                 height: 4,
                               ),
                               Text(
                                 '\$25.00',
-                                style: Theme.of(context)
+                                style: Theme
+                                    .of(context)
                                     .textTheme
                                     .subtitle1
                                     .copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .headline6
+                                      .color,
+                                ),
                               ),
                             ],
                           ),
@@ -312,16 +376,22 @@ class _PickupScreenState extends State<PickupScreen> {
                           height: 40,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Theme.of(context).primaryColor,
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
                           ),
                           child: Center(
                             child: Text(
                               AppLocalizations.of('DROP OFF'),
                               style:
-                                  Theme.of(context).textTheme.button.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: ConstanceData.secoundryFontColor,
-                                      ),
+                              Theme
+                                  .of(context)
+                                  .textTheme
+                                  .button
+                                  .copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: ConstanceData.secoundryFontColor,
+                              ),
                             ),
                           ),
                         ),
@@ -343,13 +413,18 @@ class _PickupScreenState extends State<PickupScreen> {
                           Text(
                             AppLocalizations.of('Head southwest on Madison St'),
                             style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline6
+                                  .color,
+                            ),
                           )
                         ],
                       ),
@@ -361,12 +436,17 @@ class _PickupScreenState extends State<PickupScreen> {
                           Text(
                             AppLocalizations.of('18 miles'),
                             style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                              color: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline6
+                                  .color,
+                            ),
                           ),
                           SizedBox(
                             width: 8,
@@ -375,7 +455,9 @@ class _PickupScreenState extends State<PickupScreen> {
                             child: Container(
                               height: 1,
                               width: 50,
-                              color: Theme.of(context).dividerColor,
+                              color: Theme
+                                  .of(context)
+                                  .dividerColor,
                             ),
                           )
                         ],
@@ -394,13 +476,18 @@ class _PickupScreenState extends State<PickupScreen> {
                           Text(
                             AppLocalizations.of('Turn left onto 4th Ave'),
                             style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline6
+                                  .color,
+                            ),
                           )
                         ],
                       ),
@@ -412,12 +499,17 @@ class _PickupScreenState extends State<PickupScreen> {
                           Text(
                             AppLocalizations.of('12 miles'),
                             style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                              color: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline6
+                                  .color,
+                            ),
                           ),
                           SizedBox(
                             width: 8,
@@ -426,7 +518,9 @@ class _PickupScreenState extends State<PickupScreen> {
                             child: Container(
                               height: 1,
                               width: 50,
-                              color: Theme.of(context).dividerColor,
+                              color: Theme
+                                  .of(context)
+                                  .dividerColor,
                             ),
                           )
                         ],
@@ -445,13 +539,18 @@ class _PickupScreenState extends State<PickupScreen> {
                           Text(
                             AppLocalizations.of('Turn Right at 105th'),
                             style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline6
+                                  .color,
+                            ),
                           )
                         ],
                       ),
@@ -463,12 +562,17 @@ class _PickupScreenState extends State<PickupScreen> {
                           Text(
                             AppLocalizations.of('40 miles'),
                             style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                              color: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline6
+                                  .color,
+                            ),
                           ),
                           SizedBox(
                             width: 8,
@@ -477,7 +581,9 @@ class _PickupScreenState extends State<PickupScreen> {
                             child: Container(
                               height: 1,
                               width: 50,
-                              color: Theme.of(context).dividerColor,
+                              color: Theme
+                                  .of(context)
+                                  .dividerColor,
                             ),
                           )
                         ],
@@ -489,7 +595,9 @@ class _PickupScreenState extends State<PickupScreen> {
                         children: <Widget>[
                           Icon(
                             Icons.subdirectory_arrow_right,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
                           ),
                           SizedBox(
                             width: 8,
@@ -497,10 +605,16 @@ class _PickupScreenState extends State<PickupScreen> {
                           Text(
                             AppLocalizations.of('Turn Right at William St'),
                             style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
+                            ),
                           )
                         ],
                       ),
@@ -512,9 +626,15 @@ class _PickupScreenState extends State<PickupScreen> {
                           Text(
                             AppLocalizations.of('40 miles'),
                             style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      color: Theme.of(context).primaryColor,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                              color: Theme
+                                  .of(context)
+                                  .primaryColor,
+                            ),
                           ),
                           SizedBox(
                             width: 8,
@@ -523,7 +643,9 @@ class _PickupScreenState extends State<PickupScreen> {
                             child: Container(
                               height: 1,
                               width: 50,
-                              color: Theme.of(context).dividerColor,
+                              color: Theme
+                                  .of(context)
+                                  .dividerColor,
                             ),
                           )
                         ],
@@ -542,13 +664,18 @@ class _PickupScreenState extends State<PickupScreen> {
                           Text(
                             AppLocalizations.of('Continue straight stay'),
                             style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline6
+                                  .color,
+                            ),
                           )
                         ],
                       ),
@@ -560,12 +687,17 @@ class _PickupScreenState extends State<PickupScreen> {
                           Text(
                             AppLocalizations.of('24 miles'),
                             style:
-                                Theme.of(context).textTheme.bodyText2.copyWith(
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .color,
-                                    ),
+                            Theme
+                                .of(context)
+                                .textTheme
+                                .bodyText2
+                                .copyWith(
+                              color: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline6
+                                  .color,
+                            ),
                           ),
                           SizedBox(
                             width: 8,
@@ -574,14 +706,19 @@ class _PickupScreenState extends State<PickupScreen> {
                             child: Container(
                               height: 1,
                               width: 50,
-                              color: Theme.of(context).dividerColor,
+                              color: Theme
+                                  .of(context)
+                                  .dividerColor,
                             ),
                           )
                         ],
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).padding.bottom + 16,
+                      height: MediaQuery
+                          .of(context)
+                          .padding
+                          .bottom + 16,
                     ),
                   ],
                 ),
@@ -592,7 +729,9 @@ class _PickupScreenState extends State<PickupScreen> {
             children: <Widget>[
               Container(
                 height: AppBar().preferredSize.height,
-                color: Theme.of(context).primaryColor,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 14, left: 14),
                   child: Row(
@@ -603,10 +742,14 @@ class _PickupScreenState extends State<PickupScreen> {
                       ),
                       Text(
                         '250m',
-                        style: Theme.of(context).textTheme.headline6.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: ConstanceData.secoundryFontColor,
-                            ),
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .headline6
+                            .copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: ConstanceData.secoundryFontColor,
+                        ),
                       ),
                       SizedBox(
                         width: 16,
@@ -615,10 +758,14 @@ class _PickupScreenState extends State<PickupScreen> {
                         child: Text(
                           AppLocalizations.of(
                               'Turn right at 105 William St,Chicago, US'),
-                          style: Theme.of(context).textTheme.subtitle2.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: ConstanceData.secoundryFontColor,
-                              ),
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .subtitle2
+                              .copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: ConstanceData.secoundryFontColor,
+                          ),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -633,20 +780,31 @@ class _PickupScreenState extends State<PickupScreen> {
     );
   }
 
-  customn() async {
+  customn(current) async {
     // List<Location> startPlacemark = await locationFromAddress(_startAddress);
     // List<Location> destinationPlacemark = await locationFromAddress(_destinationAddress);
 //https://www.google.com/maps/@26.4792999,90.3058874,18.12z
 // Storing latitude & longitude of start and destination location
 //  26.4798399,90.3048006
+//     Location startPlacemark = Location(
+//       longitude: 90.3048006,
+//       latitude: 26.4798399,
+//       timestamp: DateTime.now(),
+//     );
+  print('rec ${current}');
     Location startPlacemark = Location(
-      longitude: 90.3048006,
-      latitude: 26.4798399,
+      longitude: current.longitude,
+      latitude: current.latitude,
       timestamp: DateTime.now(),
     );
+    // Location destinationPlacemark = Location(
+    //   longitude: 90.2926186,
+    //   latitude: 26.4362356,
+    //   timestamp: DateTime.now(),
+    // );
     Location destinationPlacemark = Location(
-      longitude: 90.2926186,
-      latitude: 26.4362356,
+      longitude: widget.data.pickup_location_lang,
+      latitude: widget.data.pickup_location_lat,
       timestamp: DateTime.now(),
     );
 
@@ -655,12 +813,17 @@ class _PickupScreenState extends State<PickupScreen> {
     var addresses = await Geocoder.local.findAddressesFromCoordinates(
         Coordinates(startPlacemark.latitude, startPlacemark.longitude));
     var startCoordinatesString = addresses.first.addressLine;
-    print('start ${addresses}');
+    print('start ${addresses.first}');
     var addresses1 = await Geocoder.local.findAddressesFromCoordinates(
         Coordinates(
             destinationPlacemark.latitude, destinationPlacemark.longitude));
     print('end ${addresses1}');
     var destinationCoordinatesString = addresses1.first.addressLine;
+
+    setState(() {
+      dropaddress = destinationCoordinatesString;
+    });
+
     double destinationLatitude = destinationPlacemark.latitude;
     double destinationLongitude = destinationPlacemark.longitude;
 
@@ -676,12 +839,10 @@ class _PickupScreenState extends State<PickupScreen> {
     );
   }
 
-  setMarkers(
-    startCoordinatesString,
-    startPlacemark,
-    destinationCoordinatesString,
-    destinationPlacemark,
-  ) {
+  setMarkers(startCoordinatesString,
+      startPlacemark,
+      destinationCoordinatesString,
+      destinationPlacemark,) {
     Marker startMarker = Marker(
       markerId: MarkerId(startPlacemark.toString()),
       position: LatLng(startPlacemark.latitude, startPlacemark.longitude),
@@ -696,7 +857,7 @@ class _PickupScreenState extends State<PickupScreen> {
     Marker destinationMarker = Marker(
       markerId: MarkerId(destinationPlacemark.toString()),
       position:
-          LatLng(destinationPlacemark.latitude, destinationPlacemark.longitude),
+      LatLng(destinationPlacemark.latitude, destinationPlacemark.longitude),
       infoWindow: InfoWindow(
         title: '${destinationCoordinatesString}',
         // snippet: _destinationAddress,
@@ -709,12 +870,47 @@ class _PickupScreenState extends State<PickupScreen> {
     markers.add(destinationMarker);
   }
 
-  _createPolylines(
-    double startLatitude,
-    double startLongitude,
-    double destinationLatitude,
-    double destinationLongitude,
-  ) async {
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
+  _createPolylines(double startLatitude,
+      double startLongitude,
+      double destinationLatitude,
+      double destinationLongitude,) async {
     // Initializing PolylinePoints
     polylinePoints = PolylinePoints();
 
@@ -733,7 +929,7 @@ class _PickupScreenState extends State<PickupScreen> {
       result.points.forEach((PointLatLng point) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       });
-    }else{
+    } else {
       print('points1 ${result.errorMessage}');
     }
 
@@ -785,7 +981,8 @@ class _PickupScreenState extends State<PickupScreen> {
         ),
         100.0,
       ),
-    ).then((value)=>{
+    ).then((value) =>
+    {
       print('Dona'),
     });
   }
@@ -804,7 +1001,9 @@ class _PickupScreenState extends State<PickupScreen> {
     final PolylineId polylineId = PolylineId('polylineId');
     final Polyline polyline = Polyline(
       polylineId: polylineId,
-      color: Theme.of(context).primaryColor,
+      color: Theme
+          .of(context)
+          .primaryColor,
       consumeTapEvents: false,
       points: latlng1,
       width: 4,
@@ -851,7 +1050,7 @@ class _PickupScreenState extends State<PickupScreen> {
   Future seticonimage2(BuildContext context) async {
     if (bitmapDescriptorStartLocation2 == null) {
       final ImageConfiguration imagesStartConfiguration =
-          createLocalImageConfiguration(context);
+      createLocalImageConfiguration(context);
       bitmapDescriptorStartLocation2 = await BitmapDescriptor.fromAssetImage(
         imagesStartConfiguration,
         ConstanceData.mylocation1,
@@ -865,7 +1064,7 @@ class _PickupScreenState extends State<PickupScreen> {
   Future seticonimage(BuildContext context) async {
     if (bitmapDescriptorStartLocation == null) {
       final ImageConfiguration imagesStartConfiguration =
-          createLocalImageConfiguration(context);
+      createLocalImageConfiguration(context);
       bitmapDescriptorStartLocation = await BitmapDescriptor.fromAssetImage(
         imagesStartConfiguration,
         ConstanceData.mylocation3,
@@ -886,5 +1085,11 @@ class _PickupScreenState extends State<PickupScreen> {
             .loadString("jsonFile/darkmapstyle.json"));
       }
     }
+  }
+
+  Future<Position> getLocation() async {
+    current = await _determinePosition();
+    print('asd ${current}');
+    return current;
   }
 }
