@@ -210,7 +210,7 @@ class _MyWalletState extends State<MyWallet> {
                                   ),
                                   Expanded(child: SizedBox()),
                                   Text(
-                                    '\$25.00',
+                                    '₹25.00',
                                     style: Theme.of(context).textTheme.bodyText2.copyWith(
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(context).textTheme.headline6.color,
@@ -260,7 +260,7 @@ class _MyWalletState extends State<MyWallet> {
                                   ),
                                   Expanded(child: SizedBox()),
                                   Text(
-                                    '\$12.00',
+                                    '₹12.00',
                                     style: Theme.of(context).textTheme.bodyText2.copyWith(
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(context).textTheme.headline6.color,
@@ -360,7 +360,7 @@ class _MyWalletState extends State<MyWallet> {
                                   ),
                                   Expanded(child: SizedBox()),
                                   Text(
-                                    '\$50.00',
+                                    '₹50.00',
                                     style: Theme.of(context).textTheme.bodyText2.copyWith(
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(context).textTheme.headline6.color,
@@ -410,7 +410,7 @@ class _MyWalletState extends State<MyWallet> {
                                   ),
                                   Expanded(child: SizedBox()),
                                   Text(
-                                    '\$40.00',
+                                    '₹40.00',
                                     style: Theme.of(context).textTheme.bodyText2.copyWith(
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(context).textTheme.headline6.color,

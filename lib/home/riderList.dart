@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_cab_driver/Model/Order.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/home/userDetail.dart';
 import 'package:my_cab_driver/home/chatScreen.dart';
@@ -89,7 +90,7 @@ class _RiderListState extends State<RiderList> {
               child: ListView.builder(
                 itemCount: ConstanceData.orders.length,
                 itemBuilder: (con,index){
-                  var data = ConstanceData.orders[index];
+                  Order data = ConstanceData.orders[index];
                   return Padding(
                     padding: EdgeInsets.only(right: 6, left: 6,bottom: 15),
                     child: Container(

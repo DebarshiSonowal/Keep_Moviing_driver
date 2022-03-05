@@ -1,3 +1,4 @@
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:my_cab_driver/Model/Document.dart';
 import 'package:my_cab_driver/Model/Order.dart';
@@ -22,8 +23,15 @@ class Access {
   static final update_profile_url = ConstanceData.url + "update-profile";
   static final update_profile_pic_url = ConstanceData.url + "profile-picture";
   static final update_live_location_url = ConstanceData.url + "location-update";
+  static final accept_url = ConstanceData.url + "accept";
+  static final end_url = ConstanceData.url + "end";
+
+
+  static final time_distance_url = "https://maps.googleapis.com/maps/api/distancematrix/json";
   static final login_otp_vrification_url =
       ConstanceData.url + "login-otp-verification";
+
+
 
   Future<dynamic> login(String number) async {
     NetworkHelper helper = NetworkHelper(login_url);
@@ -100,6 +108,27 @@ class Access {
     NetworkHelper helper = NetworkHelper(update_live_location_url);
 
     var data = await helper.updateLiveLocation(location);
+
+    return data;
+  }
+  Future<dynamic> getTimeEstimate(Location start,Location end) async {
+    NetworkHelper helper = NetworkHelper(time_distance_url);
+
+    var data = await helper.getTimeEstimate(start,end);
+
+    return data;
+  }
+  Future<dynamic> acceptOrder(String order_id,status,driver_id) async {
+    NetworkHelper helper = NetworkHelper(accept_url);
+
+    var data = await helper.acceptOrder(order_id,status,driver_id);
+
+    return data;
+  }
+  Future<dynamic> endOrder(String order_id,status) async {
+    NetworkHelper helper = NetworkHelper(end_url);
+
+    var data = await helper.endOrder(order_id,status);
 
     return data;
   }

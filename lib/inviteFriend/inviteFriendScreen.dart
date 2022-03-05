@@ -68,7 +68,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                                 ),
                           ),
                           Text(
-                            ' \$150 ',
+                            ' ₹150 ',
                             style: Theme.of(context).textTheme.headline5.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).textTheme.headline6.color,
@@ -86,7 +86,7 @@ class _InviteFriendScreenState extends State<InviteFriendScreen> {
                         height: 32,
                       ),
                       Text(
-                        AppLocalizations.of('When your friend sign up with your referral code, you can receive up to \$150 a day.'),
+                        AppLocalizations.of('When your friend sign up with your referral code, you can receive up to ₹150 a day.'),
                         style: Theme.of(context).textTheme.subtitle1.copyWith(
                               color: Theme.of(context).textTheme.headline6.color,
                               fontWeight: FontWeight.bold,

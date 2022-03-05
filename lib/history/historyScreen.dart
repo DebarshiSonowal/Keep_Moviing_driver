@@ -12,13 +12,19 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  var weekDays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+
+  int selected = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       key: _scaffoldKey,
       drawer: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.75 < 400 ? MediaQuery.of(context).size.width * 0.75 : 350,
+        width: MediaQuery.of(context).size.width * 0.75 < 400
+            ? MediaQuery.of(context).size.width * 0.75
+            : 350,
         child: Drawer(
           child: AppDrawer(
             selectItemName: 'History',
@@ -28,7 +34,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       appBar: appBar(),
       body: Column(
         children: <Widget>[
-          celanderList(),
+          calendarList(),
           Container(
             height: 1.5,
             color: Theme.of(context).dividerColor,
@@ -52,7 +58,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadiusDirectional.only(topEnd: Radius.circular(16), topStart: Radius.circular(16)),
+                              borderRadius: BorderRadiusDirectional.only(
+                                  topEnd: Radius.circular(16),
+                                  topStart: Radius.circular(16)),
                               color: Theme.of(context).dividerColor,
                             ),
                             child: Padding(
@@ -71,13 +79,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     width: 8,
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
                                         AppLocalizations.of('Esther Berry'),
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6
+                                            .copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  .color,
                                             ),
                                       ),
                                       SizedBox(
@@ -91,9 +106,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             child: Center(
                                               child: Text(
                                                 AppLocalizations.of('ApplePay'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .button
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: ConstanceData
+                                                          .secoundryFontColor,
                                                     ),
                                               ),
                                             ),
@@ -101,7 +121,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               borderRadius: BorderRadius.all(
                                                 Radius.circular(15),
                                               ),
-                                              color: Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             ),
                                           ),
                                           SizedBox(
@@ -113,9 +134,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             child: Center(
                                               child: Text(
                                                 AppLocalizations.of('Discount'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .button
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: ConstanceData
+                                                          .secoundryFontColor,
                                                     ),
                                               ),
                                             ),
@@ -123,7 +149,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               borderRadius: BorderRadius.all(
                                                 Radius.circular(15),
                                               ),
-                                              color: Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             ),
                                           )
                                         ],
@@ -137,16 +164,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       Text(
-                                        '\$25.00',
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
+                                        '₹25.00',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6
+                                            .copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  .color,
                                             ),
                                       ),
                                       Text(
                                         '2.2 km',
-                                        style: Theme.of(context).textTheme.caption.copyWith(
-                                              color: Theme.of(context).disabledColor,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption
+                                            .copyWith(
+                                              color: Theme.of(context)
+                                                  .disabledColor,
                                               fontWeight: FontWeight.bold,
                                             ),
                                       ),
@@ -162,7 +199,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             color: Theme.of(context).dividerColor,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+                            padding: const EdgeInsets.only(
+                                right: 14, left: 14, bottom: 8, top: 8),
                             child: Row(
                               children: <Widget>[
                                 Column(
@@ -170,8 +208,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   children: <Widget>[
                                     Text(
                                       AppLocalizations.of('PICKUP'),
-                                      style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          .copyWith(
+                                            color:
+                                                Theme.of(context).disabledColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -180,9 +222,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     ),
                                     Text(
                                       AppLocalizations.of('79 Swift Village'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                .color,
                                           ),
                                     ),
                                   ],
@@ -199,7 +247,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+                            padding: const EdgeInsets.only(
+                                right: 14, left: 14, bottom: 8, top: 8),
                             child: Row(
                               children: <Widget>[
                                 Column(
@@ -207,8 +256,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   children: <Widget>[
                                     Text(
                                       AppLocalizations.of('DROP OFF'),
-                                      style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          .copyWith(
+                                            color:
+                                                Theme.of(context).disabledColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -216,10 +269,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       height: 4,
                                     ),
                                     Text(
-                                      AppLocalizations.of('115 William St, Chicago, US'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                                      AppLocalizations.of(
+                                          '115 William St, Chicago, US'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                .color,
                                           ),
                                     ),
                                   ],
@@ -248,7 +308,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadiusDirectional.only(topEnd: Radius.circular(16), topStart: Radius.circular(16)),
+                              borderRadius: BorderRadiusDirectional.only(
+                                  topEnd: Radius.circular(16),
+                                  topStart: Radius.circular(16)),
                               color: Theme.of(context).dividerColor,
                             ),
                             child: Padding(
@@ -267,13 +329,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     width: 8,
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
                                         AppLocalizations.of('Callie Greer'),
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6
+                                            .copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  .color,
                                             ),
                                       ),
                                       SizedBox(
@@ -287,9 +356,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             child: Center(
                                               child: Text(
                                                 AppLocalizations.of('ApplePay'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .button
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: ConstanceData
+                                                          .secoundryFontColor,
                                                     ),
                                               ),
                                             ),
@@ -297,7 +371,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               borderRadius: BorderRadius.all(
                                                 Radius.circular(15),
                                               ),
-                                              color: Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             ),
                                           ),
                                           SizedBox(
@@ -309,9 +384,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             child: Center(
                                               child: Text(
                                                 AppLocalizations.of('Discount'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .button
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: ConstanceData
+                                                          .secoundryFontColor,
                                                     ),
                                               ),
                                             ),
@@ -319,7 +399,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               borderRadius: BorderRadius.all(
                                                 Radius.circular(15),
                                               ),
-                                              color: Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             ),
                                           )
                                         ],
@@ -333,16 +414,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       Text(
-                                        '\$20.00',
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
+                                        '₹20.00',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6
+                                            .copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  .color,
                                             ),
                                       ),
                                       Text(
                                         '1.5 km',
-                                        style: Theme.of(context).textTheme.caption.copyWith(
-                                              color: Theme.of(context).disabledColor,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption
+                                            .copyWith(
+                                              color: Theme.of(context)
+                                                  .disabledColor,
                                               fontWeight: FontWeight.bold,
                                             ),
                                       ),
@@ -358,7 +449,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             color: Theme.of(context).dividerColor,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+                            padding: const EdgeInsets.only(
+                                right: 14, left: 14, bottom: 8, top: 8),
                             child: Row(
                               children: <Widget>[
                                 Column(
@@ -366,8 +458,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   children: <Widget>[
                                     Text(
                                       AppLocalizations.of('PICKUP'),
-                                      style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          .copyWith(
+                                            color:
+                                                Theme.of(context).disabledColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -376,9 +472,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     ),
                                     Text(
                                       AppLocalizations.of('62 Kobe Trafficway'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                .color,
                                           ),
                                     ),
                                   ],
@@ -395,7 +497,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+                            padding: const EdgeInsets.only(
+                                right: 14, left: 14, bottom: 8, top: 8),
                             child: Row(
                               children: <Widget>[
                                 Column(
@@ -403,8 +506,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   children: <Widget>[
                                     Text(
                                       AppLocalizations.of('DROP OFF'),
-                                      style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          .copyWith(
+                                            color:
+                                                Theme.of(context).disabledColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -412,10 +519,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       height: 4,
                                     ),
                                     Text(
-                                      AppLocalizations.of('280, AB Sunny willa'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                                      AppLocalizations.of(
+                                          '280, AB Sunny willa'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                .color,
                                           ),
                                     ),
                                   ],
@@ -444,7 +558,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadiusDirectional.only(topEnd: Radius.circular(16), topStart: Radius.circular(16)),
+                              borderRadius: BorderRadiusDirectional.only(
+                                  topEnd: Radius.circular(16),
+                                  topStart: Radius.circular(16)),
                               color: Theme.of(context).dividerColor,
                             ),
                             child: Padding(
@@ -463,13 +579,20 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     width: 8,
                                   ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
                                         AppLocalizations.of('Esther Berry'),
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6
+                                            .copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  .color,
                                             ),
                                       ),
                                       SizedBox(
@@ -483,9 +606,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             child: Center(
                                               child: Text(
                                                 AppLocalizations.of('ApplePay'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .button
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: ConstanceData
+                                                          .secoundryFontColor,
                                                     ),
                                               ),
                                             ),
@@ -493,7 +621,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               borderRadius: BorderRadius.all(
                                                 Radius.circular(15),
                                               ),
-                                              color: Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             ),
                                           ),
                                           SizedBox(
@@ -505,9 +634,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             child: Center(
                                               child: Text(
                                                 AppLocalizations.of('Discount'),
-                                                style: Theme.of(context).textTheme.button.copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                      color: ConstanceData.secoundryFontColor,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .button
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: ConstanceData
+                                                          .secoundryFontColor,
                                                     ),
                                               ),
                                             ),
@@ -515,7 +649,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               borderRadius: BorderRadius.all(
                                                 Radius.circular(15),
                                               ),
-                                              color: Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                             ),
                                           )
                                         ],
@@ -529,16 +664,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: <Widget>[
                                       Text(
-                                        '\$10.00',
-                                        style: Theme.of(context).textTheme.headline6.copyWith(
+                                        '₹10.00',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6
+                                            .copyWith(
                                               fontWeight: FontWeight.bold,
-                                              color: Theme.of(context).textTheme.headline6.color,
+                                              color: Theme.of(context)
+                                                  .textTheme
+                                                  .headline6
+                                                  .color,
                                             ),
                                       ),
                                       Text(
                                         '0.5 km',
-                                        style: Theme.of(context).textTheme.caption.copyWith(
-                                              color: Theme.of(context).disabledColor,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .caption
+                                            .copyWith(
+                                              color: Theme.of(context)
+                                                  .disabledColor,
                                               fontWeight: FontWeight.bold,
                                             ),
                                       ),
@@ -554,7 +699,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             color: Theme.of(context).dividerColor,
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+                            padding: const EdgeInsets.only(
+                                right: 14, left: 14, bottom: 8, top: 8),
                             child: Row(
                               children: <Widget>[
                                 Column(
@@ -562,8 +708,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   children: <Widget>[
                                     Text(
                                       AppLocalizations.of('PICKUP'),
-                                      style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          .copyWith(
+                                            color:
+                                                Theme.of(context).disabledColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -571,10 +721,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       height: 4,
                                     ),
                                     Text(
-                                      AppLocalizations.of('25 Lcie Park Suite 456'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                                      AppLocalizations.of(
+                                          '25 Lcie Park Suite 456'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                .color,
                                           ),
                                     ),
                                   ],
@@ -591,7 +748,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 14, left: 14, bottom: 8, top: 8),
+                            padding: const EdgeInsets.only(
+                                right: 14, left: 14, bottom: 8, top: 8),
                             child: Row(
                               children: <Widget>[
                                 Column(
@@ -599,8 +757,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   children: <Widget>[
                                     Text(
                                       AppLocalizations.of('DROP OFF'),
-                                      style: Theme.of(context).textTheme.caption.copyWith(
-                                            color: Theme.of(context).disabledColor,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          .copyWith(
+                                            color:
+                                                Theme.of(context).disabledColor,
                                             fontWeight: FontWeight.bold,
                                           ),
                                     ),
@@ -608,10 +770,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       height: 4,
                                     ),
                                     Text(
-                                      AppLocalizations.of('187/ William St, London, UK'),
-                                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                                      AppLocalizations.of(
+                                          '187/ William St, London, UK'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: Theme.of(context).textTheme.headline6.color,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                .color,
                                           ),
                                     ),
                                   ],
@@ -701,7 +870,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 child: Row(
                   children: <Widget>[
                     Icon(
-                      FontAwesomeIcons.dollarSign,
+                      FontAwesomeIcons.rupeeSign,
                       size: 38,
                       color: Theme.of(context).primaryColor,
                     ),
@@ -781,286 +950,460 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  Widget celanderList() {
+  Widget calendarList() {
     return Container(
       padding: EdgeInsets.only(top: 8, bottom: 8),
       color: Theme.of(context).scaffoldBackgroundColor,
       height: 80,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Theme.of(context).backgroundColor,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    AppLocalizations.of('Sun'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
+      child: Center(
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: weekDays.length,
+          padding: EdgeInsets.all(0.0),
+          itemBuilder: (con, index) {
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selected = index;
+                });
+              },
+              child: Container(
+                margin: EdgeInsets.only(right: 6.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: selected == index
+                      ? Theme.of(context).scaffoldBackgroundColor
+                      : Theme.of(context).backgroundColor,
+                  border: Border.all(
+                      color: selected == index
+                          ?Theme.of(context).primaryColor:Theme.of(context).backgroundColor, width: 1),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        AppLocalizations.of('${weekDays[index]}'),
+                        style: Theme.of(context).textTheme.button.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: selected == index
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).disabledColor,
+                            ),
+                      ),
+                      Expanded(
+                        child: SizedBox(),
+                      ),
+                      Text(
+                        '1',
+                        style: Theme.of(context).textTheme.headline6.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: selected == index
+                                  ? Theme.of(context).primaryColor
+                                  : Theme.of(context).disabledColor,
+                            ),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  Text(
-                    '1',
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                ],
+                ),
+                width: 50,
               ),
-            ),
-            width: 50,
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Theme.of(context).scaffoldBackgroundColor,
-              border: Border.all(color: Theme.of(context).primaryColor, width: 1),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    AppLocalizations.of('Mon'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                  ),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  Text(
-                    '2',
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            width: 50,
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Theme.of(context).backgroundColor,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    AppLocalizations.of('Tue'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  Text(
-                    '3',
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            width: 50,
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Theme.of(context).backgroundColor,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    AppLocalizations.of('Wed'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  Text(
-                    '4',
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            width: 50,
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Theme.of(context).backgroundColor,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    AppLocalizations.of('Thu'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  Text(
-                    '5',
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            width: 50,
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Theme.of(context).backgroundColor,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    AppLocalizations.of('Fri'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  Text(
-                    '6',
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            width: 50,
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Theme.of(context).backgroundColor,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    AppLocalizations.of('Sat'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  Text(
-                    '7',
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            width: 50,
-          ),
-          SizedBox(
-            width: 8,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: Theme.of(context).backgroundColor,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(
-                    AppLocalizations.of('Sun'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                  Expanded(
-                    child: SizedBox(),
-                  ),
-                  Text(
-                    '8',
-                    style: Theme.of(context).textTheme.headline6.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            width: 50,
-          ),
-        ],
+            );
+          },
+        ),
       ),
+
+      // child:
+      // ListView(
+      //   scrollDirection: Axis.horizontal,
+      //   children: <Widget>[
+      //     Container(
+      //       decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(16),
+      //         color: Theme
+      //             .of(context)
+      //             .backgroundColor,
+      //       ),
+      //       child: Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Column(
+      //           children: <Widget>[
+      //             Text(
+      //               AppLocalizations.of('Sun'),
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .button
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //             Expanded(
+      //               child: SizedBox(),
+      //             ),
+      //             Text(
+      //               '1',
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .headline6
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       width: 50,
+      //     ),
+      //     SizedBox(
+      //       width: 8,
+      //     ),
+      //     Container(
+      //       decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(16),
+      //         color: Theme
+      //             .of(context)
+      //             .scaffoldBackgroundColor,
+      //         border: Border.all(color: Theme
+      //             .of(context)
+      //             .primaryColor, width: 1),
+      //       ),
+      //       child: Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Column(
+      //           children: <Widget>[
+      //             Text(
+      //               AppLocalizations.of('Mon'),
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .button
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .primaryColor,
+      //               ),
+      //             ),
+      //             Expanded(
+      //               child: SizedBox(),
+      //             ),
+      //             Text(
+      //               '2',
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .headline6
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .primaryColor,
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       width: 50,
+      //     ),
+      //     SizedBox(
+      //       width: 8,
+      //     ),
+      //     Container(
+      //       decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(16),
+      //         color: Theme
+      //             .of(context)
+      //             .backgroundColor,
+      //       ),
+      //       child: Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Column(
+      //           children: <Widget>[
+      //             Text(
+      //               AppLocalizations.of('Tue'),
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .button
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //             Expanded(
+      //               child: SizedBox(),
+      //             ),
+      //             Text(
+      //               '3',
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .headline6
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       width: 50,
+      //     ),
+      //     SizedBox(
+      //       width: 8,
+      //     ),
+      //     Container(
+      //       decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(16),
+      //         color: Theme
+      //             .of(context)
+      //             .backgroundColor,
+      //       ),
+      //       child: Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Column(
+      //           children: <Widget>[
+      //             Text(
+      //               AppLocalizations.of('Wed'),
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .button
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //             Expanded(
+      //               child: SizedBox(),
+      //             ),
+      //             Text(
+      //               '4',
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .headline6
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       width: 50,
+      //     ),
+      //     SizedBox(
+      //       width: 8,
+      //     ),
+      //     Container(
+      //       decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(16),
+      //         color: Theme
+      //             .of(context)
+      //             .backgroundColor,
+      //       ),
+      //       child: Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Column(
+      //           children: <Widget>[
+      //             Text(
+      //               AppLocalizations.of('Thu'),
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .button
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //             Expanded(
+      //               child: SizedBox(),
+      //             ),
+      //             Text(
+      //               '5',
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .headline6
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       width: 50,
+      //     ),
+      //     SizedBox(
+      //       width: 8,
+      //     ),
+      //     Container(
+      //       decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(16),
+      //         color: Theme
+      //             .of(context)
+      //             .backgroundColor,
+      //       ),
+      //       child: Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Column(
+      //           children: <Widget>[
+      //             Text(
+      //               AppLocalizations.of('Fri'),
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .button
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //             Expanded(
+      //               child: SizedBox(),
+      //             ),
+      //             Text(
+      //               '6',
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .headline6
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       width: 50,
+      //     ),
+      //     SizedBox(
+      //       width: 8,
+      //     ),
+      //     Container(
+      //       decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(16),
+      //         color: Theme
+      //             .of(context)
+      //             .backgroundColor,
+      //       ),
+      //       child: Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Column(
+      //           children: <Widget>[
+      //             Text(
+      //               AppLocalizations.of('Sat'),
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .button
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //             Expanded(
+      //               child: SizedBox(),
+      //             ),
+      //             Text(
+      //               '7',
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .headline6
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       width: 50,
+      //     ),
+      //     SizedBox(
+      //       width: 8,
+      //     ),
+      //     Container(
+      //       decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.circular(16),
+      //         color: Theme
+      //             .of(context)
+      //             .backgroundColor,
+      //       ),
+      //       child: Padding(
+      //         padding: const EdgeInsets.all(8.0),
+      //         child: Column(
+      //           children: <Widget>[
+      //             Text(
+      //               AppLocalizations.of('Sun'),
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .button
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //             Expanded(
+      //               child: SizedBox(),
+      //             ),
+      //             Text(
+      //               '8',
+      //               style: Theme
+      //                   .of(context)
+      //                   .textTheme
+      //                   .headline6
+      //                   .copyWith(
+      //                 fontWeight: FontWeight.bold,
+      //                 color: Theme
+      //                     .of(context)
+      //                     .disabledColor,
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       width: 50,
+      //     ),
+      //   ],
+      // )
+      // ,
     );
   }
 }

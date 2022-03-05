@@ -1,22 +1,30 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_cab_driver/Model/MockOrder.dart';
 import 'package:my_cab_driver/Model/Order.dart';
 import 'package:my_cab_driver/appTheme.dart';
 import 'package:my_cab_driver/constance/constance.dart';
+import 'package:my_cab_driver/networking/Access.dart';
+import 'package:my_cab_driver/pickup/chatScreen.dart';
 import 'package:my_cab_driver/pickup/pickupScreen.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class UserDetailScreen extends StatefulWidget {
   final int userId;
 
   const UserDetailScreen({Key key, this.userId}) : super(key: key);
+
   @override
   _UserDetailScreenState createState() => _UserDetailScreenState();
 }
 
 class _UserDetailScreenState extends State<UserDetailScreen> {
   Order data;
+
   @override
   Widget build(BuildContext context) {
     data = ConstanceData.orders[widget.userId];
@@ -101,7 +109,8 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: Padding(
-        padding: const EdgeInsets.only(right: 14, left: 14, top: 16, bottom: 16),
+        padding:
+            const EdgeInsets.only(right: 14, left: 14, top: 16, bottom: 16),
         child: InkWell(
           highlightColor: Colors.transparent,
           splashColor: Colors.transparent,
@@ -112,6 +121,27 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                 builder: (context) => PickupScreen(data),
               ),
             );
+            // Access().acceptOrder(data.order_id.toString(),2,ConstanceData.id).then(
+            //   (value){
+            //     if(value=='Order accepted'){
+            //       Fluttertoast.showToast(
+            //           msg: "$value",
+            //           toastLength: Toast.LENGTH_SHORT,
+            //           gravity: ToastGravity.CENTER,
+            //           timeInSecForIosWeb: 1,
+            //           backgroundColor: Colors.red,
+            //           textColor: Colors.white,
+            //           fontSize: 16.0);
+            //       Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => PickupScreen(data),
+            //         ),
+            //       );
+            //     }
+            //   }
+            // );
+
           },
           child: Container(
             height: 40,
@@ -142,58 +172,73 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Container(
-              height: 70,
-              width: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: HexColor("#4CE4B1"),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    Icons.call,
-                    color: Colors.white,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    AppLocalizations.of('Call'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                  ),
-                ],
+            GestureDetector(
+              onTap: () {
+                _makePhoneCall('tel:+918674743257');
+              },
+              child: Container(
+                height: 70,
+                width: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: HexColor("#4CE4B1"),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.call,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      AppLocalizations.of('Call'),
+                      style: Theme.of(context).textTheme.button.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            Container(
-              height: 70,
-              width: 80,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: HexColor("#4252FF"),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    FontAwesomeIcons.facebookMessenger,
-                    color: Colors.white,
+            GestureDetector(
+              onTap:(){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChatScreen(data.user_name, data.user_id,FirebaseAuth.instance.currentUser.uid.toString()),
                   ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    AppLocalizations.of('Message'),
-                    style: Theme.of(context).textTheme.button.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                  ),
-                ],
+                );
+              },
+              child: Container(
+                height: 70,
+                width: 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: HexColor("#4252FF"),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      FontAwesomeIcons.facebookMessenger,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      AppLocalizations.of('Message'),
+                      style: Theme.of(context).textTheme.button.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Container(
@@ -272,16 +317,16 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                 Text(
                   AppLocalizations.of('Per minute Fare'),
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.headline6.color,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.headline6.color,
+                      ),
                 ),
                 Text(
                   '₹${double.parse(data.rate_per_minute.toString())}',
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.headline6.color,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.headline6.color,
+                      ),
                 ),
               ],
             ),
@@ -294,16 +339,16 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                 Text(
                   AppLocalizations.of('Waiting charge'),
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.headline6.color,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.headline6.color,
+                      ),
                 ),
                 Text(
                   '₹${double.parse(data.waiting_charge.toString())}',
                   style: Theme.of(context).textTheme.subtitle2.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.headline6.color,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).textTheme.headline6.color,
+                      ),
                 ),
               ],
             ),
@@ -332,7 +377,6 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             SizedBox(
               height: 8,
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -503,7 +547,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                       AppLocalizations.of('${data.payment_type}'),
                       style: Theme.of(context).textTheme.button.copyWith(
                             fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.headline6.color,
+                            color: Theme.of(context).textTheme.headline6.color,
                           ),
                     ),
                   ),
@@ -577,6 +621,14 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _makePhoneCall(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
 

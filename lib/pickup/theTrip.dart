@@ -1,36 +1,34 @@
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:my_cab_driver/Language/appLocalizations.dart';
 import 'package:my_cab_driver/Model/Order.dart';
 import 'package:my_cab_driver/Model/TimeDistance.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/networking/Access.dart';
-import 'package:my_cab_driver/ticketView.dart';
+
 import '../appTheme.dart';
-import 'package:my_cab_driver/Language/appLocalizations.dart';
+import '../ticketView.dart';
 
-class PickupScreen extends StatefulWidget {
-  Order data;
+class TheTrip extends StatefulWidget {
+  final Order data;
 
-  PickupScreen(this.data);
+  TheTrip(this.data);
 
   @override
-  _PickupScreenState createState() => _PickupScreenState();
+  _TheTripState createState() => _TheTripState();
 }
 
-class _PickupScreenState extends State<PickupScreen> {
+class _TheTripState extends State<TheTrip> {
   GoogleMapController mapController;
   PolylinePoints polylinePoints;
   Position current;
   timeDistance timeEstimate;
-
-// List of coordinates to join
   List<LatLng> polylineCoordinates = [];
 
-// Map storing polylines created by connecting two points
   Map<PolylineId, Polyline> polylines = {};
   Set<Marker> markers = {};
 
@@ -40,17 +38,6 @@ class _PickupScreenState extends State<PickupScreen> {
   void initState() {
     super.initState();
     getLocation();
-    // Future.delayed(Duration.zero,(){
-    //   try {
-    //     setState(() {
-    //             seticonimage(context);
-    //             seticonimage2(context);
-    //             customn();
-    //           });
-    //   } catch (e) {
-    //     print(e);
-    //   }
-    // });
   }
 
   @override
@@ -78,7 +65,7 @@ class _PickupScreenState extends State<PickupScreen> {
               ),
             ),
             Text(
-              AppLocalizations.of('Pick up'),
+              AppLocalizations.of('Trip'),
               style: Theme.of(context).textTheme.headline6.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).textTheme.headline6.color,
@@ -184,7 +171,7 @@ class _PickupScreenState extends State<PickupScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                AppLocalizations.of('Pick up at'),
+                                AppLocalizations.of('Drop at'),
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle2
@@ -240,7 +227,8 @@ class _PickupScreenState extends State<PickupScreen> {
                                 height: 4,
                               ),
                               Text(
-                                '${timeEstimate == null ? '5 min' : timeEstimate.time}',
+                                AppLocalizations.of(
+                                    '${timeEstimate == null ? '5 min' : timeEstimate.time}'),
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle1
@@ -271,6 +259,7 @@ class _PickupScreenState extends State<PickupScreen> {
                               ),
                               Text(
                                 '${timeEstimate == null ? '${widget.data.total_distance} km' : timeEstimate.distance}',
+                                // '${widget.data.total_distance} km',
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle1
@@ -300,7 +289,7 @@ class _PickupScreenState extends State<PickupScreen> {
                                 height: 4,
                               ),
                               Text(
-                                '₹25.00',
+                                '₹${widget.data.total_price}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle1
@@ -323,13 +312,25 @@ class _PickupScreenState extends State<PickupScreen> {
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  TicketDesign(data: widget.data),
-                            ),
-                          );
+                          // Access().endOrder(widget.data.order_id.toString(),2).then(
+                          //   (value){
+                          //     if(value){
+                          //Access().getOrders(id).then((value) => {ConstanceData.addOrders(value)});
+                          //      Navigator.pop(context);
+                          //      Navigator.pop(context);
+                          //      Navigator.pop(context);
+                          //     }
+                          //   }
+                          // );
+                          Access().getOrders(ConstanceData.id).then((value) => {
+                                setState(() {
+                                  ConstanceData.addOrders(value);
+                                }),
+                                Navigator.pop(context),
+                                Navigator.pop(context),
+                                Navigator.pop(context),
+                                Navigator.pop(context),
+                              });
                         },
                         child: Container(
                           height: 40,
@@ -339,7 +340,7 @@ class _PickupScreenState extends State<PickupScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              AppLocalizations.of('START THE TRIP'),
+                              AppLocalizations.of('Arrived at destination'),
                               style:
                                   Theme.of(context).textTheme.button.copyWith(
                                         fontWeight: FontWeight.bold,
@@ -657,32 +658,18 @@ class _PickupScreenState extends State<PickupScreen> {
   }
 
   customn(current) async {
-    // List<Location> startPlacemark = await locationFromAddress(_startAddress);
-    // List<Location> destinationPlacemark = await locationFromAddress(_destinationAddress);
-//https://www.google.com/maps/@26.4792999,90.3058874,18.12z
-// Storing latitude & longitude of start and destination location
-//  26.4798399,90.3048006
-//     Location startPlacemark = Location(
-//       longitude: 90.3048006,
-//       latitude: 26.4798399,
-//       timestamp: DateTime.now(),
-//     );
     print('rec ${current}');
     Location startPlacemark = Location(
-      longitude: current.longitude,
-      latitude: current.latitude,
-      timestamp: DateTime.now(),
-    );
-    // Location destinationPlacemark = Location(
-    //   longitude: 90.2926186,
-    //   latitude: 26.4362356,
-    //   timestamp: DateTime.now(),
-    // );
-    Location destinationPlacemark = Location(
       longitude: widget.data.pickup_location_lang,
       latitude: widget.data.pickup_location_lat,
       timestamp: DateTime.now(),
     );
+    Location destinationPlacemark = Location(
+      longitude: widget.data.drop_location_lang,
+      latitude: widget.data.drop_location_lat,
+      timestamp: DateTime.now(),
+    );
+
     Access()
         .getTimeEstimate(startPlacemark, destinationPlacemark)
         .then((value) {
@@ -690,6 +677,7 @@ class _PickupScreenState extends State<PickupScreen> {
         timeEstimate = value;
       });
     });
+
     double startLatitude = startPlacemark.latitude;
     double startLongitude = startPlacemark.longitude;
     var addresses = await Geocoder.local.findAddressesFromCoordinates(
@@ -871,31 +859,6 @@ class _PickupScreenState extends State<PickupScreen> {
         .then((value) => {
               print('Dona'),
             });
-  }
-
-  Map<PolylineId, Polyline> getPolyLine(BuildContext context) {
-    Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
-    List<LatLng> latlng1 = [
-      LatLng(51.505923, -0.086936),
-      LatLng(51.506061, -0.087631),
-      LatLng(51.506171, -0.088258),
-      LatLng(51.507129, -0.087974),
-      LatLng(51.509693, -0.087075),
-      LatLng(51.509065, -0.082206),
-      LatLng(51.509119, -0.081204)
-    ];
-    final PolylineId polylineId = PolylineId('polylineId');
-    final Polyline polyline = Polyline(
-      polylineId: polylineId,
-      color: Theme.of(context).primaryColor,
-      consumeTapEvents: false,
-      points: latlng1,
-      width: 4,
-      startCap: Cap.roundCap,
-      endCap: Cap.roundCap,
-    );
-    _polylines.addAll({polylineId: polyline});
-    return _polylines;
   }
 
   BitmapDescriptor bitmapDescriptorStartLocation;

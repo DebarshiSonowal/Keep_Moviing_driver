@@ -39,6 +39,19 @@ class ConstanceData {
   static String id;
   static profile prof;
 
+  static bool serviceEnabled=false;
+
+  static setBool() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    serviceEnabled = !serviceEnabled;
+    await prefs.setBool('enabled',serviceEnabled);
+  }
+  static getBool() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    serviceEnabled = prefs.getBool('enabled');
+    return serviceEnabled;
+  }
+
   static setProfile( profile data) {
     prof = data;
   }
