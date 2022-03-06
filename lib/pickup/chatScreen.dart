@@ -97,6 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   'timestamp': DateTime.now().millisecondsSinceEpoch,
                 }).then((val) {
                   print('sent ${val}');
+                  _controller.text = '';
                 })
               },
               child: Icon(

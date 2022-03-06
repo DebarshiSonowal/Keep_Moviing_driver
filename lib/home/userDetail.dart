@@ -115,32 +115,32 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
           highlightColor: Colors.transparent,
           splashColor: Colors.transparent,
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PickupScreen(data),
-              ),
-            );
-            // Access().acceptOrder(data.order_id.toString(),2,ConstanceData.id).then(
-            //   (value){
-            //     if(value=='Order accepted'){
-            //       Fluttertoast.showToast(
-            //           msg: "$value",
-            //           toastLength: Toast.LENGTH_SHORT,
-            //           gravity: ToastGravity.CENTER,
-            //           timeInSecForIosWeb: 1,
-            //           backgroundColor: Colors.red,
-            //           textColor: Colors.white,
-            //           fontSize: 16.0);
-            //       Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => PickupScreen(data),
-            //         ),
-            //       );
-            //     }
-            //   }
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => PickupScreen(data),
+            //   ),
             // );
+            Access().acceptOrder(data.order_id.toString(),1,ConstanceData.id).then(
+              (value){
+                if(value=='Order accepted'){
+                  Fluttertoast.showToast(
+                      msg: "$value",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PickupScreen(data),
+                    ),
+                  );
+                }
+              }
+            );
 
           },
           child: Container(
@@ -458,12 +458,15 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                 SizedBox(
                   height: 4,
                 ),
-                Text(
-                  AppLocalizations.of('${data.drop_location_name}'),
-                  style: Theme.of(context).textTheme.subtitle2.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.headline6.color,
-                      ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width-30,
+                  child: Text(
+                    AppLocalizations.of('${data.drop_location_name}'),
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.headline6.color,
+                        ),
+                  ),
                 ),
               ],
             ),
@@ -493,12 +496,15 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                 SizedBox(
                   height: 4,
                 ),
-                Text(
-                  AppLocalizations.of('${data.pickup_location_name}'),
-                  style: Theme.of(context).textTheme.subtitle2.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).textTheme.headline6.color,
-                      ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width-30,
+                  child: Text(
+                    AppLocalizations.of('${data.pickup_location_name}'),
+                    style: Theme.of(context).textTheme.subtitle2.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.headline6.color,
+                        ),
+                  ),
                 ),
               ],
             ),

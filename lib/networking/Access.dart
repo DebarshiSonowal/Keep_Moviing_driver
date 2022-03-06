@@ -25,11 +25,14 @@ class Access {
   static final update_live_location_url = ConstanceData.url + "location-update";
   static final accept_url = ConstanceData.url + "accept";
   static final end_url = ConstanceData.url + "end";
+  static final start_trip_url = ConstanceData.url + "user-send-otp";
+  static final verify_trip_url = ConstanceData.url + "user-otp-verify";
 
 
   static final time_distance_url = "https://maps.googleapis.com/maps/api/distancematrix/json";
   static final login_otp_vrification_url =
       ConstanceData.url + "login-otp-verification";
+
 
 
 
@@ -129,6 +132,20 @@ class Access {
     NetworkHelper helper = NetworkHelper(end_url);
 
     var data = await helper.endOrder(order_id,status);
+
+    return data;
+  }
+  Future<dynamic> start_trip(String user_id) async {
+    NetworkHelper helper = NetworkHelper(start_trip_url);
+
+    var data = await helper.start_trip(user_id);
+
+    return data;
+  }
+  Future<dynamic> verify_trip(String user_id,otp) async {
+    NetworkHelper helper = NetworkHelper(verify_trip_url);
+
+    var data = await helper.verify_trip(user_id,otp);
 
     return data;
   }

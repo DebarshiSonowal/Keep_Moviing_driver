@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -312,25 +313,39 @@ class _TheTripState extends State<TheTrip> {
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,
                         onTap: () {
-                          // Access().endOrder(widget.data.order_id.toString(),2).then(
-                          //   (value){
-                          //     if(value){
-                          //Access().getOrders(id).then((value) => {ConstanceData.addOrders(value)});
-                          //      Navigator.pop(context);
-                          //      Navigator.pop(context);
-                          //      Navigator.pop(context);
-                          //     }
-                          //   }
-                          // );
-                          Access().getOrders(ConstanceData.id).then((value) => {
-                                setState(() {
-                                  ConstanceData.addOrders(value);
-                                }),
-                                Navigator.pop(context),
-                                Navigator.pop(context),
-                                Navigator.pop(context),
-                                Navigator.pop(context),
-                              });
+                          Access().endOrder(widget.data.order_id.toString(),2).then(
+                            (value){
+                              if(value=="Trip Completed successfully"){
+                                  Fluttertoast.showToast(
+                                      msg: "${value}",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                Access().getOrders(ConstanceData.id).then((value) => {
+                                  setState(() {
+                                    ConstanceData.addOrders(value);
+                                  }),
+                                  Navigator.pop(context),
+                                  Navigator.pop(context),
+                                  Navigator.pop(context),
+                                  Navigator.pop(context),
+                                });
+                              }else{
+                                Fluttertoast.showToast(
+                                    msg: "${value}",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              }
+                            }
+                          );
+
                         },
                         child: Container(
                           height: 40,

@@ -1,5 +1,6 @@
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -300,7 +301,7 @@ class _PickupScreenState extends State<PickupScreen> {
                                 height: 4,
                               ),
                               Text(
-                                '₹25.00',
+                                '₹${widget.data.total_price}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle1
@@ -323,13 +324,33 @@ class _PickupScreenState extends State<PickupScreen> {
                         highlightColor: Colors.transparent,
                         splashColor: Colors.transparent,
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  TicketDesign(data: widget.data),
-                            ),
+                          Access().start_trip(widget.data.user_id.toString()).then(
+                                  (value){
+                                if(value=='Otp send successful'){
+                                  Fluttertoast.showToast(
+                                      msg: "$value",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Colors.red,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => TicketDesign(data: widget.data),
+                                    ),
+                                  );
+                                }
+                              }
                           );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) =>
+                          //         TicketDesign(data: widget.data),
+                          //   ),
+                          // );
                         },
                         child: Container(
                           height: 40,

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:my_cab_driver/Language/appLocalizations.dart';
 import 'package:my_cab_driver/constance/constance.dart';
 import 'package:my_cab_driver/pickup/theTrip.dart';
 
 import 'Model/Order.dart';
 import 'home/userDetail.dart';
+import 'networking/Access.dart';
 
 class TicketDesign extends StatefulWidget {
   Order data;
@@ -16,6 +18,14 @@ class TicketDesign extends StatefulWidget {
 }
 
 class _TicketDesignState extends State<TicketDesign> {
+  var otpController = new TextEditingController();
+
+  @override
+  void dispose() {
+    otpController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,19 +174,23 @@ class _TicketDesignState extends State<TicketDesign> {
                                   SizedBox(
                                     height: 4,
                                   ),
-                                  Text(
-                                    AppLocalizations.of(
-                                        '${widget.data.pickup_location_name}'),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              .color,
-                                        ),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 70,
+                                    child: Text(
+                                      AppLocalizations.of(
+                                          '${widget.data.pickup_location_name}'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                .color,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -219,19 +233,23 @@ class _TicketDesignState extends State<TicketDesign> {
                                   SizedBox(
                                     height: 4,
                                   ),
-                                  Text(
-                                    AppLocalizations.of(
-                                        '${widget.data.drop_location_name}'),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle2
-                                        .copyWith(
-                                          fontWeight: FontWeight.bold,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .headline6
-                                              .color,
-                                        ),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 70,
+                                    child: Text(
+                                      AppLocalizations.of(
+                                          '${widget.data.drop_location_name}'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .headline6
+                                                .color,
+                                          ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -246,7 +264,7 @@ class _TicketDesignState extends State<TicketDesign> {
                       ),
                       Container(
                         color: Theme.of(context).scaffoldBackgroundColor,
-                        height: 20,
+                        height: 5,
                       ),
                       Container(
                         color: Theme.of(context).scaffoldBackgroundColor,
@@ -460,6 +478,86 @@ class _TicketDesignState extends State<TicketDesign> {
                           ),
                         ),
                       ),
+                      Container(
+
+                        child: Center(
+                          child: Text(
+                            AppLocalizations.of('Enter your OTP code here'),
+                            textAlign: TextAlign.center,
+                            style:
+                                Theme.of(context).textTheme.subtitle2.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .headline6
+                                          .color,
+                                    ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 32, right: 32),
+                        child: Stack(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(top: 0),
+                              child: getOtpTextUI(otptxt: otpController.text),
+                            ),
+                            Opacity(
+                              opacity: 0.0,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.green,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                        border: Border.all(
+                                          color: Theme.of(context).dividerColor,
+                                        ),
+                                      ),
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 16),
+                                        child: Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: TextField(
+                                                controller: otpController,
+                                                maxLength: 4,
+                                                onChanged: (String txt) {
+                                                  setState(() {});
+                                                },
+                                                onTap: () {},
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                  fontSize: 16,
+                                                ),
+                                                decoration: new InputDecoration(
+                                                    errorText: null,
+                                                    border: InputBorder.none,
+                                                    labelStyle: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                    ),
+                                                    counterText: ""),
+                                                keyboardType:
+                                                    TextInputType.number,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       Padding(
                         padding:
                             const EdgeInsets.only(right: 14, left: 14, top: 8),
@@ -497,12 +595,54 @@ class _TicketDesignState extends State<TicketDesign> {
                           highlightColor: Colors.transparent,
                           splashColor: Colors.transparent,
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => TheTrip(widget.data),
-                              ),
-                            );
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) => TheTrip(widget.data),
+                            //   ),
+                            // );
+                            if (otpController.text.isEmpty ||
+                                otpController.text.length != 4) {
+                              Fluttertoast.showToast(
+                                  msg: "Enter a valid otp",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              return;
+                            }
+                            Access()
+                                .verify_trip(widget.data.user_id.toString(),
+                                    otpController.text)
+                                .then((value) {
+                              if (value != 'Please enter correct OTP') {
+                                Fluttertoast.showToast(
+                                    msg: "$value",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TheTrip(widget.data),
+                                  ),
+                                );
+                              }else{
+                                Fluttertoast.showToast(
+                                    msg: "$value",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              }
+                            });
                           },
                           child: Container(
                             height: 40,
@@ -536,6 +676,43 @@ class _TicketDesignState extends State<TicketDesign> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget getOtpTextUI({String otptxt = ""}) {
+    List<Widget> otplist = List<Widget>();
+    Widget getUI({String otxt = ""}) {
+      return Expanded(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 12,
+            ),
+            Text(
+              otxt,
+              style: Theme.of(context).textTheme.headline5.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.headline6.color,
+                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 2.5,
+                width: 50,
+                color: Theme.of(context).dividerColor,
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    for (var i = 0; i < 4; i++) {
+      otplist.add(getUI(otxt: otptxt.length > i ? otptxt[i] : ""));
+    }
+    return Row(
+      children: otplist,
     );
   }
 

@@ -468,7 +468,48 @@ class NetworkHelper {
     }
   }
 
+  Future start_trip(String user_id) async {
+    dio = Dio(option);
+    print(user_id);
+    try {
+      Response response = await dio.post(url, queryParameters: {
+        'user_id': user_id,
+      });
+      if (response.statusCode == 200) {
+
+        return response.data['message'];
+      } else {
+        return 'Failed';
+      }
+    } on DioError catch (e) {
+      print(e.message);
+      return 'Failed';
+    }
+  }
+  Future verify_trip(String user_id, otp) async {
+    dio = Dio(option);
+
+    try {
+      Response response = await dio.post(url, queryParameters: {
+        'user_id': user_id,
+        'otp': otp,
+      });
+      if (response.statusCode == 200) {
+        print(response.data['message']);
+        return response.data['message'];
+      } else {
+        return 'Failed';
+      }
+    } on DioError catch (e) {
+      print(e.message);
+      return 'Failed';
+    }
+  }
 
 
 }
+
+
+
+
 //+++++++++++++++++++++++++++++++++++++++++++++++++
